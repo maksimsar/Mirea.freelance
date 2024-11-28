@@ -1,17 +1,102 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Поиск специалистов</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.2.41/dist/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+      <div class="container">
+        <a class="navbar-brand" href="#">Mirea.freelance</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item" v-for="(item, index) in navItems" :key="index">
+              <a class="nav-link" href="#">{{ item }}</a>
+            </li>
+          </ul>
+        </div>
+        <button class="btn btn-light" @click="goToOrder">Разместить заказ</button>
+      </div>
+    </nav>
+
+    <!-- Заголовок -->
+    <header class="bg-light py-4">
+      <div class="container">
+        <h1 class="text-center">Поможем всем!</h1>
+      </div>
+    </header>
+
+    <!-- Категории -->
+    <main class="container my-4">
+      <h2>Категории</h2>
+      <div class="row row-cols-2 row-cols-md-4 g-3">
+        <div class="col" v-for="(category, index) in categories" :key="index">
+          <button class="btn btn-outline-success w-100">{{ category }}</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Профили специалистов -->
+    <section class="container my-4">
+      <h2>Профили специалистов</h2>
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" v-for="(profile, index) in profiles" :key="index">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ profile.name }}</h5>
+              <p class="card-text">{{ profile.specialization }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Подвал -->
+    <footer class="bg-dark text-white py-3">
+      <div class="container text-center">
+        <p>&copy; 2024 Mirea.freelance</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          navItems: ['Главная', 'Мои заказы', 'Информация', 'О нас', 'Профиль'],
+          categories: [
+            "Сайты", "Дизайн", "Тексты", "Программирование", "3D Графика",
+            "Рисунки и иллюстрации", "Аутсорсинг и консалтинг", "Реклама и маркетинг",
+            "Инжиниринг", "Продвижение сайтов (SEO)", "Маркетплейс менеджмент",
+            "AI — искусственный интеллект", "Аудио/Видео/Фото", "Игры", 
+            "Социальные сети", "Mobile", "Крипто и блокчейн", "Анимация",
+            "Интернет-магазины", "Автоматизация бизнеса", "Фирменный стиль", "Браузеры"
+          ],
+          profiles: [
+            { name: "Саранцев Максим", specialization: "Бэкенд-разработчик" },
+            { name: "Владислав Кирьяков", specialization: "ML" },
+            { name: "Рустам Искендеров", specialization: "Базы данных" }
+          ]
+        }
+      },
+      methods: {
+        goToOrder() {
+          window.location.href = 'zakaz.html'; // Переход по ссылке для размещения заказа
+        }
+      }
+    });
+    
+    app.mount('#app');
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
