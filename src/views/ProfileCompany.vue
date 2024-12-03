@@ -1,8 +1,11 @@
 <template>
     <div class="container mt-4">
+      <!-- Кнопка "Создать заказ" -->
+      <button class="create-order-btn" @click="navigateToCreateOrder">Создать заказ</button>
+  
       <!-- Компонент переключения профилей -->
       <ProfileSwitcher />
-    
+  
       <div class="row mt-4">
         <div class="col-md-4">
           <ProfileAvatar :avatar="user.avatar" />
@@ -12,7 +15,7 @@
           <CompanyInfo :user="user" @edit="openEditModal" />
         </div>
       </div>
-    
+  
       <ModalEdit
         v-if="currentField"
         :placeholder="getPlaceholder()"
@@ -23,12 +26,12 @@
   </template>
   
   <script>
-  import { Modal } from 'bootstrap'; // Используем объектный импорт
+  import { Modal } from 'bootstrap';
   import ProfileAvatar from '../components/ProfileAvatar.vue';
   import ReviewsSection from '../components/ReviewsSection.vue';
   import ModalEdit from '../components/ModalEdit.vue';
-  import ProfileSwitcher from '../components/ProfileSwitcher.vue'; // Импортируем новый компонент
-  import CompanyInfo from '../components/CompanyInfo.vue'; // Импортируем новый компонент для компании
+  import ProfileSwitcher from '../components/ProfileSwitcher.vue';
+  import CompanyInfo from '../components/CompanyInfo.vue';
   
   export default {
     name: 'ProfilePage',
@@ -37,13 +40,13 @@
       ReviewsSection,
       ModalEdit,
       ProfileSwitcher,
-      CompanyInfo, // Добавляем компонент компании
+      CompanyInfo,
     },
     data() {
       return {
         user: {
           avatar: 'path/to/avatar.jpg',
-          companyName: 'Tech Solutions LLC', // Название компании
+          companyName: 'Tech Solutions LLC',
           contacts: [
             {
               name: 'Дмитрий Иванов',
@@ -54,8 +57,8 @@
               name: 'Анастасия Кузнецова',
               telegram: '@nastya_kuznetsova',
               phone: '+7-999-234-56-78',
-            }
-          ], // Контакты представителей
+            },
+          ],
           reviews: [
             {
               customerFeedback: 'Прекрасная работа! Все выполнено в срок.',
@@ -85,8 +88,6 @@
       openEditModal(field) {
         this.currentField = field;
         this.currentValue = this.user[field];
-    
-        // Инициализация модального окна
         const modalElement = document.getElementById('editModal');
         if (modalElement) {
           const modal = Modal.getInstance(modalElement) || new Modal(modalElement);
@@ -105,11 +106,35 @@
           this.currentValue = '';
         }
       },
+      navigateToCreateOrder() {
+        this.$router.push({ name: 'CreateOrder' });
+      },
     },
   };
   </script>
   
   <style scoped>
-  /* Дополнительные стили, если нужно */
+  .create-order-btn {
+    position: absolute;
+    top: 80px; /* Смещено ниже */
+    right: 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.3s, background-color 0.3s;
+  }
+  
+  .create-order-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+  }
+  
+  .create-order-btn:active {
+    transform: scale(0.95);
+  }
   </style>
   
