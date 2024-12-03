@@ -22,6 +22,10 @@
             <li class="nav-item">
               <router-link class="nav-link" to="/profile" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">Профиль</router-link>
             </li>
+              <li class="nav-item">
+              <router-link class="nav-link" to="/order_processing" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">*Обработка заказов*</router-link>
+            
+            </li>
           </ul>
         </div>
 
