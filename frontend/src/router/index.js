@@ -9,7 +9,8 @@ import ProfileCompany from '../views/ProfileCompany.vue';
 import CompanyOrder from '../views/CompanyOrder.vue';
 import ProcessingOrder from '../views/ProcessingOrder.vue';
 import AuthPage from '../views/AuthPage.vue';
-// Импорт страницы обработки заказов
+
+
 
 const routes = [
   {
