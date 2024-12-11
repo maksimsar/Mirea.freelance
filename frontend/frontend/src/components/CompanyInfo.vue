@@ -1,18 +1,20 @@
 <template>
     <div class="card p-3">
-      <h5>Общая информация</h5>
-      <p><strong>Фамилия:</strong> {{ user.surname }}</p>
-      <p><strong>Имя:</strong> {{ user.name }}</p>
-      <p><strong>Отчество:</strong> {{ user.patronymic }}</p>
-      <p>
-        <strong>Номер телефона:</strong> {{ user.phone }}
-        <button class="btn btn-edit" @click="editField('phone')">Изменить</button>
-      </p>
-      <p>
-        <strong>Telegram:</strong> {{ user.telegram }}
-        <button class="btn btn-edit" @click="editField('telegram')">Изменить</button>
-      </p>
-      <p><strong>Средний балл:</strong> {{ user.grade }}</p>
+      <h5>Общая информация о компании</h5>
+      <p><strong>Название компании:</strong> {{ user.companyName }}</p>
+      
+      <div v-for="(contact, index) in user.contacts" :key="index">
+        <h6>Представитель {{ index + 1 }}</h6>
+        <p><strong>Имя:</strong> {{ contact.name }}</p>
+        <p>
+          <strong>Номер телефона:</strong> {{ contact.phone }}
+          <button class="btn btn-edit" @click="editField(`contacts[${index}].phone`)">Изменить</button>
+        </p>
+        <p>
+          <strong>Telegram:</strong> {{ contact.telegram }}
+          <button class="btn btn-edit" @click="editField(`contacts[${index}].telegram`)">Изменить</button>
+        </p>
+      </div>
     </div>
   </template>
   
@@ -29,8 +31,8 @@
   };
   </script>
   
-  <style>
-  button.btn-edit {
+  <style scoped>
+  .btn-edit {
     color: #fff; /* Белый текст */
     background-color: #007bff; /* Синий фон */
     border: none; /* Убираем рамку */
