@@ -9,8 +9,7 @@
         <ReviewsSection :reviews="user.reviews" />
       </div>
       <div class="col-md-8">
-        <!-- Исправлено: добавлен : для привязки объекта user -->
-        <TeacherInfo :user="user" @edit="openEditModal" />
+        <UserInfo :user="user" @edit="openEditModal" />
       </div>
     </div>
 
@@ -24,32 +23,32 @@
 </template>
 
 <script>
-import { Modal } from 'bootstrap';
+import { Modal } from 'bootstrap'; // Используем объектный импорт
 import ProfileAvatar from '../components/ProfileAvatar.vue';
-import TeacherInfo from '../components/TeacherInfo.vue';
+import UserInfo from '../components/UserInfo.vue';
 import ReviewsSection from '../components/ReviewsSection.vue';
 import ModalEdit from '../components/ModalEdit.vue';
-import ProfileSwitcher from '../components/ProfileSwitcher.vue';
+import ProfileSwitcher from '../components/ProfileSwitcher.vue'; // Импортируем новый компонент
 
 export default {
   name: 'ProfilePage',
   components: {
     ProfileAvatar,
-    TeacherInfo,
+    UserInfo,
     ReviewsSection,
     ModalEdit,
-    ProfileSwitcher,
+    ProfileSwitcher, // Добавляем компонент в список компонентов
   },
   data() {
     return {
       user: {
+        avatar: 'path/to/avatar.jpg',
         name: 'Иван',
         surname: 'Иванов',
         patronymic: 'Иванович',
         phone: '+7-999-123-45-67',
         telegram: '@ivan_ivanov',
-        rating: 4.8,
-        developmentArea: 'Web-разработка',
+        grade: 4.5,
         reviews: [
           {
             customerFeedback: 'Прекрасная работа! Все выполнено в срок.',
@@ -118,5 +117,3 @@ export default {
 <style scoped>
 /* Дополнительные стили, если нужно */
 </style>
-
-  
