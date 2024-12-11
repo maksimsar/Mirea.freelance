@@ -12,7 +12,8 @@
         <strong>Telegram:</strong> {{ user.telegram }}
         <button class="btn btn-edit" @click="editField('telegram')">Изменить</button>
       </p>
-      <p><strong>Средний балл:</strong> {{ user.grade }}</p>
+      <p><strong>Рейтинг:</strong> {{ user.rating }}</p>
+      <p><strong>Сфера разработки:</strong> {{ user.developmentArea }}</p>
     </div>
   </template>
   
@@ -29,8 +30,8 @@
   };
   </script>
   
-  <style>
-  button.btn-edit {
+  <style scoped>
+  .btn-edit {
     color: #fff; /* Белый текст */
     background-color: #007bff; /* Синий фон */
     border: none; /* Убираем рамку */
