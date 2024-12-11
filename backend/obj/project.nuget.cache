@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "X/DTWtkQHV8=",
+  "dgSpecHash": "56ghK1lGenE=",
   "success": true,
   "projectFilePath": "C:\\MireaFreelance\\Mirea.freelance\\backend\\backend.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Yaroslav\\.nuget\\packages\\bcrypt.net-next\\4.0.2\\bcrypt.net-next.4.0.2.nupkg.sha512",
     "C:\\Users\\Yaroslav\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Yaroslav\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.10\\microsoft.aspnetcore.openapi.8.0.10.nupkg.sha512",
     "C:\\Users\\Yaroslav\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",
