@@ -1,11 +1,5 @@
--- Создание базы данных
-CREATE DATABASE freelance;
-
--- Подключение к базе данных
-\c freelance;
-
 -- Создание таблицы User
-CREATE TABLE "User" (
+CREATE TABLE user (
     Id SERIAL PRIMARY KEY,
     Login VARCHAR(255) NOT NULL UNIQUE,
     PasswordHash VARCHAR(255) NOT NULL,
@@ -14,7 +8,7 @@ CREATE TABLE "User" (
 
 -- Создание таблицы Profile
 CREATE TABLE Profile (
-    UserId INT PRIMARY KEY REFERENCES "User"(Id),
+    UserId INT PRIMARY KEY REFERENCES user(Id),
     FirstName VARCHAR(255) NOT NULL,
     LastName VARCHAR(255) NOT NULL,
     Age INT NOT NULL,
@@ -58,7 +52,7 @@ CREATE TABLE Feedback (
 -- Создание таблицы UserRole
 CREATE TABLE UserRole (
     Id SERIAL PRIMARY KEY,
-    UserId INT NOT NULL REFERENCES "User"(Id),
+    UserId INT NOT NULL REFERENCES user(Id),
     RoleId INT NOT NULL REFERENCES Role(Id),
     AssignedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
