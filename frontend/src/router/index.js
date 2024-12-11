@@ -7,8 +7,10 @@ import ProfilePage from '../views/ProfilePage.vue';
 import ProfileTeacher from '../views/ProfileTeacher.vue';
 import ProfileCompany from '../views/ProfileCompany.vue';
 import CompanyOrder from '../views/CompanyOrder.vue';
-import ProcessingOrder from '../views/ProcessingOrder.vue'; 
-import AuthPage from '../views/AuthPage.vue'
+import ProcessingOrder from '../views/ProcessingOrder.vue';
+import AuthPage from '../views/AuthPage.vue';
+
+
 
 const routes = [
   {
@@ -47,7 +49,7 @@ const routes = [
     component: ProcessingOrder,
   },
   {
-    path: '/login', // Добавленный маршрут
+    path: '/login',
     name: 'AuthPage',
     component: AuthPage,
   },
