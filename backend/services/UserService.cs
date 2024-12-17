@@ -7,11 +7,12 @@ using System.Text;
 public class UserService
 {
     private readonly AppDbContext _context;
-
+    private readonly ProfileService _profileService;
     // Конструктор класса UserService
-    public UserService(AppDbContext context)
+    public UserService(AppDbContext context, ProfileService profileService)
     {
         _context = context;
+        _profileService = profileService;
     }
 
     // Метод создания пользователя
@@ -76,17 +77,27 @@ public async Task<(bool success, string message, User user)> CreateUserAsync(str
     // Метод удаления пользователя
     public async Task<(bool success, string message)> DeleteUserAsync(int userId)
     {
+        // Находим пользователя
         var user = await _context.User.FindAsync(userId);
-
         if (user == null)
         {
             return (false, "Пользователь не найден");
         }
 
+        // Удаляем профиль пользователя через ProfileService
+        var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.userid == userId);
+        if (profile != null)
+        {
+            _context.Profiles.Remove(profile);
+            await _context.SaveChangesAsync();
+        }
+
+        // Удаляем пользователя
         _context.User.Remove(user);
         await _context.SaveChangesAsync();
 
-        return (true, "Пользователь успешно удалён");
+        return (true, "Пользователь и его профиль успешно удалены");
     }
+
 
 }
