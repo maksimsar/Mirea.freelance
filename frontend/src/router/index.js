@@ -7,10 +7,15 @@ import ProfilePage from '../views/ProfilePage.vue';
 import ProfileTeacher from '../views/ProfileTeacher.vue';
 import ProfileCompany from '../views/ProfileCompany.vue';
 import CompanyOrder from '../views/CompanyOrder.vue';
+<<<<<<< HEAD
 import ProcessingOrder from '../views/ProcessingOrder.vue';
 import AuthPage from '../views/AuthPage.vue';
 
 
+=======
+import ProcessingOrder from '../views/ProcessingOrder.vue'; // Импорт страницы обработки заказов
+import AuthPage from '../views/AuthPage.vue';
+>>>>>>> stenzel
 
 const routes = [
   {
@@ -48,6 +53,10 @@ const routes = [
     name: 'OrderProcessing',
     component: ProcessingOrder,
   },
+<<<<<<< HEAD
+=======
+  
+>>>>>>> stenzel
   {
     path: '/login',
     name: 'AuthPage',
