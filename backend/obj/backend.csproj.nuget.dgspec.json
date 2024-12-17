@@ -1,31 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\MireaFreelance\\Mirea.freelance\\backend\\backend.csproj": {}
+    "/Users/macbook/proj/backend/backend.csproj": {}
   },
   "projects": {
-    "C:\\MireaFreelance\\Mirea.freelance\\backend\\backend.csproj": {
+    "/Users/macbook/proj/backend/backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\MireaFreelance\\Mirea.freelance\\backend\\backend.csproj",
+        "projectUniqueName": "/Users/macbook/proj/backend/backend.csproj",
         "projectName": "backend",
-        "projectPath": "C:\\MireaFreelance\\Mirea.freelance\\backend\\backend.csproj",
-        "packagesPath": "C:\\Users\\Yaroslav\\.nuget\\packages\\",
-        "outputPath": "C:\\MireaFreelance\\Mirea.freelance\\backend\\obj\\",
+        "projectPath": "/Users/macbook/proj/backend/backend.csproj",
+        "packagesPath": "/Users/macbook/.nuget/packages/",
+        "outputPath": "/Users/macbook/proj/backend/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Yaroslav\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/macbook/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -43,8 +37,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -102,7 +95,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
