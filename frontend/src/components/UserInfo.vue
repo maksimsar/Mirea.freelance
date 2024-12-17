@@ -30,7 +30,7 @@
   </script>
   
   <style>
-  .btn-edit {
+  button.btn-edit {
     color: #fff; /* Белый текст */
     background-color: #007bff; /* Синий фон */
     border: none; /* Убираем рамку */
