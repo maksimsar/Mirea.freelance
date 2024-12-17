@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Mirea.Freelance.backend.data;
 using System.Text;
+using Mirea.Freelance.backend.services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProfileService>();
+builder.Services.AddScoped<TaskService>();
+
 
 var app = builder.Build();
 
@@ -113,7 +116,41 @@ app.MapPatch("/api/profiles/{id}", async (ProfileService profileService, int id,
 
     return Results.NotFound(message);
 });
+//
+//
+//Task
 
+// Создание задачи
+app.MapPost("/api/tasks", async (TaskService taskService, [FromBody] Task task) =>
+{
+    var createdTask = await taskService.CreateTaskAsync(task);
+    return Results.Created($"/api/tasks/{createdTask.Id}", createdTask);
+});
+
+// Получение задачи по ID
+app.MapGet("/api/tasks/{id}", async (TaskService taskService, int id) =>
+{
+    var task = await taskService.GetTaskByIdAsync(id);
+    return task != null ? Results.Ok(task) : Results.NotFound("Задача не найдена");
+});
+
+// Обновление задачи
+app.MapPut("/api/tasks/{id}", async (TaskService taskService, int id, [FromBody] Task updatedTask) =>
+{
+    var task = await taskService.UpdateTaskAsync(id, updatedTask);
+    return task != null ? Results.Ok(task) : Results.NotFound("Задача не найдена");
+});
+
+// Удаление задачи
+app.MapDelete("/api/tasks/{id}", async (TaskService taskService, int id) =>
+{
+    var success = await taskService.DeleteTaskAsync(id);
+    return success ? Results.Ok("Задача удалена") : Results.NotFound("Задача не найдена");
+});
+
+//
+//
+//
 
 
 // Запуск приложения

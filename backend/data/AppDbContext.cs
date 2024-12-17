@@ -33,8 +33,26 @@ namespace Mirea.Freelance.backend.data
 
             modelBuilder.Entity<Profile>()
                 .HasKey(p => p.userid);
-              // Определяем поведение при удалении (например, удалить профиль, если удаляется пользователь)
+            
+            modelBuilder.Entity<Task>()
+                .ToTable("task") // Устанавливаем имя таблицы
+                .HasKey(t => t.Id); // Устанавливаем первичный ключ
+            
+            modelBuilder.Entity<Task>()
+                .HasOne(t => t.ClientProfile)
+                .WithMany()
+                .HasForeignKey(t => t.ClientProfileId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(); // Удаление задачи при удалении профиля клиента
 
+            // Связь Task с FreelancerProfile
+            modelBuilder.Entity<Task>()
+                .HasOne(t => t.FreelancerProfile)
+                .WithMany()
+                .HasForeignKey(t => t.FreelancerProfileId)
+                .OnDelete(DeleteBehavior.SetNull); 
+              // Определяем поведение при удалении (например, удалить профиль, если удаляется пользователь)
+            
             // Дополнительные настройки сущностей (если нужно)
         }
 
