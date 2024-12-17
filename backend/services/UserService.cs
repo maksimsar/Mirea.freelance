@@ -8,7 +8,6 @@ public class UserService
 {
     private readonly AppDbContext _context;
     private readonly ProfileService _profileService;
-
     // Конструктор класса UserService
     public UserService(AppDbContext context, ProfileService profileService)
     {
