@@ -19,7 +19,7 @@ namespace Mirea.Freelance.backend.data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = "Host=81.177.136.21;Port=5432;Database=mireafreelance;Username=student8;Password=student11122024";
+            var connectionString = "Host=Your_host;Port=5252;Database=name_of_database;Username=name_of_user;Password=your_pass";
             optionsBuilder.UseNpgsql(connectionString);
         }
 
@@ -51,7 +51,11 @@ namespace Mirea.Freelance.backend.data
                 .WithMany()
                 .HasForeignKey(t => t.FreelancerProfileId)
                 .OnDelete(DeleteBehavior.SetNull); 
-              // Определяем поведение при удалении (например, удалить профиль, если удаляется пользователь)
+            // Определяем поведение при удалении (например, удалить профиль, если удаляется пользователь)
+            modelBuilder.Entity<Role>()
+                .ToTable("role")
+                .HasKey(r => r.Id); // Устанавливаем первичный ключ
+            
             
             // Дополнительные настройки сущностей (если нужно)
         }
