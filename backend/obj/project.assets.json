@@ -3444,6 +3444,7 @@
     "net8.0": [
       "BCrypt.Net-Next >= 4.0.2",
       "Microsoft.AspNetCore.OpenApi >= 8.0.10",
+      "Microsoft.EntityFrameworkCore >= 9.0.0",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.0",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.0",
       "Npgsql >= 9.0.2",
@@ -3452,23 +3453,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Yaroslav\\.nuget\\packages\\": {},
+    "C:\\Users\\Максим\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\MireaFreelance\\Mirea.freelance\\backend\\backend.csproj",
+      "projectUniqueName": "C:\\Users\\Максим\\Myprojects\\Mirea.freelance\\backend\\backend.csproj",
       "projectName": "backend",
-      "projectPath": "C:\\MireaFreelance\\Mirea.freelance\\backend\\backend.csproj",
-      "packagesPath": "C:\\Users\\Yaroslav\\.nuget\\packages\\",
-      "outputPath": "C:\\MireaFreelance\\Mirea.freelance\\backend\\obj\\",
+      "projectPath": "C:\\Users\\Максим\\Myprojects\\Mirea.freelance\\backend\\backend.csproj",
+      "packagesPath": "C:\\Users\\Максим\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Максим\\Myprojects\\Mirea.freelance\\backend\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Yaroslav\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Максим\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3477,6 +3478,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -3494,8 +3496,7 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "9.0.100"
+      }
     },
     "frameworks": {
       "net8.0": {
@@ -3508,6 +3509,10 @@
           "Microsoft.AspNetCore.OpenApi": {
             "target": "Package",
             "version": "[8.0.10, )"
+          },
+          "Microsoft.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[9.0.0, )"
           },
           "Microsoft.EntityFrameworkCore.Design": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -3553,7 +3558,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
