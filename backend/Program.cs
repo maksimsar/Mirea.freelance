@@ -17,6 +17,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProfileService>();
 builder.Services.AddScoped<TaskService>();
+builder.Services.AddScoped<RoleService>();
 
 
 var app = builder.Build();
@@ -147,6 +148,21 @@ app.MapDelete("/api/tasks/{id}", async (TaskService taskService, int id) =>
     var success = await taskService.DeleteTaskAsync(id);
     return success ? Results.Ok("Задача удалена") : Results.NotFound("Задача не найдена");
 });
+
+
+//Эндпоинт для создания роли
+app.MapPost("/api/roles", async (RoleService roleService, [FromBody] Role role) =>
+{
+    var createdRole = await roleService.CreateRoleAsync(role);
+    return Results.Created($"/api/roles/{createdRole.Id}", createdRole);
+}
+
+//Эндпоинт для изменения роли
+app.MapPut("/api/roles/{id}", async (RoleService roleService, int id, [FromBody] Role updatedRole) =>
+{
+    var role = await roleService.UpdateRoleAsync(id, updatedRole);
+    return role != null ? Results.Ok(role) : Results.NotFound("Роль не найдена");
+}
 
 //
 //
