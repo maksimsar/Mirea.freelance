@@ -51,7 +51,11 @@ namespace Mirea.Freelance.backend.data
                 .WithMany()
                 .HasForeignKey(t => t.FreelancerProfileId)
                 .OnDelete(DeleteBehavior.SetNull); 
-              // Определяем поведение при удалении (например, удалить профиль, если удаляется пользователь)
+            // Определяем поведение при удалении (например, удалить профиль, если удаляется пользователь)
+            modelBuilder.Entity<Role>()
+                .ToTable("role")
+                .HasKey(r => r.Id); // Устанавливаем первичный ключ
+            
             
             // Дополнительные настройки сущностей (если нужно)
         }
