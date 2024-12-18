@@ -17,13 +17,13 @@
               <router-link class="nav-link" to="/" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">Главная</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/orders" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">Заказы</router-link>
+              <router-link class="nav-link" to="/orders" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">Мои заказы</router-link>
             </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/profile" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">Профиль</router-link>
             </li>
               <li class="nav-item">
-              <router-link class="nav-link" to="/order_processing" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">Обработка заказов</router-link>
+              <router-link class="nav-link" to="/order_processing" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">*Обработка заказов*</router-link>
             
             </li>
           </ul>
@@ -31,7 +31,7 @@
 
         <!-- Кнопки Войти/Регистрация справа -->
         <div class="navbar-nav ml-auto">
-          <router-link class="nav-link" to="/login" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">Войти</router-link>
+          <router-link class="nav-link" to="/login" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">Войти/Регистрация</router-link>
         </div>
       </div>
     </nav>
