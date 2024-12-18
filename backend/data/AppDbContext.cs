@@ -19,7 +19,7 @@ namespace Mirea.Freelance.backend.data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = "Host=81.177.136.21;Port=5432;Database=mireafreelance;Username=student8;Password=student11122024";
+            var connectionString = "Host=Your_host;Port=5252;Database=name_of_database;Username=name_of_user;Password=your_pass";
             optionsBuilder.UseNpgsql(connectionString);
         }
 
