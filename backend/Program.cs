@@ -149,20 +149,21 @@ app.MapDelete("/api/tasks/{id}", async (TaskService taskService, int id) =>
     return success ? Results.Ok("Задача удалена") : Results.NotFound("Задача не найдена");
 });
 
-
-//Эндпоинт для создания роли
+// Эндпоинт для создания роли
 app.MapPost("/api/roles", async (RoleService roleService, [FromBody] Role role) =>
 {
     var createdRole = await roleService.CreateRoleAsync(role);
-    return Results.Created($"/api/roles/{createdRole.Id}", createdRole);
-}
+    return createdRole != null 
+        ? Results.Created($"/api/roles/{createdRole.Id}", createdRole) 
+        : Results.BadRequest("Роль с таким именем уже существует");
+});
 
-//Эндпоинт для изменения роли
+// Эндпоинт для изменения роли
 app.MapPut("/api/roles/{id}", async (RoleService roleService, int id, [FromBody] Role updatedRole) =>
 {
     var role = await roleService.UpdateRoleAsync(id, updatedRole);
     return role != null ? Results.Ok(role) : Results.NotFound("Роль не найдена");
-}
+});
 
 //
 //
