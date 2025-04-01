@@ -1,5 +1,8 @@
 using System;
 
+
+namespace Mirea.Freelance.backend.models;
+
 public class UserRole
 {
     public int Id { get; set; }

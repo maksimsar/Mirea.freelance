@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Text;
+using Mirea.Freelance.backend.models;
 
 public class UserService
 {

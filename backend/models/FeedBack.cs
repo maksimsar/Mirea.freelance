@@ -1,3 +1,6 @@
+
+namespace Mirea.Freelance.backend.models;
+
 public class Feedback
 {
     public int Id { get; set; }
