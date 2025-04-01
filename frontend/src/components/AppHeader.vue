@@ -1,37 +1,61 @@
 <template>
   <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-info">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-custom">
       <div class="container">
-        <!-- Логотип в левой части -->
         <a class="navbar-brand" href="#">Mirea Freelance</a>
-
-        <!-- Бургер-меню для маленьких экранов -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
           <span class="navbar-toggler-icon"></span>
         </button>
-        
-        <!-- Меню навигации -->
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav mx-auto">
+            <!-- Всегда доступно -->
             <li class="nav-item">
-              <router-link class="nav-link" to="/" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">Главная</router-link>
+              <router-link class="nav-link" to="/">Главная</router-link>
             </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/orders" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">Мои заказы</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/profile" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">Профиль</router-link>
-            </li>
+            <!-- Если пользователь не авторизован -->
+            <template v-if="!userRole">
               <li class="nav-item">
-              <router-link class="nav-link" to="/order_processing" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">*Обработка заказов*</router-link>
-            
-            </li>
+                <router-link class="nav-link" to="/login">Вход/Регистрация</router-link>
+              </li>
+            </template>
+            <!-- Для авторизованных пользователей -->
+            <template v-else>
+              <!-- Меню для студента -->
+              <template v-if="userRole === 'student'">
+                <li class="nav-item">
+                  <router-link class="nav-link" to="/orders">Заказы</router-link>
+                </li>
+              </template>
+              <!-- Меню для админа -->
+              <template v-if="userRole === 'admin'">
+                <li class="nav-item">
+                  <router-link class="nav-link" to="/order_processing">Обработка заказов</router-link>
+                </li>
+              </template>
+              <!-- Меню для компании -->
+              <template v-if="userRole === 'company'">
+                <li class="nav-item">
+                  <router-link class="nav-link" to="/create_order">Создать заявку</router-link>
+                </li>
+              </template>
+              <!-- Общая страница профиля -->
+              <li class="nav-item">
+                <router-link class="nav-link" to="/profile">Профиль</router-link>
+              </li>
+              <!-- Кнопка Logout -->
+              <li class="nav-item">
+                <button class="nav-link btn-logout" @click="logout">Logout</button>
+              </li>
+            </template>
           </ul>
-        </div>
-
-        <!-- Кнопки Войти/Регистрация справа -->
-        <div class="navbar-nav ml-auto">
-          <router-link class="nav-link" to="/login" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">Войти/Регистрация</router-link>
         </div>
       </div>
     </nav>
@@ -40,52 +64,50 @@
 
 <script>
 export default {
-  name: 'AppHeader',
+  name: "AppHeader",
+  data() {
+    return {
+      userRole: localStorage.getItem("userRole"),
+    };
+  },
   methods: {
-    handleMouseOver(event) {
-      event.target.style.transition = 'transform 0.3s ease';
-      event.target.style.transform = 'scale(1.1)';
+    logout() {
+      localStorage.removeItem("userRole");
+      this.userRole = null;
+      this.$router.push({ name: "Home" });
     },
-    handleMouseLeave(event) {
-      event.target.style.transform = 'scale(1)';
-    }
-  }
+    syncUserRole() {
+      this.userRole = localStorage.getItem("userRole");
+    },
+  },
+  mounted() {
+    window.addEventListener("storage", this.syncUserRole);
+  },
+  beforeUnmount() {
+    window.removeEventListener("storage", this.syncUserRole);
+  },
 };
 </script>
 
 <style scoped>
 .navbar {
-  border-bottom: 2px solid #007bff; /* Добавим границу снизу для красоты */
+  border-bottom: 2px solid #007bff;
 }
-
-/* Цвет фона navbar изменён на голубой */
-.bg-info {
+.bg-custom {
   background-color: #007bff !important;
 }
-
-/* Эффект при наведении на ссылки */
 .nav-link {
   transition: color 0.3s ease, transform 0.3s ease;
   color: white !important;
 }
-
 .nav-link:hover {
-  color: #acacac !important; /* Изменение цвета текста при наведении */
+  color: #acacac !important;
   transform: scale(1.1);
 }
-
-/* Убираем подчеркивание у ссылок */
-.navbar-nav .nav-item .nav-link {
-  text-decoration: none;
-}
-
-/* Кастомизация навигации для правой части */
-.navbar-nav.ml-auto {
-  margin-left: auto;
-}
-
-/* Убираем отступы на маленьких экранах */
-.navbar-collapse {
-  flex-grow: 0;
+.btn-logout {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
 }
 </style>
