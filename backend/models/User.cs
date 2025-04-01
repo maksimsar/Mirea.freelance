@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;   // Для использован�
 using System.ComponentModel.DataAnnotations.Schema;  // Для использования [Column]
 
 
+namespace Mirea.Freelance.backend.models;
+
 public class User
 {
     [Key]

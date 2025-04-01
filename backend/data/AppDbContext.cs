@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Mirea.Freelance.backend.models;
 
 
 namespace Mirea.Freelance.backend.data
@@ -13,13 +14,13 @@ namespace Mirea.Freelance.backend.data
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<Task> Tasks { get; set; }
+        public DbSet<Order> Orders { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = "Host=81.177.136.21;Port=5432;Database=mireafreelance;Username=student8;Password=student11122024";
+            var connectionString = "Host=localhost;Port=5432;Database=freelance;Username=postgres;Password=12345";
             optionsBuilder.UseNpgsql(connectionString);
         }
 
@@ -34,11 +35,11 @@ namespace Mirea.Freelance.backend.data
             modelBuilder.Entity<Profile>()
                 .HasKey(p => p.userid);
             
-            modelBuilder.Entity<Task>()
-                .ToTable("task") // Устанавливаем имя таблицы
+            modelBuilder.Entity<Order>()
+                .ToTable("order") // Устанавливаем имя таблицы
                 .HasKey(t => t.Id); // Устанавливаем первичный ключ
             
-            modelBuilder.Entity<Task>()
+            modelBuilder.Entity<Order>()
                 .HasOne(t => t.ClientProfile)
                 .WithMany()
                 .HasForeignKey(t => t.ClientProfileId)
@@ -46,7 +47,7 @@ namespace Mirea.Freelance.backend.data
                 .IsRequired(); // Удаление задачи при удалении профиля клиента
 
             // Связь Task с FreelancerProfile
-            modelBuilder.Entity<Task>()
+            modelBuilder.Entity<Order>()
                 .HasOne(t => t.FreelancerProfile)
                 .WithMany()
                 .HasForeignKey(t => t.FreelancerProfileId)

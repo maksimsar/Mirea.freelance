@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;  // Для KeyAttribute
 using System.ComponentModel.DataAnnotations.Schema;  // Для ForeignKeyAttribute
 using System.Text.Json.Serialization;
 
+namespace Mirea.Freelance.backend.models;
+
 public class Profile
 {
     [Column("userid")]
