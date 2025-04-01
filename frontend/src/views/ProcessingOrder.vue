@@ -1,59 +1,62 @@
 <template>
-    <div class="processing-order">
-      <div
-        class="column unprocessed animate__animated animate__fadeInLeft"
-        @drop="onDrop('unprocessed', $event)"
-        @dragover.prevent
-      >
-        <h3>Не обработан</h3>
-        <transition-group name="list" tag="div">
-          <SOrderCard
-            v-for="(order, index) in orders.unprocessed"
-            :key="index"
-            :order="order"
-            @dragstart="onDragStart"
-          />
-        </transition-group>
-      </div>
-      <div
-        class="column processing animate__animated animate__fadeInDown"
-        @drop="onDrop('processing', $event)"
-        @dragover.prevent
-      >
-        <h3>В обработке</h3>
-        <transition-group name="list" tag="div">
-          <SOrderCard
-            v-for="(order, index) in orders.processing"
-            :key="index"
-            :order="order"
-            @dragstart="onDragStart"
-          />
-        </transition-group>
-      </div>
-      <div
-        class="column processed animate__animated animate__fadeInRight"
-        @drop="onDrop('processed', $event)"
-        @dragover.prevent
-      >
-        <h3>Обработан</h3>
-        <transition-group name="list" tag="div">
-          <SOrderCard
-            v-for="(order, index) in orders.processed"
-            :key="index"
-            :order="order"
-            @dragstart="onDragStart"
-          />
-        </transition-group>
-      </div>
+  <div class="processing-order">
+    <!-- Первая колонка: Не обработан -->
+    <div class="column unprocessed animate__animated animate__fadeInLeft">
+      <h3>Не обработан</h3>
+      <transition-group name="list" tag="div">
+        <SOrderCard
+          v-for="(order, index) in orders.unprocessed"
+          :key="index"
+          :order="order"
+          @startProcessing="moveToProcessing"
+        />
+      </transition-group>
     </div>
-  </template>
+
+    <!-- Вторая колонка: В обработке -->
+    <div class="column processing animate__animated animate__fadeInDown">
+      <h3>В обработке</h3>
+      <transition-group name="list" tag="div">
+        <SOrderCard
+          v-for="(order, index) in orders.processing"
+          :key="index"
+          :order="order"
+          @approve="approveOrder"
+          @reject="rejectOrder"
+          @editOrder="openEditModal"
+        />
+      </transition-group>
+    </div>
+
+    <!-- Третья колонка: Обработан -->
+    <div class="column processed animate__animated animate__fadeInRight">
+      <h3>Обработан</h3>
+      <transition-group name="list" tag="div">
+        <SOrderCard
+          v-for="(order, index) in orders.processed"
+          :key="index"
+          :order="order"
+        />
+      </transition-group>
+    </div>
+
+    <!-- Модальное окно для редактирования (если выбрано) -->
+    <EditOrderModal
+      v-if="editingOrder"
+      :order="editingOrder"
+      @close="editingOrder = null"
+      @save="saveOrder"
+    />
+  </div>
+</template>
 
 <script>
 import SOrderCard from "../components/SOrderCard.vue";
+import EditOrderModal from "../components/EditOrderModal.vue";
 
 export default {
   name: "ProcessingOrder",
-  components: { SOrderCard },
+  components: { SOrderCard, EditOrderModal },
   data() {
     return {
       orders: {
@@ -80,64 +83,54 @@ export default {
         processing: [],
         processed: [],
       },
+      editingOrder: null, // Заказ, который редактируем в модалке
     };
   },
   methods: {
-    onDragStart(event, order) {
-      // Проверка: если order существует, сохраняем его в dataTransfer
-      if (order) {
-        console.log("Начато перетаскивание:", order);
-        event.dataTransfer.setData("order", JSON.stringify(order));
-      }
+    // Перевод из "Не обработан" -> "В обработке"
+    moveToProcessing(order) {
+      this.orders.unprocessed = this.orders.unprocessed.filter(o => o !== order);
+      order.status = "processing";
+      this.orders.processing.push(order);
     },
-    onDrop(newStatus, event) {
-      console.log("Событие drop:", event);
-      
-      // Проверка: если данные в dataTransfer не существуют, возвращаем ошибку
-      if (!event || !event.dataTransfer) {
-        console.error("Ошибка: объект dataTransfer отсутствует");
-        return;
-      }
-
-      const data = event.dataTransfer.getData("order");
-
-      // Проверка: если данных нет или они невалидны
-      if (!data) {
-        console.error("Ошибка: данные order отсутствуют в dataTransfer");
-        return;
-      }
-
-      try {
-        const order = JSON.parse(data); // Попытка разобрать данные
-        console.log("Полученные данные:", order);
-        this.moveOrder(order, newStatus);
-      } catch (e) {
-        console.error("Ошибка при разборе JSON:", e);
-      }
+    // Одобрить заказ
+    approveOrder(order) {
+      this.orders.processing = this.orders.processing.filter(o => o !== order);
+      order.status = "processed_positive"; // Заказ одобрен
+      this.orders.processed.push(order);
     },
-    moveOrder(order, newStatus) {
-      // Логика перемещения заказа по статусам
-      this.orders[order.status] = this.orders[order.status].filter(
-        (o) => o !== order
-      );
-      order.status = newStatus;
-      this.orders[newStatus].push(order);
+    // Отклонить заказ
+    rejectOrder(order) {
+      this.orders.processing = this.orders.processing.filter(o => o !== order);
+      order.status = "processed_negative"; // Заказ отклонён
+      this.orders.processed.push(order);
     },
-  },  // Удалена лишняя запятая
+    // Открываем модальное окно для редактирования – передаём сам объект заказа для двусторонней привязки
+    openEditModal(order) {
+      this.editingOrder = order;
+    },
+    // Сохраняем отредактированные данные – изменения уже отражены, просто закрываем модалку
+    saveOrder() {
+      this.editingOrder = null;
+    },
+  },
 };
 </script>
-
 
 <style scoped>
 @import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css";
 
+/* Контейнер с тремя колонками */
 .processing-order {
   display: flex;
   justify-content: space-between;
   background-color: #007bff;
   padding: 1em;
   gap: 1em;
+  min-height: calc(100vh - 60px);
 }
+
+/* Оформление колонок */
 .column {
   flex: 1;
   background-color: #fff;
@@ -149,16 +142,15 @@ export default {
   margin-bottom: 1em;
   text-align: center;
 }
-.order-card {
-  margin-bottom: 1em;
-  padding: 1em;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #f8f9fa;
+
+/* Плавные перемещения карточек */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.3s ease;
 }
-.list-move {
-  transition: transform 0.5s;
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 </style>
-
-  
