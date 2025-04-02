@@ -1,8 +1,8 @@
 <template>
   <header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-custom">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-custom shadow-sm">
       <div class="container">
-        <a class="navbar-brand" href="#">Mirea Freelance</a>
+        <router-link class="navbar-brand" to="/">Mirea Freelance</router-link>
         <button
           class="navbar-toggler"
           type="button"
@@ -15,7 +15,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav mx-auto">
+          <ul class="navbar-nav ms-auto align-items-center">
             <!-- Всегда доступно -->
             <li class="nav-item">
               <router-link class="nav-link" to="/">Главная</router-link>
@@ -28,22 +28,32 @@
             </template>
             <!-- Для авторизованных пользователей -->
             <template v-else>
-              <!-- Меню для студента -->
+              <!-- Меню для студентов -->
               <template v-if="userRole === 'student'">
                 <li class="nav-item">
                   <router-link class="nav-link" to="/orders">Заказы</router-link>
                 </li>
+                <li class="nav-item">
+                  <router-link class="nav-link" to="/tracking/student">Отслеживание заказов</router-link>
+                </li>
               </template>
-              <!-- Меню для админа -->
+              <!-- Меню для админа (преподаватель = админ) -->
               <template v-if="userRole === 'admin'">
                 <li class="nav-item">
                   <router-link class="nav-link" to="/order_processing">Обработка заказов</router-link>
+                </li>
+                <!-- Добавляем ссылку на отслеживание заказов, которая раньше была для преподавателя -->
+                <li class="nav-item">
+                  <router-link class="nav-link" to="/tracking/teacher">Отслеживание заказов</router-link>
                 </li>
               </template>
               <!-- Меню для компании -->
               <template v-if="userRole === 'company'">
                 <li class="nav-item">
                   <router-link class="nav-link" to="/create_order">Создать заявку</router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link class="nav-link" to="/tracking/company">Отслеживание заказов</router-link>
                 </li>
               </template>
               <!-- Общая страница профиля -->
@@ -99,15 +109,19 @@ export default {
 .nav-link {
   transition: color 0.3s ease, transform 0.3s ease;
   color: white !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
 }
 .nav-link:hover {
   color: #acacac !important;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 .btn-logout {
   background: none;
   border: none;
   color: white;
   cursor: pointer;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
 }
 </style>
