@@ -31,7 +31,7 @@ public class StudentProfile : Profile
 }
 
 // Профиль для преподавателя
-public class TeacherProfile : Profile
+public class MentorProfile : Profile
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
