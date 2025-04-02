@@ -6,6 +6,11 @@ import ProcessingOrder from '../views/ProcessingOrder.vue';
 import CompanyOrder from '../views/CompanyOrder.vue';
 import AuthPage from '../views/AuthPage.vue';
 
+// Новые страницы отслеживания заказов
+import OrderTrackingStudent from '../views/OrderTrackingStudent.vue';
+import OrderTrackingTeacher from '../views/OrderTrackingTeacher.vue'; // Можно оставить, если в дальнейшем понадобится
+import OrderTrackingCompany from '../views/OrderTrackingCompany.vue';
+
 const routes = [
   {
     path: '/',
@@ -19,21 +24,21 @@ const routes = [
     component: AuthPage,
     meta: { requiresAuth: false },
   },
-  // Страницы для студентов
+  // Страница заказов для студентов
   {
     path: '/orders',
     name: 'Orders',
     component: OrdersPage,
     meta: { requiresAuth: true, roles: ['student'] },
   },
-  // Общая страница профиля доступна всем авторизованным пользователям
+  // Общая страница профиля для всех авторизованных пользователей
   {
     path: '/profile',
     name: 'Profile',
     component: ProfilePage,
     meta: { requiresAuth: true, roles: ['student', 'admin', 'company'] },
   },
-  // Страница обработки заказов для админа
+  // Страница обработки заказов для админа (с учетом, что преподаватель = админ)
   {
     path: '/order_processing',
     name: 'OrderProcessing',
@@ -47,6 +52,26 @@ const routes = [
     component: CompanyOrder,
     meta: { requiresAuth: true, roles: ['company'] },
   },
+  // Страницы отслеживания заказов
+  {
+    path: '/tracking/student',
+    name: 'StudentTracking',
+    component: OrderTrackingStudent,
+    meta: { requiresAuth: true, roles: ['student'] },
+  },
+  {
+    path: '/tracking/teacher',
+    name: 'TeacherTracking',
+    component: OrderTrackingTeacher,
+    // Если преподаватель равен администратору, можно добавить роль "admin"
+    meta: { requiresAuth: true, roles: ['admin'] },
+  },
+  {
+    path: '/tracking/company',
+    name: 'CompanyTracking',
+    component: OrderTrackingCompany,
+    meta: { requiresAuth: true, roles: ['company'] },
+  },
 ];
 
 const router = createRouter({
@@ -56,14 +81,10 @@ const router = createRouter({
 
 // Глобальный navigation guard для проверки авторизации и роли
 router.beforeEach((to, from, next) => {
-  // Получаем роль пользователя (например, из localStorage)
   const userRole = localStorage.getItem('userRole');
-
   if (to.meta.requiresAuth && !userRole) {
-    // Если страница требует авторизации, а пользователь не вошёл, перенаправляем на страницу входа
     next({ name: 'AuthPage' });
   } else if (to.meta.roles && userRole && !to.meta.roles.includes(userRole)) {
-    // Если роль пользователя не соответствует разрешённым для маршрута, перенаправляем на главную
     next({ name: 'Home' });
   } else {
     next();
