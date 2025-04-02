@@ -5,11 +5,10 @@ import ProfilePage from '../views/ProfilePage.vue';
 import ProcessingOrder from '../views/ProcessingOrder.vue';
 import CompanyOrder from '../views/CompanyOrder.vue';
 import AuthPage from '../views/AuthPage.vue';
-
-// Новые страницы отслеживания заказов
 import OrderTrackingStudent from '../views/OrderTrackingStudent.vue';
 import OrderTrackingTeacher from '../views/OrderTrackingTeacher.vue'; // Можно оставить, если в дальнейшем понадобится
 import OrderTrackingCompany from '../views/OrderTrackingCompany.vue';
+import AdminOrders from '../views/AdminsOrders.vue'; // Новый компонент для админов
 
 const routes = [
   {
@@ -71,6 +70,13 @@ const routes = [
     name: 'CompanyTracking',
     component: OrderTrackingCompany,
     meta: { requiresAuth: true, roles: ['company'] },
+  },
+  // Новый маршрут для страницы администраторов, где они просматривают заказы и берут их в менторство
+  {
+    path: '/admin/orders',
+    name: 'AdminsOrders',
+    component: AdminOrders,
+    meta: { requiresAuth: true, roles: ['admin'] },
   },
 ];
 

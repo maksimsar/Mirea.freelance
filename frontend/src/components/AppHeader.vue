@@ -42,9 +42,13 @@
                 <li class="nav-item">
                   <router-link class="nav-link" to="/order_processing">Обработка заказов</router-link>
                 </li>
-                <!-- Добавляем ссылку на отслеживание заказов, которая раньше была для преподавателя -->
+                <!-- Ссылка на отслеживание заказов (ранее для преподавателя) -->
                 <li class="nav-item">
                   <router-link class="nav-link" to="/tracking/teacher">Отслеживание заказов</router-link>
+                </li>
+                <!-- Новая ссылка для перехода на страницу заказов для менторства -->
+                <li class="nav-item">
+                  <router-link class="nav-link" to="/admin/orders">Менторские заказы</router-link>
                 </li>
               </template>
               <!-- Меню для компании -->
