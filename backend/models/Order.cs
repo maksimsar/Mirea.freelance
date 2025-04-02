@@ -13,17 +13,17 @@ public class Order
     
     public decimal Budget { get; set; }
     
-    public int ClientProfileId { get; set; }
+    public int CompanyProfileId { get; set; }
     
-    public CompanyProfile ClientProfile { get; set; } = null!;
+    public CompanyProfile CompanyProfile { get; set; } = null!;
     
-    public int? FreelancerProfileId { get; set; }
-    
-    public StudentProfile FreelancerProfile { get; set; } = null!;
+    public ICollection<StudentProfile> FreelancerProfiles { get; set; } = new List<StudentProfile>();
     
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     
     public DateTime? Deadline { get; set; }
+    
+    public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 }
 
 
