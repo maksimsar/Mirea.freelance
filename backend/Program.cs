@@ -7,7 +7,7 @@ using Mirea.freelance.backend.models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Добавляем конфигурацию для подключения к PostgreSQL
+// Настраиваем DbContext через DI с использованием строки подключения из appsettings.json
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
