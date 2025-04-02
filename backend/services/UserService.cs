@@ -1,9 +1,9 @@
-using Mirea.Freelance.backend.data;
+using Mirea.freelance.backend.data;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Text;
-using Mirea.Freelance.backend.models;
+using Mirea.freelance.backend.models;
 
 public class UserService
 {

@@ -1,6 +1,6 @@
-using Mirea.Freelance.backend.data;
+using Mirea.freelance.backend.data;
 using Microsoft.EntityFrameworkCore;
-using Mirea.Freelance.backend.models;
+using Mirea.freelance.backend.models;
 
 public class ProfileService
 {
