@@ -28,6 +28,8 @@ public class StudentProfile : Profile
 
     // Сфера разработки или специальность
     public string SphereOfDevelopment { get; set; } = string.Empty;
+    
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
 }
 
 // Профиль для преподавателя
@@ -58,6 +60,8 @@ public class CompanyProfile : Profile
     
     // Коллекция контактов компании
     public ICollection<CompanyContact> Contacts { get; set; } = new List<CompanyContact>();
+    
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
     
     public string TaxId { get; set; } = string.Empty; //ИНН
     public string Website { get; set; } = string.Empty;
