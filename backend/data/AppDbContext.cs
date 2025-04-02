@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Mirea.Freelance.backend.models;
+using Mirea.freelance.backend.models;
 
 
-namespace Mirea.Freelance.backend.data
+namespace Mirea.freelance.backend.data
 {
     public class AppDbContext : DbContext
     {

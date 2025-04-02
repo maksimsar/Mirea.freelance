@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Mirea.Freelance.backend.data;
+using Mirea.freelance.backend.data;
 using System.Threading.Tasks;
 
 [ApiController]

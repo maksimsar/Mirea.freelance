@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Mirea.Freelance.backend.data;
+using Mirea.freelance.backend.data;
 using System.Text;
-using Mirea.Freelance.backend.services;
-using Mirea.Freelance.backend.models; // убедитесь, что Order находится в этом пространстве имен
+using Mirea.freelance.backend.services;
+using Mirea.freelance.backend.models;
 
 var builder = WebApplication.CreateBuilder(args);
 
