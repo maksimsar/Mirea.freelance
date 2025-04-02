@@ -1,18 +1,15 @@
 <template>
   <div class="container mt-4">
-    <!-- Компонент переключения профилей -->
-    <ProfileSwitcher />
-
+    <!-- Компонент ProfileSwitcher удалён -->
     <div class="row mt-4">
       <div class="col-md-4">
         <ProfileAvatar :avatar="user.avatar" />
         <ReviewsSection :reviews="user.reviews" />
       </div>
       <div class="col-md-8">
-        <UserInfo :user="user" @edit="openEditModal" />
+        <TeacherInfo :user="user" @edit="openEditModal" />
       </div>
     </div>
-
     <ModalEdit
       v-if="currentField"
       :placeholder="getPlaceholder()"
@@ -23,21 +20,19 @@
 </template>
 
 <script>
-import { Modal } from 'bootstrap'; // Используем объектный импорт
+import { Modal } from 'bootstrap';
 import ProfileAvatar from '../components/ProfileAvatar.vue';
-import UserInfo from '../components/UserInfo.vue';
+import TeacherInfo from '../components/TeacherInfo.vue';
 import ReviewsSection from '../components/ReviewsSection.vue';
 import ModalEdit from '../components/ModalEdit.vue';
-import ProfileSwitcher from '../components/ProfileSwitcher.vue'; // Импортируем новый компонент
 
 export default {
   name: 'ProfilePage',
   components: {
     ProfileAvatar,
-    UserInfo,
+    TeacherInfo,
     ReviewsSection,
     ModalEdit,
-    ProfileSwitcher, // Добавляем компонент в список компонентов
   },
   data() {
     return {
@@ -48,7 +43,8 @@ export default {
         patronymic: 'Иванович',
         phone: '+7-999-123-45-67',
         telegram: '@ivan_ivanov',
-        grade: 4.5,
+        rating: 4.8,
+        developmentArea: 'Web-разработка',
         reviews: [
           {
             customerFeedback: 'Прекрасная работа! Все выполнено в срок.',
@@ -115,5 +111,5 @@ export default {
 </script>
 
 <style scoped>
-/* Дополнительные стили, если нужно */
+/* Дополнительные стили при необходимости */
 </style>
