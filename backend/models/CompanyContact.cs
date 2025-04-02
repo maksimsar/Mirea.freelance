@@ -8,13 +8,13 @@ public class CompanyContact
     // Внешний ключ для связи с CompanyProfile
     public int CompanyProfileId { get; set; }
     
-    public CompanyProfile CompanyProfile { get; set; }
+    public CompanyProfile CompanyProfile { get; set; } = null!;
     
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     
-    public string Phone { get; set; }
+    public string Phone { get; set; } = string.Empty;
     
-    public string Telegram { get; set; }
+    public string Telegram { get; set; } = string.Empty;
     
-    public string Email { get; set; } // если потребуется
+    public string Email { get; set; } = string.Empty; // если потребуется
 }
