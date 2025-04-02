@@ -1,44 +1,30 @@
-using System.ComponentModel.DataAnnotations;  
-using System.ComponentModel.DataAnnotations.Schema;  
-using System.Text.Json.Serialization;
 
-namespace Mirea.Freelance.backend.models
+namespace Mirea.freelance.backend.models;
+
+public class Order
 {
-    public class Order
-    {
-        [Column("id")]
-        public int Id { get; set; }
+    public int Id { get; set; }
     
-        [Column("title")]
-        public string Title { get; set; }
+    public string Title { get; set; }
     
-        [Column("description")]
-        public string Description { get; set; }
+    public string Description { get; set; }
     
-        [Column("status")]
-        public string Status { get; set; } = "Open";
+    public string Status { get; set; } = "Open";
     
-        [Column("budget")]
-        public decimal Budget { get; set; }
+    public decimal Budget { get; set; }
     
-        [Column("clientprofileid")]
-        [ForeignKey("ClientProfile")]
-        public int ClientProfileId { get; set; }
+    public int ClientProfileId { get; set; }
+
+    public CompanyProfile ClientProfile { get; set; }
     
-        public Profile ClientProfile { get; set; }
+    public int? FreelancerProfileId { get; set; }
+
+    public StudentProfile FreelancerProfile { get; set; }
     
-        [Column("freelancerprofileid")]
-        [ForeignKey("FreelancerProfile")]
-        public int? FreelancerProfileId { get; set; }
+    public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     
-        public Profile FreelancerProfile { get; set; }
-    
-        [Column("createddate")]
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-    
-        [Column("deadline")]
-        public DateTime? Deadline { get; set; }
-    }
+    public DateTime? Deadline { get; set; }
 }
+
 
 
