@@ -1,7 +1,7 @@
 ### DotnetCore template
 # .NET Core build folders
-bin/
-obj/
+backend\bin\
+backend\obj\
 bin/
 obj/
 
