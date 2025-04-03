@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Mirea.Freelance.backend.data;
+using Mirea.freelance.backend.data;
 using System.Text;
-using Mirea.Freelance.backend.services;
-
+using Mirea.freelance.backend.services;
+using Mirea.freelance.backend.models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Добавляем конфигурацию для подключения к PostgreSQL
+// Настраиваем DbContext через DI с использованием строки подключения из appsettings.json
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -16,9 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProfileService>();
-builder.Services.AddScoped<TaskService>();
+builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<RoleService>();
-
 
 var app = builder.Build();
 
@@ -34,18 +33,15 @@ app.Use(async (context, next) =>
     await next();
 });
 
-
-// Добавляем эндпоинт для создания пользователя
+// Эндпоинт для создания пользователя
 app.MapPost("api/users", async (UserService userService, [FromBody] CreateUserDto createUserDto) =>
 {
     if (string.IsNullOrWhiteSpace(createUserDto.Username) ||
-    string.IsNullOrWhiteSpace(createUserDto.Password) ||
-    string.IsNullOrWhiteSpace(createUserDto.Email))
-{
-    return Results.BadRequest("All fields are required.");
-}
-
-
+        string.IsNullOrWhiteSpace(createUserDto.Password) ||
+        string.IsNullOrWhiteSpace(createUserDto.Email))
+    {
+        return Results.BadRequest("All fields are required.");
+    }
 
     Console.WriteLine($"Received Username: {createUserDto.Username}");
     Console.WriteLine($"Received Password: {createUserDto.Password}");
@@ -59,7 +55,6 @@ app.MapPost("api/users", async (UserService userService, [FromBody] CreateUserDt
     return Results.BadRequest(message);
 });
 
-
 app.MapGet("/api/users/{id}", async (UserService userService, int id) =>
 {
     var user = await userService.GetUserByIdAsync(id);
@@ -67,7 +62,6 @@ app.MapGet("/api/users/{id}", async (UserService userService, int id) =>
     {
         return Results.NotFound(new { message = "Пользователь не найден" });
     }
-
 
     var userDto = new
     {
@@ -92,16 +86,14 @@ app.MapDelete("/api/users/{id}", async (UserService userService, int id) =>
     return Results.NotFound(message);
 });
 
-//Эндпоинт для поиска профиля по id пользователя
+// Эндпоинт для поиска профиля по id пользователя
 app.MapGet("/api/profiles/{id}", async (ProfileService profileService, int id) =>
 {
     var profile = await profileService.GetProfileByIdAsync(id);
-
     if (profile != null)
     {
         return Results.Ok(profile);
     }
-
     return Results.NotFound("Профиль не найден");
 });
 
@@ -109,45 +101,46 @@ app.MapGet("/api/profiles/{id}", async (ProfileService profileService, int id) =
 app.MapPatch("/api/profiles/{id}", async (ProfileService profileService, int id, [FromBody] Profile updatedProfile) =>
 {
     var (success, message) = await profileService.UpdateProfileAsync(id, updatedProfile);
-
     if (success)
     {
         return Results.Ok(message);
     }
-
     return Results.NotFound(message);
 });
+
 //
+// Эндпоинты для заказов (ранее задачи)
+
+// Создание заказа
+app.MapPost("/api/orders", async (OrderService orderService, [FromBody] Order order) =>
+{
+    var createdOrder = await orderService.CreateOrderAsync(order);
+    return Results.Created($"/api/orders/{createdOrder.Id}", createdOrder);
+});
+
+// Получение заказа по ID
+app.MapGet("/api/orders/{id}", async (OrderService orderService, int id) =>
+{
+    var order = await orderService.GetOrderByIdAsync(id);
+    return order != null ? Results.Ok(order) : Results.NotFound("Заказ не найден");
+});
+
+// Обновление заказа
+app.MapPut("/api/orders/{id}", async (OrderService orderService, int id, [FromBody] Order updatedOrder) =>
+{
+    var order = await orderService.UpdateOrderAsync(id, updatedOrder);
+    return order != null ? Results.Ok(order) : Results.NotFound("Заказ не найден");
+});
+
+// Удаление заказа
+app.MapDelete("/api/orders/{id}", async (OrderService orderService, int id) =>
+{
+    var success = await orderService.DeleteOrderAsync(id);
+    return success ? Results.Ok("Заказ удалён") : Results.NotFound("Заказ не найден");
+});
+
 //
-//Task
-
-// Создание задачи
-app.MapPost("/api/tasks", async (TaskService taskService, [FromBody] Task task) =>
-{
-    var createdTask = await taskService.CreateTaskAsync(task);
-    return Results.Created($"/api/tasks/{createdTask.Id}", createdTask);
-});
-
-// Получение задачи по ID
-app.MapGet("/api/tasks/{id}", async (TaskService taskService, int id) =>
-{
-    var task = await taskService.GetTaskByIdAsync(id);
-    return task != null ? Results.Ok(task) : Results.NotFound("Задача не найдена");
-});
-
-// Обновление задачи
-app.MapPut("/api/tasks/{id}", async (TaskService taskService, int id, [FromBody] Task updatedTask) =>
-{
-    var task = await taskService.UpdateTaskAsync(id, updatedTask);
-    return task != null ? Results.Ok(task) : Results.NotFound("Задача не найдена");
-});
-
-// Удаление задачи
-app.MapDelete("/api/tasks/{id}", async (TaskService taskService, int id) =>
-{
-    var success = await taskService.DeleteTaskAsync(id);
-    return success ? Results.Ok("Задача удалена") : Results.NotFound("Задача не найдена");
-});
+// Эндпоинты для ролей
 
 // Эндпоинт для создания роли
 app.MapPost("/api/roles", async (RoleService roleService, [FromBody] Role role) =>
@@ -165,12 +158,6 @@ app.MapPut("/api/roles/{id}", async (RoleService roleService, int id, [FromBody]
     return role != null ? Results.Ok(role) : Results.NotFound("Роль не найдена");
 });
 
-//
-//
-//
-
-
-// Запуск приложения
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
