@@ -2,19 +2,15 @@ using System.ComponentModel.DataAnnotations;   // Для использован�
 using System.ComponentModel.DataAnnotations.Schema;  // Для использования [Column]
 
 
+namespace Mirea.freelance.backend.models;
+
 public class User
 {
-    [Key]
-    [Column("id")]  // Указание имени столбца как "id"
     public int Id { get; set; }
-
-    [Column("login")]
-    public string Login { get; set; }
-
-    [Column("passwordhash")]
-    public string PasswordHash { get; set; }
-
-    [Column("registrationdate")]
+    
+    public string Login { get; set; } = string.Empty;
+    
+    public string PasswordHash { get; set; } = string.Empty;
+    
     public DateTime RegistrationDate { get; set; }
-
 }
