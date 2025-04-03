@@ -5,8 +5,8 @@
       <h3>Не обработан</h3>
       <transition-group name="list" tag="div">
         <SOrderCard
-          v-for="(order, index) in orders.unprocessed"
-          :key="index"
+          v-for="order in orders.unprocessed"
+          :key="order.Id"
           :order="order"
           @startProcessing="moveToProcessing"
         />
@@ -18,8 +18,8 @@
       <h3>В обработке</h3>
       <transition-group name="list" tag="div">
         <SOrderCard
-          v-for="(order, index) in orders.processing"
-          :key="index"
+          v-for="order in orders.processing"
+          :key="order.Id"
           :order="order"
           @approve="approveOrder"
           @reject="rejectOrder"
@@ -33,8 +33,8 @@
       <h3>Обработан</h3>
       <transition-group name="list" tag="div">
         <SOrderCard
-          v-for="(order, index) in orders.processed"
-          :key="index"
+          v-for="order in orders.processed"
+          :key="order.Id"
           :order="order"
         />
       </transition-group>
@@ -62,55 +62,54 @@ export default {
       orders: {
         unprocessed: [
           {
-            company: {
-              name: "Компания 1",
-              ogrn: "123",
-              inn: "456",
-              address: "ул. Примерная, 1",
-            },
-            status: "unprocessed",
+            Id: 1,
+            Title: "Заказ №1",
+            Description: "Описание заказа №1. Общая суть и задачи.",
+            Status: "unprocessed",
+            Budget: 10000,
+            Deadline: "2025-04-20",
+            CompanyProfile: { name: "Компания 1", address: "ул. Примерная, 1" },
+            // Дополнительные коллекции (FreelancerProfiles, Feedbacks) можно добавить по необходимости
           },
           {
-            company: {
-              name: "Компания 2",
-              ogrn: "124",
-              inn: "457",
-              address: "ул. Примерная, 2",
-            },
-            status: "unprocessed",
+            Id: 2,
+            Title: "Заказ №2",
+            Description: "Описание заказа №2. Детали и этапы выполнения.",
+            Status: "unprocessed",
+            Budget: 15000,
+            Deadline: "2025-05-10",
+            CompanyProfile: { name: "Компания 2", address: "ул. Примерная, 2" },
           },
         ],
         processing: [],
         processed: [],
       },
-      editingOrder: null, // Заказ, который редактируем в модалке
+      editingOrder: null, // Заказ для редактирования
     };
   },
   methods: {
-    // Перевод из "Не обработан" -> "В обработке"
     moveToProcessing(order) {
-      this.orders.unprocessed = this.orders.unprocessed.filter(o => o !== order);
-      order.status = "processing";
+      // Удаляем заказ из не обработанных
+      this.orders.unprocessed = this.orders.unprocessed.filter(o => o.Id !== order.Id);
+      order.Status = "processing";
       this.orders.processing.push(order);
     },
-    // Одобрить заказ
     approveOrder(order) {
-      this.orders.processing = this.orders.processing.filter(o => o !== order);
-      order.status = "processed_positive"; // Заказ одобрен
+      this.orders.processing = this.orders.processing.filter(o => o.Id !== order.Id);
+      order.Status = "processed_positive";
       this.orders.processed.push(order);
     },
-    // Отклонить заказ
     rejectOrder(order) {
-      this.orders.processing = this.orders.processing.filter(o => o !== order);
-      order.status = "processed_negative"; // Заказ отклонён
+      this.orders.processing = this.orders.processing.filter(o => o.Id !== order.Id);
+      order.Status = "processed_negative";
       this.orders.processed.push(order);
     },
-    // Открываем модальное окно для редактирования – передаём сам объект заказа для двусторонней привязки
     openEditModal(order) {
+      // Передаём сам объект заказа для двусторонней привязки
       this.editingOrder = order;
     },
-    // Сохраняем отредактированные данные – изменения уже отражены, просто закрываем модалку
     saveOrder() {
+      // Изменения уже сохранены, просто закрываем модальное окно
       this.editingOrder = null;
     },
   },
@@ -120,7 +119,6 @@ export default {
 <style scoped>
 @import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css";
 
-/* Контейнер с тремя колонками */
 .processing-order {
   display: flex;
   justify-content: space-between;
@@ -129,8 +127,6 @@ export default {
   gap: 1em;
   min-height: calc(100vh - 60px);
 }
-
-/* Оформление колонок */
 .column {
   flex: 1;
   background-color: #fff;
@@ -141,9 +137,8 @@ export default {
 .column h3 {
   margin-bottom: 1em;
   text-align: center;
+  color: #007bff;
 }
-
-/* Плавные перемещения карточек */
 .list-enter-active,
 .list-leave-active {
   transition: all 0.3s ease;
