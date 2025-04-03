@@ -4,6 +4,7 @@ using Mirea.freelance.backend.data;
 using System.Text;
 using Mirea.freelance.backend.services;
 using Mirea.freelance.backend.models;
+using Mirea.freelance.backend.repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Добавляем сервисы
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
+
 builder.Services.AddScoped<ProfileService>();
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<RoleService>();
