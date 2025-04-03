@@ -1,0 +1,67 @@
+
+namespace Mirea.freelance.backend.models;
+
+public abstract class Profile
+{
+    // Будет использоваться как первичный ключ, а также внешний ключ к User (если связь 1:1)
+    public int UserId { get; set; }
+
+    // Навигационное свойство на пользователя
+    public User User { get; set; } = null!;
+}
+
+// Профиль для студента
+public class StudentProfile : Profile
+{
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string Patronymic { get; set; } = string.Empty;
+    
+    public int Age { get; set; }
+    public string Gender { get; set; } = string.Empty;
+    
+    public string Phone { get; set; } = string.Empty;
+    public string Telegram { get; set; } = string.Empty;
+    
+    public decimal Rating { get; set; } = 0;
+
+    // Сфера разработки или специальность
+    public string SphereOfDevelopment { get; set; } = string.Empty;
+    
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
+}
+
+// Профиль для преподавателя
+public class MentorProfile : Profile
+{
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string Patronymic { get; set; } = string.Empty;
+    
+    public int Age { get; set; }
+    public string Gender { get; set; } = string.Empty;
+    
+    public string Phone { get; set; } = string.Empty;
+    public string Telegram { get; set; } = string.Empty;
+
+    // Здесь может быть предмет, который ведёт преподаватель, или его специализация
+    public string SphereOfDevelopment { get; set; } = string.Empty;
+
+    // Пример: кабинет, адрес вуза и т.п.
+    public string OfficeAddress { get; set; } = string.Empty;
+}
+
+// Профиль для компании
+public class CompanyProfile : Profile
+{
+    public string CompanyName { get; set; } = string.Empty;
+    public string CompanyAddress { get; set; } = string.Empty;
+    
+    // Коллекция контактов компании
+    public ICollection<CompanyContact> Contacts { get; set; } = new List<CompanyContact>();
+    
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
+    
+    public string TaxId { get; set; } = string.Empty; //ИНН
+    public string Website { get; set; } = string.Empty;
+}
