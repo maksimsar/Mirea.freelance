@@ -17,7 +17,7 @@ public interface IOrderRepository
     Task UpdateAsync(Order order);
     
     //
-    Task DeleteAsync(Order order);
+    Task DeleteAsync(int id);
     
     //
     Task<IEnumerable<Order>> GetOrdersByCompanyIdAsync(int companyProfileId);
