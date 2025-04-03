@@ -36,7 +36,7 @@ public class UserService
             bool loginTaken = await _userRepository.IsLoginTakenAsync(login);
             if (loginTaken)
             {
-                return (false, "Login is already taken.", null);
+                return (false, "Пользователь уже существует.", null);
             }
 
             // Создаём сущность пользователя
@@ -51,7 +51,7 @@ public class UserService
             // Добавим в БД
             await _userRepository.AddAsync(newUser);
 
-            return (true, "User created successfully.", newUser);
+            return (true, "Пользователь успешно создан.", newUser);
         }
 
         // Пример: Обновить пользователя
@@ -60,7 +60,7 @@ public class UserService
         {
             var existingUser = await _userRepository.GetByIdAsync(id);
             if (existingUser == null)
-                return (false, "User not found.", null);
+                return (false, "Пользователь не найден.", null);
 
             // Предположим, нужно обновить логин и пароль
             existingUser.Login = newLogin;
@@ -68,7 +68,7 @@ public class UserService
 
             await _userRepository.UpdateAsync(existingUser);
 
-            return (true, "User updated successfully.", existingUser);
+            return (true, "Пользователь обновлен.", existingUser);
         }
 
         // Пример: Удалить пользователя
@@ -78,10 +78,10 @@ public class UserService
             var user = await _userRepository.GetByIdAsync(id);
             if (user == null)
             {
-                return (false, "User not found.");
+                return (false, "пользователь обновлен.");
             }
 
             await _userRepository.DeleteAsync(id);
-            return (true, "User deleted successfully.");
+            return (true, "Пользователь удален успешно.");
         }
     }
