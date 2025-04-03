@@ -1,15 +1,15 @@
 <template>
   <div>
-    <!-- Header Section -->
-    <header class="bg-light py-4">
+    <!-- Interactive Explanation Section with Tabs -->
+    <main class="container my-4">
+       <!-- Header Section -->
+    <header>
       <div class="container">
         <h1 class="text-center">Поможем всем!</h1>
         <p class="text-center">Этот сайт поможет студентам РТУ МИРЭА и компаниям эффективно взаимодействовать для выполнения проектов.</p>
       </div>
     </header>
 
-    <!-- Interactive Explanation Section with Tabs -->
-    <main class="container my-4">
       <div class="row">
         <div class="col-4">
           <div class="list-group" id="list-tab" role="tablist">
@@ -49,22 +49,22 @@
               <h5>Почему это выгодно?</h5>
               <p>Проект предоставляет уникальную возможность студентам РТУ МИРЭА выполнить реальные кейсы от компаний, развить навыки и заработать деньги, а заказчикам — получить качественное решение от перспективных специалистов.</p>
             </div>
-            <div v-show="activeTab === 'student'" class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+            <div v-show="activeTab === 'student'" class="tab-pane fade show active" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
               <h5>Преимущества для студентов</h5>
               <p>Студенты могут работать над реальными проектами, развивать профессиональные навыки и строить портфолио.</p>
             </div>
-            <div v-show="activeTab === 'teacher'" class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
+            <div v-show="activeTab === 'teacher'" class="tab-pane fade show active" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
               <h5>Преимущества для преподавателей</h5>
               <p>Преподаватели смогут назначать студентов на реальные задачи, помогать им развивать навыки и координировать работу над проектами.</p>
             </div>
-            <div v-show="activeTab === 'client'" class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">
+            <div v-show="activeTab === 'client'" class="tab-pane fade show active" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">
               <h5>Преимущества для заказчиков</h5>
               <p>Заказчики смогут получить решение своих задач от студентов, поддерживая инновации и развивая молодежь.</p>
             </div>
           </div>
         </div>
       </div>
-    </main>
+
 
     <!-- Latest Orders Section -->
     <section class="container my-4">
@@ -76,7 +76,7 @@
             <div class="card-body">
               <h5 class="card-title">Разработка корпоративного сайта для компании</h5>
               <p class="card-text">Требуется разработка функционального и привлекательного сайта для компании. Сроки: 2 месяца.</p>
-              <a href="#" class="btn btn-primary">Перейти к заказу</a>
+              <a href="#" class="btn">Перейти к заказу</a>
             </div>
           </div>
         </div>
@@ -86,7 +86,7 @@
             <div class="card-body">
               <h5 class="card-title">Создание логотипа для стартапа</h5>
               <p class="card-text">Необходим уникальный и запоминающийся логотип для нового стартапа. Сроки: 1 месяц.</p>
-              <a href="#" class="btn btn-primary">Перейти к заказу</a>
+              <a href="#" class="btn">Перейти к заказу</a>
             </div>
           </div>
         </div>
@@ -96,12 +96,13 @@
             <div class="card-body">
               <h5 class="card-title">Разработка стратегии продвижения</h5>
               <p class="card-text">Нужна стратегия продвижения для нового продукта на рынке. Сроки: 1,5 месяца.</p>
-              <a href="#" class="btn btn-primary">Перейти к заказу</a>
+              <a href="#" class="btn">Перейти к заказу</a>
             </div>
           </div>
         </div>
       </div>
     </section>
+  </main>
   </div>
 </template>
 
@@ -122,12 +123,43 @@ export default {
 </script>
 
 <style scoped>
+
 .list-group-item {
   cursor: pointer;
+  background-color: #303841;
+  color: #E0E0E0;
+  border: none;
+
+}
+
+.list-group-item:hover {
+  background-color: #ff047dc3;
+  color: white;
 }
 
 .list-group-item.active {
-  background-color: #007bff;
+  background-color: #a1014f;
   color: white;
+}
+
+.btn {
+  background-color: #00b5c5;
+  color: white;
+
+}
+.btn:hover {
+  background-color:  #037485;
+  color: white;
+}
+
+.card {
+  background-color: #303841;
+  color: #E0E0E0;
+  margin-bottom: 10px;
+}
+
+.card-header{
+  background-color: #1A1F2A;
+  color: #E0E0E0;
 }
 </style>

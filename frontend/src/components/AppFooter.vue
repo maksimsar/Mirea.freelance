@@ -8,13 +8,16 @@
 
 <script>
 export default {
-  name: 'AppFooter',
+  name: "AppFooter",
 };
 </script>
 
 <style scoped>
 /* Устанавливаем фон футера */
 .bg-custom {
-  background-color: #007bff !important;
+  background-color: #1a1f2a !important;
+  color: #e0e0e0d0;
+  font-family: "BezierSans-Regular";
+  font-size: 14px;
 }
 </style>
