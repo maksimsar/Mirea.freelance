@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Mirea.freelance.backend.models;
 
 
-namespace Mirea.Freelance.backend.data
+namespace Mirea.freelance.backend.data
 {
     public class AppDbContext : DbContext
     {
@@ -10,55 +11,242 @@ namespace Mirea.Freelance.backend.data
         {
         }
 
-        public DbSet<Feedback> Feedbacks { get; set; }
-        public DbSet<Profile> Profiles { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<Task> Tasks { get; set; }
-        public DbSet<User> User { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<User> Users { get; set; } = null!;
 
+        public DbSet<Profile> Profiles { get; set; } = null!;
+
+        public DbSet<Role> Roles { get; set; } = null!;
+
+        public DbSet<UserRole> UserRoles { get; set; } = null!;
+
+        public DbSet<Order> Orders { get; set; } = null!;
+
+        public DbSet<Feedback> Feedbacks { get; set; } = null!;
+
+        public DbSet<CompanyContact> CompanyContacts { get; set; } = null!;
+
+        // OnConfiguring оставлен как запасной вариант, если DI не настроит опции (например, при выполнении миграций)
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = "Host=Your_host;Port=5252;Database=name_of_database;Username=name_of_user;Password=your_pass";
-            optionsBuilder.UseNpgsql(connectionString);
+            if (!optionsBuilder.IsConfigured)
+            {
+                // Создаём конфигурацию вручную из appsettings.json, который находится в корне приложения
+                var configuration = new ConfigurationBuilder()
+                    .SetBasePath(AppContext.BaseDirectory)
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .Build();
+
+                // Читаем строку подключения по ключу "DefaultConnection"
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+                // Настраиваем подключение к PostgreSQL
+                optionsBuilder.UseNpgsql(connectionString);
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .ToTable("user");  // Указываем, что таблица будет называться 'user'
-                
-            modelBuilder.Entity<Profile>()
-                .ToTable("profile");  // Указываем, что таблица будет называться 'profile'
+            //Настройка сущщности User
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("Users");
 
-            modelBuilder.Entity<Profile>()
-                .HasKey(p => p.userid);
-            
-            modelBuilder.Entity<Task>()
-                .ToTable("task") // Устанавливаем имя таблицы
-                .HasKey(t => t.Id); // Устанавливаем первичный ключ
-            
-            modelBuilder.Entity<Task>()
-                .HasOne(t => t.ClientProfile)
-                .WithMany()
-                .HasForeignKey(t => t.ClientProfileId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .IsRequired(); // Удаление задачи при удалении профиля клиента
+                entity.HasKey(u => u.Id);
+                entity.Property(u => u.Login).IsRequired();
+                entity.Property(u => u.PasswordHash).IsRequired();
+                entity.Property(u => u.RegistrationDate).IsRequired();
+            });
 
-            // Связь Task с FreelancerProfile
-            modelBuilder.Entity<Task>()
-                .HasOne(t => t.FreelancerProfile)
-                .WithMany()
-                .HasForeignKey(t => t.FreelancerProfileId)
-                .OnDelete(DeleteBehavior.SetNull); 
-            // Определяем поведение при удалении (например, удалить профиль, если удаляется пользователь)
-            modelBuilder.Entity<Role>()
-                .ToTable("role")
-                .HasKey(r => r.Id); // Устанавливаем первичный ключ
+            //Настройка базовой сущности Profile
+            modelBuilder.Entity<Profile>(entity =>
+            {
+                entity.ToTable("Profiles");
+
+                entity.HasKey(p => p.UserId);
+                entity.Property(p => p.Rating).IsRequired();
+
+                entity.HasOne(p => p.User)
+                    .WithOne()
+                    .HasForeignKey<Profile>(p => p.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+            });
+
+            //Настройка наследуемой сущности StudentProfile
+            modelBuilder.Entity<StudentProfile>(entity =>
+            {
+                entity.ToTable("StudentProfiles");
+
+                entity.Property(s => s.FirstName).IsRequired();
+                entity.Property(s => s.LastName).IsRequired();
+                entity.Property(s => s.Patronymic);
+
+                entity.Property(s => s.Age).IsRequired();
+                entity.Property(s => s.Gender).IsRequired();
+                entity.Property(s => s.Phone).IsRequired();
+                entity.Property(s => s.Telegram).IsRequired();
+                entity.Property(s => s.SphereOfDevelopment).IsRequired();
+            });
+
+            //Настройка наследуемой сущности MentorProfile
+            modelBuilder.Entity<MentorProfile>(entity =>
+            {
+                entity.ToTable("MentorProfiles");
+
+                entity.Property(m => m.FirstName).IsRequired();
+                entity.Property(m => m.LastName).IsRequired();
+                entity.Property(m => m.Patronymic);
+                entity.Property(m => m.Age).IsRequired();
+                entity.Property(m => m.Gender).IsRequired();
+                entity.Property(m => m.Phone).IsRequired();
+                entity.Property(m => m.Telegram).IsRequired();
+                entity.Property(m => m.SphereOfDevelopment).IsRequired();
+                entity.Property(m => m.OfficeAddress).IsRequired();
+            });
+
+            //Настройка наследуемой сущности CompanyProfile
+            modelBuilder.Entity<CompanyProfile>(entity =>
+            {
+                entity.ToTable("CompanyProfiles");
+
+                entity.Property(cp => cp.CompanyName).IsRequired();
+                entity.Property(cp => cp.CompanyAddress).IsRequired();
+                entity.Property(cp => cp.TaxId).IsRequired();
+                entity.Property(cp => cp.Website);
+
+                entity.HasMany(cp => cp.Contacts)
+                    .WithOne(cc => cc.CompanyProfile)
+                    .HasForeignKey(cc => cc.CompanyProfileId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
             
+            //Настройка  сущности CompanyContact
+            modelBuilder.Entity<CompanyContact>(entity =>
+            {
+                entity.ToTable("CompanyContacts");
+
+                entity.HasKey(cc => cc.Id);
+
+                entity.Property(cc => cc.Name).IsRequired();
+                entity.Property(cc => cc.Phone).IsRequired();
+                entity.Property(cc => cc.Telegram).IsRequired();
+                entity.Property(cc => cc.Email);
+
+                entity.HasOne(cc => cc.CompanyProfile)
+                    .WithMany(cp => cp.Contacts)
+                    .HasForeignKey(cc => cc.CompanyProfileId)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            //Настройка сущности UserRole
+            modelBuilder.Entity<UserRole>(entity =>
+            {
+                entity.ToTable("UserRoles");
+
+                entity.HasKey(ur => ur.Id);
+
+                entity.Property(ur => ur.AssignedDate).IsRequired();
+
+                entity.HasOne(ur => ur.User)
+                    .WithMany()
+                    .HasForeignKey(ur => ur.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(ur => ur.Role)
+                    .WithMany()
+                    .HasForeignKey(ur => ur.RoleId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
             
-            // Дополнительные настройки сущностей (если нужно)
+            //Настройка сущности Role
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.ToTable("Roles");
+
+                entity.HasKey(r => r.Id);
+                entity.Property(r => r.Name).IsRequired();
+            });
+            
+            //Настройка сущности Order
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.ToTable("Orders");
+
+                entity.HasKey(o => o.Id);
+
+                entity.Property(o => o.Title).IsRequired();
+                entity.Property(o => o.Description).IsRequired();
+                entity.Property(o => o.Status).IsRequired();
+                entity.Property(o => o.Budget).IsRequired();
+                entity.Property(o => o.CreatedDate).IsRequired();
+                entity.Property(o => o.Deadline).IsRequired();
+
+                // Настройка связи "один ко многим": один CompanyProfile имеет много Orders.
+                entity.HasOne(o => o.CompanyProfile)
+                    .WithMany(cp => cp.Orders)  // Свойство Orders в CompanyProfile
+                    .HasForeignKey(o => o.CompanyProfileId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(o => o.FreelancerProfiles)
+                    .WithMany(sp => sp.Orders)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "OrderFreelancer", // имя промежуточной таблицы
+                        j => j
+                            .HasOne<StudentProfile>()
+                            .WithMany()
+                            .HasForeignKey("FreelancerProfileId")
+                            .IsRequired(false) // делаем FK nullable
+                            .OnDelete(DeleteBehavior.SetNull),
+                        j => j
+                            .HasOne<Order>()
+                            .WithMany()
+                            .HasForeignKey("OrderId")
+                            .OnDelete(DeleteBehavior.Cascade));
+            });
+            
+            //Настройка сущности FeedBack
+            modelBuilder.Entity<Feedback>(entity =>
+            {
+                // Указываем имя таблицы
+                entity.ToTable("Feedbacks");
+
+                // Задаём первичный ключ
+                entity.HasKey(f => f.Id);
+
+                // Настраиваем свойства
+                entity.Property(f => f.OrderId).IsRequired();
+                entity.Property(f => f.AuthorProfileId).IsRequired();
+                entity.Property(f => f.RecipientProfileId).IsRequired();
+                entity.Property(f => f.Rating).IsRequired();
+                entity.Property(f => f.Comment)
+                    .IsRequired()
+                    .HasMaxLength(500);
+                entity.Property(f => f.CreatedDate)
+                    .IsRequired()
+                    .HasColumnType("timestamp without time zone");
+
+                // Настраиваем связь между Feedback и Order
+                // Предполагаем, что в Order есть коллекция обратных навигационных свойств (например, Feedbacks)
+                entity.HasOne(f => f.Order)
+                    .WithMany(o => o.Feedbacks) // добавьте это свойство в Order: public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+                    .HasForeignKey(f => f.OrderId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Настраиваем связь между Feedback и AuthorProfile
+                // Если в Profile нет коллекционного свойства для authored feedback, используем WithMany() без параметра
+                entity.HasOne(f => f.AuthorProfile)
+                    .WithMany()
+                    .HasForeignKey(f => f.AuthorProfileId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // Настраиваем связь между Feedback и RecipientProfile
+                entity.HasOne(f => f.RecipientProfile)
+                    .WithMany()
+                    .HasForeignKey(f => f.RecipientProfileId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
         }
-
     }
 }
