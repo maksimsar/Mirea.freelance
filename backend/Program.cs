@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Mirea.freelance.backend.data;
 using System.Text;
+using Mirea.freelance.backend.data;
 using Mirea.freelance.backend.services;
 using Mirea.freelance.backend.models;
+using Mirea.freelance.backend.repositories;
+using Mirea.freelance.backend.dto;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +16,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Добавляем сервисы
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<ProfileService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<OrderService>();
-builder.Services.AddScoped<RoleService>();
 
 var app = builder.Build();
 
@@ -167,5 +169,3 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.Run();
-
-record CreateUserDto(string Username, string Password, string Email);
