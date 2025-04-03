@@ -3,85 +3,114 @@ using Mirea.freelance.backend.repositories;
 using Mirea.freelance.backend.data;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Mirea.freelance.backend.dto;
 
 namespace Mirea.freelance.backend.services;
 
 public class UserService
+{
+    private readonly IUserRepository _userRepository;
+
+    public UserService(IUserRepository userRepository)
     {
-        private readonly IUserRepository _userRepository;
-
-        // Внедрение зависимости (Dependency Injection) через конструктор
-        public UserService(IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
-
-        // Пример: Получить пользователя по Id
-        public async Task<User?> GetUserByIdAsync(int id)
-        {
-            return await _userRepository.GetByIdAsync(id);
-        }
-
-        // Пример: Получить всех пользователей
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
-        {
-            return await _userRepository.GetAllAsync();
-        }
-
-        // Пример: Создать пользователя
-        // Возвращает (success, message, user?)
-        public async Task<(bool success, string message, User? user)> CreateUserAsync(string login, string password)
-        {
-            // Проверим, не занят ли логин
-            bool loginTaken = await _userRepository.IsLoginTakenAsync(login);
-            if (loginTaken)
-            {
-                return (false, "Login is already taken.", null);
-            }
-
-            // Создаём сущность пользователя
-            var newUser = new User
-            {
-                Login = login,
-                // Предположим, password хранится как хеш
-                PasswordHash = password,
-                RegistrationDate = System.DateTime.UtcNow
-            };
-
-            // Добавим в БД
-            await _userRepository.AddAsync(newUser);
-
-            return (true, "User created successfully.", newUser);
-        }
-
-        // Пример: Обновить пользователя
-        // Возвращает (success, message, user?)
-        public async Task<(bool success, string message, User? user)> UpdateUserAsync(int id, string newLogin, string newPassword)
-        {
-            var existingUser = await _userRepository.GetByIdAsync(id);
-            if (existingUser == null)
-                return (false, "User not found.", null);
-
-            // Предположим, нужно обновить логин и пароль
-            existingUser.Login = newLogin;
-            existingUser.PasswordHash = newPassword;
-
-            await _userRepository.UpdateAsync(existingUser);
-
-            return (true, "User updated successfully.", existingUser);
-        }
-
-        // Пример: Удалить пользователя
-        // Возвращает (success, message)
-        public async Task<(bool success, string message)> DeleteUserAsync(int id)
-        {
-            var user = await _userRepository.GetByIdAsync(id);
-            if (user == null)
-            {
-                return (false, "User not found.");
-            }
-
-            await _userRepository.DeleteAsync(id);
-            return (true, "User deleted successfully.");
-        }
+        _userRepository = userRepository;
     }
+
+    // Получить пользователя по Id
+    public async Task<UserResponseDto?> GetUserByIdAsync(int id)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
+        if (user == null) return null;
+
+        return new UserResponseDto
+        {
+            Id = user.Id,
+            Login = user.Login,
+            RegistrationDate = user.RegistrationDate
+        };
+    }
+
+    // Получить всех пользователей
+    public async Task<IEnumerable<UserResponseDto>> GetAllUsersAsync()
+    {
+        var users = await _userRepository.GetAllAsync();
+        // Преобразуем User в UserResponseDto
+        var result = users.Select(u => new UserResponseDto
+        {
+            Id = u.Id,
+            Login = u.Login,
+            RegistrationDate = u.RegistrationDate
+        });
+        return result;
+    }
+
+    // Создать пользователя (регистрация)
+    // Создать пользователя (регистрация)
+    public async Task<(bool success, string message, UserResponseDto? user)> CreateUserAsync(CreateUserDto dto)
+    {
+        // Проверим, не занят ли логин
+        bool loginTaken = await _userRepository.IsLoginTakenAsync(dto.Login);
+        if (loginTaken)
+        {
+            return (false, "Логин уже занят.", null);
+        }
+
+        // Создаём сущность пользователя
+        var newUser = new User
+        {
+            Login = dto.Login,
+            // Допустим, password хранится как хеш
+            PasswordHash = dto.Password, 
+            RegistrationDate = DateTime.UtcNow
+        };
+
+        // Добавим в БД
+        await _userRepository.AddAsync(newUser);
+
+        // Возвращаем UserResponseDto
+        var userResponse = new UserResponseDto
+        {
+            Id = newUser.Id,
+            Login = newUser.Login,
+            RegistrationDate = newUser.RegistrationDate
+        };
+
+        return (true, "Пользователь успешно создан.", userResponse);
+    }
+
+    // Обновить пользователя
+    public async Task<(bool success, string message, UserResponseDto? user)> UpdateUserAsync(int id, UpdateUserDto dto)
+    {
+        var existingUser = await _userRepository.GetByIdAsync(id);
+        if (existingUser == null)
+            return (false, "Пользователь не найден.", null);
+
+        // Предположим, нужно обновить логин и пароль
+        existingUser.Login = dto.NewLogin;
+        existingUser.PasswordHash = dto.NewPassword;
+
+        await _userRepository.UpdateAsync(existingUser);
+
+        var updatedUser = new UserResponseDto
+        {
+            Id = existingUser.Id,
+            Login = existingUser.Login,
+            RegistrationDate = existingUser.RegistrationDate
+        };
+
+        return (true, "Пользователь обновлен.", updatedUser);
+    }
+
+    // Удалить пользователя
+    public async Task<(bool success, string message)> DeleteUserAsync(int id)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
+        if (user == null)
+        {
+            return (false, "Пользователь не найден.");
+        }
+
+        await _userRepository.DeleteAsync(id);
+        return (true, "Пользователь удален успешно.");
+    }
+}
