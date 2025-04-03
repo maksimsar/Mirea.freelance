@@ -63,7 +63,6 @@ namespace Mirea.freelance.backend.data
                 entity.ToTable("Profiles");
 
                 entity.HasKey(p => p.UserId);
-                entity.Property(p => p.Rating).IsRequired();
 
                 entity.HasOne(p => p.User)
                     .WithOne()
@@ -85,6 +84,7 @@ namespace Mirea.freelance.backend.data
                 entity.Property(s => s.Gender).IsRequired();
                 entity.Property(s => s.Phone).IsRequired();
                 entity.Property(s => s.Telegram).IsRequired();
+                entity.Property(s => s.Rating).IsRequired();
                 entity.Property(s => s.SphereOfDevelopment).IsRequired();
             });
 
