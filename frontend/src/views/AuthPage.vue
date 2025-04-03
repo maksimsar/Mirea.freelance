@@ -128,7 +128,7 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f8f9fa;
+  background-color: #0D0F1A;
   animation: fadeIn 1s ease-out;
 }
 
@@ -138,6 +138,8 @@ export default {
   animation: slideIn 0.8s ease-out;
   border-radius: 15px;
   overflow: hidden;
+  color:#E0E0E0;
+  background-color: #181B29;
 }
 
 /* Анимации */
@@ -162,8 +164,9 @@ export default {
 }
 
 /* Визуальная эстетика */
+
 .card-header {
-  background-color: #007bff;
+  background-color: #00B8D4;
   color: white;
   padding: 1rem;
   font-size: 1.25rem;
@@ -171,7 +174,7 @@ export default {
 }
 
 .card-footer {
-  background-color: #f8f9fa;
+  background-color: #00B8D4;
 }
 
 .switch-mode-text {

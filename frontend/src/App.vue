@@ -12,6 +12,7 @@
 import AppHeader from './components/AppHeader.vue';
 import AppFooter from './components/AppFooter.vue';
 
+
 export default {
   name: 'App',
   components: {
@@ -22,6 +23,7 @@ export default {
 </script>
 
 <style>
+
 /* Глобальные стили */
 html, body {
   height: 100%;
@@ -32,9 +34,32 @@ html, body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  font-family: 'Caviar Dreams';
+ 
+}
+main {
+  flex: 1;
+  background-color: #0D0F1A;
+  color: #E0E0E0;
+
 }
 
-main {
-  flex: 1; /* Занимает всё свободное пространство */
+@font-face {
+	font-family: 'BezierSans-Regular';
+	src: url('./fonts/beziersans-regular.eot'); /* IE 9 Compatibility Mode */
+	src: url('./fonts/beziersans-regular.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+		url('./fonts/beziersans-regular.woff2') format('woff2'), /* Super Modern Browsers */
+		url('./fonts/beziersans-regular.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+		url('./fonts/beziersans-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+		url('./fonts/beziersans-regular.svg#beziersans-regular') format('svg'); /* Chrome < 4, Legacy iOS */
+}
+@font-face {
+	font-family: 'Caviar Dreams';
+	src: url('./fonts/caviar_dreams.eot'); /* IE 9 Compatibility Mode */
+	src: url('./fonts/caviar_dreams.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+		url('./fonts/caviar_dreams.woff2') format('woff2'), /* Super Modern Browsers */
+		url('./fonts/caviar_dreams.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+		url('./fonts/caviar_dreams.ttf') format('truetype'), /* Safari, Android, iOS */
+		url('./fonts/caviar_dreams.svg#caviar_dreams') format('svg'); /* Chrome < 4, Legacy iOS */
 }
 </style>
