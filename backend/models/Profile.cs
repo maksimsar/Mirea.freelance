@@ -6,9 +6,6 @@ public abstract class Profile
     // Будет использоваться как первичный ключ, а также внешний ключ к User (если связь 1:1)
     public int UserId { get; set; }
 
-    // Общий рейтинг для любого типа профиля
-    public decimal Rating { get; set; } = 0;
-
     // Навигационное свойство на пользователя
     public User User { get; set; } = null!;
 }
@@ -25,6 +22,8 @@ public class StudentProfile : Profile
     
     public string Phone { get; set; } = string.Empty;
     public string Telegram { get; set; } = string.Empty;
+    
+    public decimal Rating { get; set; } = 0;
 
     // Сфера разработки или специальность
     public string SphereOfDevelopment { get; set; } = string.Empty;
