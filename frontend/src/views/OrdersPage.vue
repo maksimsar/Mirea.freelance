@@ -105,19 +105,23 @@ export default {
 </script>
 
 <style scoped>
-/* Стили для страницы заказов */
 .container {
   max-width: 1200px;
+  
 }
 
 h2 {
   font-size: 2rem;
+  font-family: 'BezierSans-Regular';
+  text-shadow: #FF007A 1px 1px 1px;
 }
 
 .row {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  justify-content: center; /* Центр по горизонтали */
+  align-items: center;     /* Центр по вертикали */
 }
 
 /* Модальные окна */
@@ -125,4 +129,5 @@ h2 {
   max-width: 600px;
   margin: 0 auto;
 }
+
 </style>
