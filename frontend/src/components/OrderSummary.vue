@@ -16,13 +16,17 @@
   
   <style scoped>
   .order-summary h2 {
-    margin: 0 0 5px;
-    font-size: 1.2rem;
-    color: #007bff;
+    margin-left: 1%;
+    font-size: 1.8rem;
+    color: #E0E0E0;
+    text-shadow: #037485 1px 1px 1px;
+    font-family: 'BezierSans-Regular';
+    
   }
   .order-summary p {
-    font-size: 0.9rem;
-    color: #555;
+    font-size: 1rem;
+    color: #E0E0E0;
+    margin-left: 4%;
   }
   </style>
   

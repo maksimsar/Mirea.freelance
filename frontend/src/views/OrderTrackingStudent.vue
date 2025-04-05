@@ -1,13 +1,13 @@
 <template>
-    <div class="order-tracking-student">
-      <h1>Отслеживание заказов для студента</h1>
+    <div class="order-tracking-student container mt-5">
+      <h2 class="text-center mb-4">Отслеживание заказов </h2>
       <transition-group name="list" tag="div">
-        <div v-for="order in orders" :key="order.id" class="order-card">
+        <div v-for="order in orders" :key="order.id" class="order-card mt-5">
           <OrderSummary :order="order" />
           <ProgressBar :progress="order.progress" />
           <OrderHistory :history="order.history" />
           <div class="tasks">
-            <h4>Задачи:</h4>
+            <h3>Задачи:</h3>
             <ul>
               <li
                 v-for="task in order.tasks"
@@ -44,8 +44,8 @@
             summary: "Общая суть заказа №1",
             progress: 45,
             history: [
-              { status: "в работе", date: "2025-03-01", color: "yellow" },
-              { status: "выполнено", date: "2025-03-05", color: "green" },
+              { status: "в работе", date: "2025-03-01", color: "#00b5c5" },
+              { status: "выполнено", date: "2025-03-05", color: "#00FF9F" },
             ],
             tasks: [
               { id: 101, title: "Общая задача", completed: true },
@@ -58,8 +58,8 @@
             summary: "Общая суть заказа №2",
             progress: 80,
             history: [
-              { status: "в работе", date: "2025-03-10", color: "yellow" },
-              { status: "выполнено", date: "2025-03-15", color: "green" },
+              { status: "в работе", date: "2025-03-10", color: "#00b5c5" },
+              { status: "выполнено", date: "2025-03-15", color: "#00FF9F" },
             ],
             tasks: [
               { id: 201, title: "Задача 1", completed: true },
@@ -75,29 +75,30 @@
   <style scoped>
   .order-tracking-student {
     padding: 1em;
-    background-color: #f1f1f1;
+    background-color: #0D0F1A;
   }
   .order-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 1em;
+    max-width: 90%;
+    justify-content:center;
+    padding: 4%;
+    border-radius: 8px;
+    background-color:  #2D3445;
     margin-bottom: 1em;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   }
   .tasks ul {
     list-style: none;
     padding: 0;
+    margin-left: 4%;
   }
   .tasks li {
-    font-size: 0.85rem;
+    font-size: 1rem;
     padding: 3px 0;
   }
   .tasks li.completed {
-    color: green;
+    color: #00FF9F;
   }
   .tasks li.pending {
-    color: orange;
+    color: #00b5c5;
   }
   .list-enter-active, .list-leave-active {
     transition: all 0.3s ease;
@@ -106,5 +107,17 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+  
+  h2 {
+  font-size: 2rem;
+  font-family: 'BezierSans-Regular';
+  text-shadow: #FF007A 1px 1px 1px;
+}
+
+h3 {
+  margin-bottom: 1%;
+  margin-top: 3%;
+}
+
   </style>
   

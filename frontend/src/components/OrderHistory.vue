@@ -1,6 +1,6 @@
 <template>
     <div class="order-history animate__animated animate__fadeIn">
-      <h3>История заказа</h3>
+      <h3>История заказа: </h3>
       <ul>
         <li
           v-for="(entry, index) in history"
@@ -24,19 +24,18 @@
   
   <style scoped>
   .order-history {
-    margin-top: 10px;
+    margin-top: 1%;
   }
   .order-history h3 {
-    font-size: 1rem;
-    margin-bottom: 5px;
-  }
+  margin-bottom: 1%;
+}
   .order-history ul {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin-left: 4%;
   }
   .order-history li {
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
   </style>
   
