@@ -1,6 +1,6 @@
 <template>
   <main class="container mt-5">
-    <h2 class="text-center mb-4">Доступные заявки</h2>
+    <h2 class="text-center mb-5">Доступные заявки</h2>
     <div class="row">
       <!-- Перебираем заказы и отображаем каждый через компонент OrderCard -->
       <OrderCard
@@ -107,7 +107,6 @@ export default {
 <style scoped>
 .container {
   max-width: 1200px;
-  
 }
 
 h2 {

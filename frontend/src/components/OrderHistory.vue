@@ -26,9 +26,7 @@
   .order-history {
     margin-top: 1%;
   }
-  .order-history h3 {
-  margin-bottom: 1%;
-}
+  
   .order-history ul {
     list-style: none;
     padding: 0;

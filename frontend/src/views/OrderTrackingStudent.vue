@@ -24,7 +24,7 @@
           </div>
         </div>
       </transition-group>
-    </div>
+      </div>
   </template>
   
   <script>
@@ -74,16 +74,15 @@
   
   <style scoped>
   .order-tracking-student {
-    padding: 1em;
     background-color: #0D0F1A;
+    max-width: 1080px;
   }
   .order-card {
-    max-width: 90%;
-    justify-content:center;
-    padding: 4%;
+    max-width: 100%;
+    padding: 2%;
     border-radius: 8px;
     background-color:  #2D3445;
-    margin-bottom: 1em;
+    margin-bottom: 5%;
   }
   .tasks ul {
     list-style: none;
@@ -100,13 +99,6 @@
   .tasks li.pending {
     color: #00b5c5;
   }
-  .list-enter-active, .list-leave-active {
-    transition: all 0.3s ease;
-  }
-  .list-enter-from, .list-leave-to {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
   
   h2 {
   font-size: 2rem;
@@ -118,6 +110,5 @@ h3 {
   margin-bottom: 1%;
   margin-top: 3%;
 }
-
   </style>
   

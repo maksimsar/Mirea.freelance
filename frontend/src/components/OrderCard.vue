@@ -24,7 +24,6 @@
   .order-card {
     min-height: 200px; 
     max-width: 90%;
-
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -33,6 +32,7 @@
     background-color: #2D3445;
     color:  #E0E0E0;
     transition: color 0.3s ease, transform 0.3s ease;
+    margin-bottom: 5%;
   }
 
   .order-card:hover {
