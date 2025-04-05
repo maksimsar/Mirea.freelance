@@ -26,13 +26,12 @@
   .progress {
     height: 100%;
     background-color: #037485;
-    transition: width 0.3s ease;
   }
   .progress-text {
     position: absolute;
     top: 0;
     left: 50%;
-    transform: translateX(-50%);
+  
     font-size: 0.8rem;
     color: #ffffff;
     text-shadow: #181B29 1px 1px 2px;
