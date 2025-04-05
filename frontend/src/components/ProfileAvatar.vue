@@ -1,65 +1,70 @@
 <template>
-    <div class="text-center">
-      <!-- Аватар -->
+  <div class="text-center">
+    <div class="avatar-container">
       <img
         :src="currentAvatar"
         @error="onImageError"
         alt="Avatar"
         class="rounded-circle img-thumbnail"
-        width="130"
-        height="130"
+        width="200"
+        height="200"
       />
-      <!-- Кнопка изменения аватара -->
-      <button class="btn btn-primary mt-3" @click="changeAvatar">
-        Изменить аватарку
+    </div>
+    <div class="mt-3">
+      <button class="btn" @click="changeAvatar">
+        Изменить
       </button>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    props: {
-      avatar: {
-        type: String,
-        default: 'https://via.placeholder.com/150',
-      },
+  </div>
+</template>
+
+
+<script>
+import altavatar from '../pictures/altavatar.jpg';
+
+export default {
+  props: {
+    avatar: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      currentAvatar: this.avatar || altavatar,
+      fallbackAvatar: altavatar
+    };
+  },
+  watch: {
+    avatar(newVal) {
+      this.currentAvatar = newVal || this.fallbackAvatar;
+    }
+  },
+  methods: {
+    onImageError() {
+      this.currentAvatar = this.fallbackAvatar;
     },
-    data() {
-      return {
-        currentAvatar: this.avatar, // Локальное состояние для аватара
-      };
-    },
-    methods: {
-      onImageError() {
-        // Замена на заглушку, если аватар не загрузился
-        this.currentAvatar = 'https://via.placeholder.com/150';
-      },
-      changeAvatar() {
-        // Заглушка для функции изменения аватара
-        alert('Функция изменения аватарки пока не реализована.');
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .text-center {
-    text-align: center;
+    changeAvatar() {
+      alert('Функция изменения аватарки пока не реализована.');
+    }
   }
-  
-  img {
-    object-fit: cover; /* Адаптация изображения */
-    border: 2px solid #007bff; /* Обводка в корпоративном стиле */
-  }
-  
-  .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-  }
-  
-  .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #004085;
-  }
-  </style>
-  
+};
+</script>
+
+<style scoped>
+.text-center {
+  margin-top: 2%;
+}
+img {
+  object-fit: cover;
+}
+
+.btn {
+  background-color: #00b5c5;
+  color: white;
+}
+.btn:hover {
+  background-color: #037485;
+  color: white;
+}
+</style>
