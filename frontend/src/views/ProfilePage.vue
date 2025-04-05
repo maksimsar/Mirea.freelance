@@ -1,15 +1,25 @@
 <template>
-  <div class="container mt-4">
-    <!-- Компонент ProfileSwitcher удалён -->
-    <div class="row mt-4">
+  <div class="container mt-5">
+    <h2 class="text-center mb-3">Профиль</h2>
+    <div class="row g-4 align-items-start">
+      <!-- Левая колонка -->
       <div class="col-md-4">
-        <ProfileAvatar :avatar="user.avatar" />
-        <ReviewsSection :reviews="user.reviews" />
+        <div class="card p-3 shadow-sm">
+          <ProfileAvatar :avatar="user.avatar" />
+        </div>
+        <div class="card p-3 mt-4">
+          <ReviewsSection :reviews="user.reviews" />
+        </div>
       </div>
+
+      <!-- Правая колонка -->
       <div class="col-md-8">
-        <TeacherInfo :user="user" @edit="openEditModal" />
+        <div class="card p-4">
+          <TeacherInfo :user="user" @edit="openEditModal" />
+        </div>
       </div>
     </div>
+
     <ModalEdit
       v-if="currentField"
       :placeholder="getPlaceholder()"
@@ -18,6 +28,7 @@
     />
   </div>
 </template>
+
 
 <script>
 import { Modal } from 'bootstrap';
@@ -111,5 +122,13 @@ export default {
 </script>
 
 <style scoped>
-/* Дополнительные стили при необходимости */
+  h2 {
+  font-size: 2rem;
+  font-family: 'BezierSans-Regular';
+  text-shadow: #FF007A 1px 1px 1px;
+}
+
+.card {
+  background-color:#0D0F1A;
+}
 </style>

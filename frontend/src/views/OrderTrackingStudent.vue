@@ -1,6 +1,6 @@
 <template>
     <div class="order-tracking-student container mt-5">
-      <h2 class="text-center mb-4">Отслеживание заказов </h2>
+      <h2 class="text-center mb-4">Проекты в работе</h2>
       <transition-group name="list" tag="div">
         <div v-for="order in orders" :key="order.id" class="order-card mt-5">
           <OrderSummary :order="order" />

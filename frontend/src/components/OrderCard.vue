@@ -34,6 +34,9 @@
     transition: color 0.3s ease, transform 0.3s ease;
     margin-bottom: 5%;
   }
+  .card-body {
+    background-color: #2D3445;
+  }
 
   .order-card:hover {
     transform: scale(1.05);

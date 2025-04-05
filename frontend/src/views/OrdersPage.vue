@@ -1,6 +1,6 @@
 <template>
   <main class="container mt-5">
-    <h2 class="text-center mb-5">Доступные заявки</h2>
+    <h2 class="text-center mb-5">Доступные проекты</h2>
     <div class="row">
       <!-- Перебираем заказы и отображаем каждый через компонент OrderCard -->
       <OrderCard

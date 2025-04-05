@@ -36,12 +36,12 @@
               <template v-if="userRole === 'student'">
                 <li class="nav-item">
                   <router-link class="nav-link" to="/orders"
-                    >Заказы</router-link
+                    >Найти проект</router-link
                   >
                 </li>
                 <li class="nav-item">
                   <router-link class="nav-link" to="/tracking/student"
-                    >Отслеживание заказов</router-link
+                    >Мои проекты</router-link
                   >
                 </li>
               </template>
@@ -55,16 +55,17 @@
                 <!-- Ссылка на отслеживание заказов (ранее для преподавателя) -->
                 <li class="nav-item">
                   <router-link class="nav-link" to="/tracking/teacher"
-                    >Отслеживание заказов</router-link
+                    >Мои проекты</router-link
                   >
                 </li>
                 <!-- Новая ссылка для перехода на страницу заказов для менторства -->
                 <li class="nav-item">
                   <router-link class="nav-link" to="/admin/orders"
-                    >Менторские заказы</router-link
+                    >Доступные проекты</router-link
                   >
                 </li>
               </template>
+
               <!-- Меню для компании -->
               <template v-if="userRole === 'company'">
                 <li class="nav-item">
@@ -74,7 +75,7 @@
                 </li>
                 <li class="nav-item">
                   <router-link class="nav-link" to="/tracking/company"
-                    >Отслеживание заказов</router-link
+                    >Мои проекты</router-link
                   >
                 </li>
               </template>
@@ -87,7 +88,7 @@
               <!-- Кнопка Logout -->
               <li class="nav-item">
                 <button class="nav-link btn-logout" @click="logout">
-                  Logout
+                  Выйти
                 </button>
               </li>
             </template>
