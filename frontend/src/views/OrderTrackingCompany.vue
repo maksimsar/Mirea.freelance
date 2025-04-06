@@ -1,6 +1,6 @@
 <template>
-    <div class="order-tracking-company">
-      <h1>Отслеживание заказов для компании</h1>
+    <div class="order-tracking-company container mt-5">
+      <h2 class="text-center md-4">Заказы в работе</h2>
       <transition-group name="list" tag="div">
         <div v-for="order in orders" :key="order.id" class="order-card">
           <OrderSummary :order="order" />
@@ -52,24 +52,18 @@
   </script>
   
   <style scoped>
+
   .order-tracking-company {
-    padding: 1em;
-    background-color: #f1f1f1;
+    background-color: #0D0F1A;
+    max-width: 1080px;
   }
   .order-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 1em;
-    margin-bottom: 1em;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    max-width: 100%;
+    padding: 2%;
+    border-radius: 8px;
+    background-color:  #2D3445;
+    margin-bottom: 5%;
   }
-  .list-enter-active, .list-leave-active {
-    transition: all 0.3s ease;
-  }
-  .list-enter-from, .list-leave-to {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
+
   </style>
   
