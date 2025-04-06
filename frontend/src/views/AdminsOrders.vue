@@ -1,6 +1,6 @@
 <template>
-    <div class="admin-orders">
-      <h1 class="page-title">Доступные заказы для менторства</h1>
+    <div class="admin-orders mt-5">
+      <h2 class="page-title text-center mb-5">Доступные проекты для менторства</h2>
       <transition-group name="list" tag="div" class="orders-list">
         <div
           v-for="order in orders"
@@ -8,27 +8,29 @@
           class="order-card animate__animated animate__fadeInUp"
         >
           <div class="order-info">
-            <h2>{{ order.name }}</h2>
+            <h3>{{ order.name }}</h3>
             <p>{{ order.summary }}</p>
             <p>
               <strong>Компания:</strong>
               {{ order.company.name }} – {{ order.company.address }}
             </p>
             <p v-if="order.mentor">
-              <strong>Ментор:</strong> {{ order.mentor }}
+              <strong>Ментор: </strong>
+              <span class="mentor-assigned">{{ order.mentor }}</span>
             </p>
             <p v-else>
               <strong>Ментор:</strong> <span class="not-assigned">Не назначен</span>
             </p>
           </div>
           <div class="order-actions" v-if="!order.mentor">
-            <button @click="takeMentorship(order.id)">
+            <button class="btn" @click="takeMentorship(order.id)">
               Взять в менторство
             </button>
           </div>
         </div>
       </transition-group>
-    </div>
+      </div>
+
   </template>
   
   <script>
@@ -85,65 +87,62 @@
   
   <style scoped>
   .admin-orders {
-    padding: 1.5em;
-    background-color: #f9f9f9;
-    min-height: 100vh;
-  }
-  .page-title {
-    color: #007bff;
-    margin-bottom: 1em;
-    text-align: center;
-  }
-  .orders-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
+  max-width: 1200px;
+  margin: 0 auto; /* Центрируем контейнер */
+  padding: 0 20px;
+}
+    h2 {
+    font-size: 2rem;
+    font-family: 'BezierSans-Regular';
+    text-shadow: #FF007A 1px 1px 1px;
   }
   .order-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 1em;
+    min-height: 200px; 
+    max-width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #2D3445;
+    color:  #E0E0E0;
+    transition: color 0.3s ease, transform 0.3s ease;
+    margin-bottom: 5%;
   }
-  .order-info h2 {
-    margin: 0 0 5px;
-    font-size: 1.2rem;
-    color: #007bff;
+  .card-body {
+    background-color: #2D3445;
   }
-  .order-info p {
-    margin: 3px 0;
-    font-size: 0.9rem;
-    color: #555;
+
+  .order-card:hover {
+    transform: scale(1.05);
   }
-  .not-assigned {
-    color: #dc3545;
-    font-weight: bold;
+  
+  h3{
+    font-size: 1.3rem;
+    font-family: 'BezierSans-Regular';
+    text-shadow: #037485 1px 1px 1px;
   }
-  .order-actions button {
-    background-color: #28a745;
-    border: none;
-    color: #fff;
-    padding: 0.5em 1em;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  
+  .card-text {
+    flex-grow: 1;
+    margin-bottom: 15px;
   }
-  .order-actions button:hover {
-    background-color: #218838;
-  }
-  /* Плавная анимация появления карточек */
-  .list-enter-active,
-  .list-leave-active {
-    transition: all 0.3s ease;
-  }
-  .list-enter-from,
-  .list-leave-to {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
+
+  .btn {
+  background-color: #00b5c5;
+  color: white;
+
+}
+.btn:hover {
+  background-color:  #037485;
+  color: white;
+}
+.not-assigned {
+  color:#FF007A;
+}
+
+.mentor-assigned {
+  color: #00FF9F;
+}
   </style>
   
