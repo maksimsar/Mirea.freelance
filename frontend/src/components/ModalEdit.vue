@@ -10,7 +10,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="editModalLabel">Редактировать</h5>
+              <h4 class="modal-title" id="editModalLabel">Редактировать</h4>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -55,4 +55,40 @@
     },
   };
   </script>
+
+<style scoped>
+
+.modal-dialog {
+  background: none;
+  width: 100%;
+}
+.modal-content {
+  background:#2D3445;
+  border: none;
+}
+
+.form-check-input:checked {
+  background-color: #037485;
+  border-color: #037485;
+}
+.btn {
+  background-color: #00b5c5;
+  color: white;
+}
+.btn:hover {
+  background-color:  #037485;
+  color: white;
+}
+
+.form {
+  margin: 3%;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+.form-submit-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+</style>
   

@@ -123,6 +123,7 @@ export default {
 </script>
 
 <style scoped>
+
 .auth-page {
   display: flex;
   justify-content: center;
@@ -130,6 +131,10 @@ export default {
   height: 100vh;
   background-color: #0D0F1A;
   animation: fadeIn 1s ease-out;
+  
+}
+h3, label {
+  font-family: "BezierSans-Regular";
 }
 
 .auth-card {
@@ -166,7 +171,7 @@ export default {
 /* Визуальная эстетика */
 
 .card-header {
-  background-color: #00B8D4;
+  background-color: #FF007A;
   color: white;
   padding: 1rem;
   font-size: 1.25rem;
@@ -174,7 +179,7 @@ export default {
 }
 
 .card-footer {
-  background-color: #00B8D4;
+  background-color: #FF007A;
 }
 
 .switch-mode-text {
@@ -182,12 +187,24 @@ export default {
   font-size: 0.875rem;
 }
 
+.btn {
+  background-color: #00b5c5;
+  color: white;
+}
+
+.btn:hover{
+  background-color: #037485;
+  color: white;
+}
+
 .btn-link {
   color: #007bff;
   text-decoration: none;
+  background-color: #FF007A;
 }
 
 .btn-link:hover {
   text-decoration: underline;
+  background-color: #FF007A;
 }
 </style>

@@ -18,23 +18,23 @@
   .progress-bar {
     position: relative;
     height: 20px;
-    background-color: #e9ecef;
+    background-color:  #0D0F1A;
     border-radius: 10px;
     overflow: hidden;
     margin: 10px 0;
   }
   .progress {
     height: 100%;
-    background-color: #28a745;
-    transition: width 0.3s ease;
+    background-color: #037485;
   }
   .progress-text {
     position: absolute;
     top: 0;
     left: 50%;
-    transform: translateX(-50%);
+  
     font-size: 0.8rem;
-    color: #fff;
+    color: #ffffff;
+    text-shadow: #181B29 1px 1px 2px;
   }
   </style>
   

@@ -30,19 +30,17 @@
   </script>
   
   <style>
-  .btn-edit {
-    color: #fff; /* Белый текст */
-    background-color: #007bff; /* Синий фон */
-    border: none; /* Убираем рамку */
-    padding: 5px 10px; /* Пространство внутри кнопки */
-    font-size: 14px; /* Размер текста */
-    border-radius: 5px; /* Скруглённые углы */
-    cursor: pointer; /* Указатель при наведении */
-    transition: background-color 0.2s ease; /* Плавный переход цвета */
-  }
-  
-  .btn-edit:hover {
-    background-color: #0056b3; /* Более тёмный синий при наведении */
-  }
+  .card {
+  background-color:  #0D0F1A;
+  color:#E0E0E0;
+}
+.btn {
+  background-color: #00b5c5;
+  color: white;
+}
+.btn:hover {
+  background-color: #037485;
+  color: white;
+}
   </style>
   
