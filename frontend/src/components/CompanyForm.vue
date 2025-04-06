@@ -1,6 +1,6 @@
 <template>
   <div class="company-form">
-    <h2>Информация о компании</h2>
+    <h3 class="text-center">O компании</h3>
     <transition name="fade-slide">
       <div class="form-group">
         <label for="name">Название компании</label>
@@ -50,29 +50,21 @@ export default {
 </script>
 
 <style scoped>
-/* Основной стиль формы */
+
 .company-form {
   margin-bottom: 20px;
   padding: 20px;
-  border: 2px solid #007bff;
-  border-radius: 10px;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color:  #2D3445;
+  border-radius: 5px;
 }
 
-.company-form:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* Заголовок */
 h2 {
-  color: #007bff;
+  color: #e0e0e0;
   margin-bottom: 20px;
+  font-family: "BezierSans-Regular";
+  font-weight: bold;
 }
 
-/* Группы полей */
 .form-group {
   margin-bottom: 15px;
   display: flex;
@@ -80,34 +72,15 @@ h2 {
 }
 
 label {
-  font-weight: bold;
   margin-bottom: 5px;
-  color: #007bff;
+  color: #e0e0e0;
 }
 
 input {
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #007bff;
+  border: 2px solid #00b5c5;
   border-radius: 5px;
   outline: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-input:focus {
-  border-color: #0056b3;
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-}
-
-/* Анимации */
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.fade-slide-enter-from,
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(20px);
 }
 </style>
