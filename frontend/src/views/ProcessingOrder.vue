@@ -144,7 +144,6 @@ h2 {
 .column h3 {
   margin-bottom: 1em;
   text-align: center;
-  color: #007bff;
 }
 .list-enter-active,
 .list-leave-active {

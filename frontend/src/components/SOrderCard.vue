@@ -8,8 +8,8 @@
       </div>
     </div>
 
-    <div class="card-body">
-      <!--
+    <div class="card-body" :style="cardStyle">
+
       <p><strong>Описание:</strong> {{ order.Description }}</p>
       <p>
         <strong>Компания:</strong>
@@ -17,10 +17,8 @@
       </p>
       <p><strong>Бюджет:</strong> {{ order.Budget }} руб.</p>
       <p><strong>Дедлайн:</strong> {{ formattedDeadline }}</p>
-      <p><strong>Статус:</strong> {{ order.Status }}</p>
--->
-      <p>{{ order.company.address }}</p>
-    </div>
+      <p><strong>Статус:</strong> {{ order.Status }}</p>     
+    </div> 
     <div class="card-footer">
       <!-- Кнопка "Начать обработку" для заказов со статусом "Open" или "unprocessed" -->
       <div v-if="order.Status === 'Open' || order.Status === 'unprocessed'">
@@ -55,11 +53,11 @@ export default {
       // Определяем стиль карточки в зависимости от статуса заказа
       switch (this.order.Status) {
         case "processing":
-          return { backgroundColor: "#E0E0E0" };
+          return { backgroundColor: "#E0E0E0"};
         case "processed_positive":
-          return { backgroundColor: "#00a36a" };
+          return { backgroundColor: "#00a36a" , color: "#e0e0e0"};
         case "processed_negative":
-          return { backgroundColor: "#a1014f" }; 
+          return { backgroundColor: "#a1014f", color: "#e0e0e0"}; 
         default:
           return { backgroundColor: "#E0E0E0" };
       }
@@ -105,10 +103,7 @@ export default {
   align-items: center;
   font-weight: bold;
 }
-.card-header h3 {
-  margin: 0;
-  color: #007bff;
-}
+
 .edit-icon {
   cursor: pointer;
   color: #00b5c5;
@@ -118,12 +113,10 @@ export default {
 }
 .card-body {
   margin-top: 0.5em;
-  background-color: #e0e0e0;
 }
 .card-body p {
   margin: 5px 0;
   font-size: 0.9rem;
-  color: #555;
 }
 .card-footer {
   margin-top: 0.5em;
