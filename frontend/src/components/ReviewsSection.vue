@@ -1,14 +1,14 @@
 <template>
     <div class="mt-3">
-      <h5>Отзывы</h5>
+      <h5 class="text-center">Отзывы</h5>
       <div class="reviews-container">
         <div
           v-for="(review, index) in reviews"
           :key="index"
-          class="card mb-3 shadow-sm"
+          class="card mb-3"
         >
           <div class="card-body">
-            <h6 class="card-title">Отзыв от заказчика</h6>
+            <h6 class="card-title">От заказчика: </h6>
             <p class="card-text">{{ review.customerFeedback }}</p>
             <div class="stars">
               <span v-for="star in 5" :key="star" class="star">
@@ -19,7 +19,7 @@
               </span>
             </div>
             <hr />
-            <h6 class="card-title">Отзыв от преподавателя</h6>
+            <h6 class="card-title">От преподавателя: </h6>
             <p class="card-text">{{ review.teacherFeedback }}</p>
             <div class="stars">
               <span v-for="star in 5" :key="star + 't'" class="star">
@@ -48,24 +48,37 @@
   
   <style>
   .reviews-container {
-    max-height: 300px; /* Ограничиваем высоту контейнера */
-    overflow-y: auto; /* Включаем прокрутку по вертикали */
+    max-height: 300px; 
+    overflow-y: auto; 
     padding: 10px;
-    border: 1px solid #ddd;
     border-radius: 5px;
-    background-color: #f9f9f9;
+    background-color:  #0D0F1A;
+   }
+
+  .card-body {
+    background-color: #2D3445;
+    border-radius: 5px;
   }
-  
-  .card {
-    border: none;
+  h5 {
+    color: white !important;
+    font-family: "BezierSans-Regular";
+    text-shadow: #a1014f 1px 1px 1px;
+
   }
+  .card-title {
+    color: white !important;
+    font-family: "BezierSans-Regular";
+  }
+ .card-text {
+  color: #E0E0E0;
+}
   
   .stars {
-    color: #ffc107; /* Золотой цвет для звёзд */
+    color: #ffc107;
   }
-  
   .star {
     margin-right: 5px;
   }
+
   </style>
   

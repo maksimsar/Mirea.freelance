@@ -43,6 +43,20 @@ main {
   color: #E0E0E0;
 
 }
+h2 {
+    font-size: 2rem;
+    font-family: 'BezierSans-Regular';
+    text-shadow: #FF007A 1px 1px 1px;
+  }
+  .btn {
+  background-color: #00b5c5;
+  color: white;
+
+}
+.btn:hover {
+  background-color:  #037485;
+  color: white;
+}
 
 @font-face {
 	font-family: 'BezierSans-Regular';

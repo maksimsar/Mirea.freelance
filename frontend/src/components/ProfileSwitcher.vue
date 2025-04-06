@@ -45,13 +45,15 @@
   
   <style scoped>
   .nav-pills .nav-link {
-    color: #007bff;
+    color: #037485 !important;
     cursor: pointer;
+    color: #E0E0E0 !important;
+    background-color: #2D3445 !important;
   }
   
   .nav-pills .nav-link.active {
-    background-color: #007bff;
-    color: #fff;
+    background-color: #037485 !important;
+    color: #fff !important;
   }
   </style>
   

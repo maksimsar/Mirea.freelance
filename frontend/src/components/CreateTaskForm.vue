@@ -8,7 +8,7 @@
           placeholder="Название задачи"
           required
         />
-        <button type="submit">Добавить задачу</button>
+        <button class="btn" type="submit">Добавить задачу</button>
       </form>
     </div>
   </template>
@@ -39,14 +39,14 @@
   .create-task-form {
     margin-top: 10px;
     padding: 10px;
-    border: 1px solid #ddd;
     border-radius: 5px;
-    background-color: #fdfdfd;
+    background-color: #2D3445;
   }
   .create-task-form h3 {
     margin: 0 0 10px;
-    font-size: 1rem;
-    color: #007bff;
+    font-size: 1.5rem;
+    color: #fff;
+
   }
   .create-task-form form {
     display: flex;
@@ -55,19 +55,20 @@
   .create-task-form input {
     flex: 1;
     padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+    border: 1px solid #0D0F1A;
+    border-radius: 5px;
   }
-  .create-task-form button {
-    padding: 5px 10px;
-    border: none;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  .create-task-form button:hover {
-    background-color: #0056b3;
-  }
+  .btn {
+  background-color: #00b5c5;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+
+}
+.btn:hover {
+  background-color:  #037485;
+  color: white;
+}
+
   </style>
   

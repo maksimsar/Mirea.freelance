@@ -1,17 +1,19 @@
 <template>
-  <div class="order-form">
-    <h1>Оформление заказа</h1>
-    <transition name="fade-slide">
-      <RepresentativesForm v-model="representatives" />
-    </transition>
+  <div class="order-form mt-5">
+      <h2 class="page-title text-center mb-5">Оформление заказа</h2>
     <transition name="fade-slide">
       <CompanyForm v-model="company" />
     </transition>
     <transition name="fade-slide">
+      <RepresentativesForm v-model="representatives" />
+    </transition>
+    <transition name="fade-slide">
       <OrderDetailsForm v-model="orderDetails" />
     </transition>
-    <button class="btn-submit" @click="submitOrder">Отправить заказ</button>
+    <div class="button-wrapper">
+    <button class="btn px-8 py-3" @click="submitOrder">Оформить заказ</button>
   </div>
+ </div>
 </template>
 
 <script>
@@ -44,56 +46,25 @@ export default {
 <style scoped>
 /* Общий стиль формы */
 .order-form {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
-  border: 2px solid #007bff;
   border-radius: 10px;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #0D0F1A;
 }
-
-.order-form:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* Заголовок */
-h1 {
-  color: #007bff;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-/* Кнопка */
-.btn-submit {
-  background-color: #007bff;
+.btn {
+  background-color: #00b5c5;
   color: white;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  display: block;
-  margin: 20px auto;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  font-size: 120%;
+
 }
-
-.btn-submit:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
+.btn:hover {
+  background-color:  #037485;
+  color: white;
 }
-
-
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.fade-slide-enter-from,
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(20px);
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
 }
 </style>

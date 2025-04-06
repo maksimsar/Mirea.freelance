@@ -1,6 +1,6 @@
 <template>
   <div class="order-details-form">
-    <h2>Описание заказа</h2>
+    <h3 class="text-center">Описание заказа</h3>
     <transition name="fade-slide">
       <div class="form-group">
         <label for="order-details">Подробное описание заказа</label>
@@ -40,23 +40,10 @@ export default {
 .order-details-form {
   margin-bottom: 20px;
   padding: 20px;
-  border: 2px solid #007bff;
-  border-radius: 10px;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 5px;
+  background-color: #2d3445;
 }
 
-.order-details-form:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* Заголовок формы */
-h2 {
-  color: #007bff;
-  margin-bottom: 20px;
-}
 
 /* Группы полей */
 .form-group {
@@ -66,40 +53,19 @@ h2 {
 }
 
 label {
-  font-weight: bold;
   margin-bottom: 5px;
-  color: #007bff;
+  color: #e0e0e0;
 }
 
 /* Поле ввода (textarea) */
 textarea {
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #007bff;
+  border: 2px solid #00b5c5;
   border-radius: 5px;
   outline: none;
   resize: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   width: 100%;
   height: 120px;
-  font-family: 'Arial', sans-serif;
-  line-height: 1.5;
-}
-
-textarea:focus {
-  border-color: #0056b3;
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-}
-
-/* Анимации */
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.fade-slide-enter-from,
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(20px);
 }
 </style>
