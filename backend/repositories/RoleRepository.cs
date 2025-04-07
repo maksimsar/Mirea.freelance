@@ -1,104 +1,97 @@
 using Microsoft.EntityFrameworkCore;
 using Mirea.freelance.backend.data;
 using Mirea.freelance.backend.models;
+using Mirea.freelance.backend.repositories;
 
 namespace Mirea.freelance.backend.repositories;
 
-public class ProfileRepository : IProfileRepository
+public class RoleRepository : IRoleRepository
 {
     private readonly AppDbContext _context;
 
-    public ProfileRepository(AppDbContext context)
+    public RoleRepository(AppDbContext context)
     {
         _context = context;
     }
 
-    public async Task<StudentProfile?> GetStudentProfileByUserIdAsync(int userId)
+    // Получить роль по Id
+    public async Task<Role?> GetByIdAsync(int id)
     {
-        return await _context.StudentProfiles.FirstOrDefaultAsync(sp => sp.UserId == userId);
+        return await _context.Roles
+            .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public async Task<MentorProfile?> GetMentorProfileByUserIdAsync(int userId)
+    // Получить все роли
+    public async Task<IEnumerable<Role>> GetAllAsync()
     {
-        return await _context.MentorProfiles.FirstOrDefaultAsync(mp => mp.UserId == userId);
+        return await _context.Roles
+            .ToListAsync();
     }
 
-    public async Task<CompanyProfile?> GetCompanyProfileByUserIdAsync(int userId)
+    // Добавить роль
+    public async Task AddAsync(Role role)
     {
-        return await _context.CompanyProfiles
-            .Include(cp => cp.Contacts)
-            .FirstOrDefaultAsync(cp => cp.UserId == userId);
-    }
-
-    public async Task AddStudentProfileAsync(StudentProfile profile)
-    {
-        _context.StudentProfiles.Add(profile);
+        _context.Roles.Add(role);
         await _context.SaveChangesAsync();
     }
 
-    public async Task AddMentorProfileAsync(MentorProfile profile)
+    // Обновить роль
+    public async Task UpdateAsync(Role role)
     {
-        _context.MentorProfiles.Add(profile);
+        _context.Roles.Update(role);
         await _context.SaveChangesAsync();
     }
 
-    public async Task AddCompanyProfileAsync(CompanyProfile profile)
+    // Удалить роль
+    public async Task DeleteAsync(int id)
     {
-        _context.CompanyProfiles.Add(profile);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task UpdateStudentProfileAsync(StudentProfile profile)
-    {
-        _context.StudentProfiles.Update(profile);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task UpdateMentorProfileAsync(MentorProfile profile)
-    {
-        _context.MentorProfiles.Update(profile);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task UpdateCompanyProfileAsync(CompanyProfile profile)
-    {
-        // Удаляем старые контакты и добавляем новые, чтобы синхронизировать коллекцию
-        var existingProfile = await _context.CompanyProfiles
-            .Include(cp => cp.Contacts)
-            .FirstOrDefaultAsync(cp => cp.UserId == profile.UserId);
-        if (existingProfile != null)
+        var role = await GetByIdAsync(id);
+        if (role != null)
         {
-            _context.CompanyContacts.RemoveRange(existingProfile.Contacts);
-            existingProfile.Contacts = profile.Contacts;
-            _context.CompanyProfiles.Update(existingProfile);
+            _context.Roles.Remove(role);
             await _context.SaveChangesAsync();
         }
     }
 
-    public async Task DeleteProfileAsync(int userId)
+    // Получить назначение роли по Id
+    public async Task<UserRole?> GetUserRoleByIdAsync(int id)
     {
-        var studentProfile = await _context.StudentProfiles.FindAsync(userId);
-        if (studentProfile != null)
-        {
-            _context.StudentProfiles.Remove(studentProfile);
-            await _context.SaveChangesAsync();
-            return;
-        }
+        return await _context.UserRoles
+            .Include(ur => ur.Role)
+            .Include(ur => ur.User)
+            .FirstOrDefaultAsync(ur => ur.Id == id);
+    }
 
-        var mentorProfile = await _context.MentorProfiles.FindAsync(userId);
-        if (mentorProfile != null)
-        {
-            _context.MentorProfiles.Remove(mentorProfile);
-            await _context.SaveChangesAsync();
-            return;
-        }
+    // Получить все роли пользователя
+    public async Task<IEnumerable<UserRole>> GetRolesByUserIdAsync(int userId)
+    {
+        return await _context.UserRoles
+            .Include(ur => ur.Role)
+            .Where(ur => ur.UserId == userId)
+            .ToListAsync();
+    }
 
-        var companyProfile = await _context.CompanyProfiles
-            .Include(cp => cp.Contacts)
-            .FirstOrDefaultAsync(cp => cp.UserId == userId);
-        if (companyProfile != null)
+    // Добавить назначение роли
+    public async Task AddUserRoleAsync(UserRole userRole)
+    {
+        _context.UserRoles.Add(userRole);
+        await _context.SaveChangesAsync();
+    }
+
+    // Обновить назначение роли
+    public async Task UpdateUserRoleAsync(UserRole userRole)
+    {
+        _context.UserRoles.Update(userRole);
+        await _context.SaveChangesAsync();
+    }
+
+    // Удалить назначение роли
+    public async Task DeleteUserRoleAsync(int id)
+    {
+        var userRole = await GetUserRoleByIdAsync(id);
+        if (userRole != null)
         {
-            _context.CompanyProfiles.Remove(companyProfile);
+            _context.UserRoles.Remove(userRole);
             await _context.SaveChangesAsync();
         }
     }

@@ -1,6 +1,6 @@
 namespace Mirea.freelance.backend.dto;
 
-public class UserRoleDto
+public class UserRoleResponseDto
 {
     public int Id { get; set; }
     public int UserId { get; set; }

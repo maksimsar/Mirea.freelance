@@ -15,90 +15,79 @@ public class ProfileRepository : IProfileRepository
 
     public async Task<StudentProfile?> GetStudentProfileByUserIdAsync(int userId)
     {
-        return await _context.StudentProfiles.FirstOrDefaultAsync(sp => sp.UserId == userId);
+        return await _context.Profiles
+            .OfType<StudentProfile>()
+            .FirstOrDefaultAsync(sp => sp.UserId == userId);
     }
 
     public async Task<MentorProfile?> GetMentorProfileByUserIdAsync(int userId)
     {
-        return await _context.MentorProfiles.FirstOrDefaultAsync(mp => mp.UserId == userId);
+        return await _context.Profiles
+            .OfType<MentorProfile>()
+            .FirstOrDefaultAsync(mp => mp.UserId == userId);
     }
 
     public async Task<CompanyProfile?> GetCompanyProfileByUserIdAsync(int userId)
     {
-        return await _context.CompanyProfiles
+        return await _context.Profiles
+            .OfType<CompanyProfile>()
             .Include(cp => cp.Contacts)
             .FirstOrDefaultAsync(cp => cp.UserId == userId);
     }
 
     public async Task AddStudentProfileAsync(StudentProfile profile)
     {
-        _context.StudentProfiles.Add(profile);
+        _context.Profiles.Add(profile);
         await _context.SaveChangesAsync();
     }
 
     public async Task AddMentorProfileAsync(MentorProfile profile)
     {
-        _context.MentorProfiles.Add(profile);
+        _context.Profiles.Add(profile);
         await _context.SaveChangesAsync();
     }
 
     public async Task AddCompanyProfileAsync(CompanyProfile profile)
     {
-        _context.CompanyProfiles.Add(profile);
+        _context.Profiles.Add(profile);
         await _context.SaveChangesAsync();
     }
 
     public async Task UpdateStudentProfileAsync(StudentProfile profile)
     {
-        _context.StudentProfiles.Update(profile);
+        _context.Profiles.Update(profile);
         await _context.SaveChangesAsync();
     }
 
     public async Task UpdateMentorProfileAsync(MentorProfile profile)
     {
-        _context.MentorProfiles.Update(profile);
+        _context.Profiles.Update(profile);
         await _context.SaveChangesAsync();
     }
 
     public async Task UpdateCompanyProfileAsync(CompanyProfile profile)
     {
         // Удаляем старые контакты и добавляем новые, чтобы синхронизировать коллекцию
-        var existingProfile = await _context.CompanyProfiles
+        var existingProfile = await _context.Profiles
+            .OfType<CompanyProfile>()
             .Include(cp => cp.Contacts)
             .FirstOrDefaultAsync(cp => cp.UserId == profile.UserId);
         if (existingProfile != null)
         {
             _context.CompanyContacts.RemoveRange(existingProfile.Contacts);
             existingProfile.Contacts = profile.Contacts;
-            _context.CompanyProfiles.Update(existingProfile);
+            _context.Profiles.Update(existingProfile);
             await _context.SaveChangesAsync();
         }
     }
 
     public async Task DeleteProfileAsync(int userId)
     {
-        var studentProfile = await _context.StudentProfiles.FindAsync(userId);
-        if (studentProfile != null)
+        var profile = await _context.Profiles
+            .FirstOrDefaultAsync(p => p.UserId == userId);
+        if (profile != null)
         {
-            _context.StudentProfiles.Remove(studentProfile);
-            await _context.SaveChangesAsync();
-            return;
-        }
-
-        var mentorProfile = await _context.MentorProfiles.FindAsync(userId);
-        if (mentorProfile != null)
-        {
-            _context.MentorProfiles.Remove(mentorProfile);
-            await _context.SaveChangesAsync();
-            return;
-        }
-
-        var companyProfile = await _context.CompanyProfiles
-            .Include(cp => cp.Contacts)
-            .FirstOrDefaultAsync(cp => cp.UserId == userId);
-        if (companyProfile != null)
-        {
-            _context.CompanyProfiles.Remove(companyProfile);
+            _context.Profiles.Remove(profile);
             await _context.SaveChangesAsync();
         }
     }
