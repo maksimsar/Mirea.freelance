@@ -1,6 +1,6 @@
 namespace Mirea.freelance.backend.dto;
 
-public class FeedbackDto
+public class FeedbackResponseDto
 {
     public int Id { get; set; }
     public int OrderId { get; set; }
