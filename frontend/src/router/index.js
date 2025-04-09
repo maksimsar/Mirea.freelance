@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../views/HomePage.vue';
 import OrdersPage from '../views/OrdersPage.vue';
 import ProfilePage from '../views/ProfilePage.vue';
+import ProfileTeacher from '../views/ProfileTeacher.vue';
+import ProfileCompany from '../views/ProfileCompany.vue';
 import ProcessingOrder from '../views/ProcessingOrder.vue';
 import CompanyOrder from '../views/CompanyOrder.vue';
 import AuthPage from '../views/AuthPage.vue';
@@ -34,7 +36,18 @@ const routes = [
   {
     path: '/profile',
     name: 'Profile',
-    component: ProfilePage,
+    component: () => {
+      const userRole = localStorage.getItem('userRole');
+      if (userRole === 'student') {
+        return ProfilePage;
+      } else if (userRole === 'admin') {
+        return ProfileTeacher;
+      } else if (userRole === 'company') {
+        return ProfileCompany;
+      } else {
+        return ProfilePage; 
+      }
+    },
     meta: { requiresAuth: true, roles: ['student', 'admin', 'company'] },
   },
   // Страница обработки заказов для админа (с учетом, что преподаватель = админ)

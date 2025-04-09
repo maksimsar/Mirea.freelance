@@ -1,17 +1,24 @@
 <template>
-    <div class="container mt-4">
-      <!-- Компонент переключения профилей -->
-      <ProfileSwitcher />
-  
-      <div class="row mt-4">
-        <div class="col-md-4">
+  <div class="container mt-5">
+    <h2 class="text-center mb-3">Профиль преподавателя</h2>
+    <div class="row g-4 align-items-start">
+      <!-- Левая колонка -->
+      <div class="col-md-4">
+        <div class="card p-3 shadow-sm">
           <ProfileAvatar :avatar="user.avatar" />
+        </div>
+        <div class="card p-3 mt-4">
           <ReviewsSection :reviews="user.reviews" />
         </div>
-        <div class="col-md-8">
-          <TeacherInfo user="user" @edit="openEditModal" />
+      </div>
+
+      <!-- Правая колонка -->
+      <div class="col-md-8">
+        <div class="card p-4">
+          <TeacherInfo :user="user" @edit="openEditModal" />
         </div>
       </div>
+    </div>
   
       <ModalEdit
         v-if="currentField"
@@ -28,7 +35,6 @@
   import TeacherInfo from '../components/TeacherInfo.vue';
   import ReviewsSection from '../components/ReviewsSection.vue';
   import ModalEdit from '../components/ModalEdit.vue';
-  import ProfileSwitcher from '../components/ProfileSwitcher.vue'; // Импортируем новый компонент
   
   export default {
     name: 'ProfilePage',
@@ -37,7 +43,6 @@
       TeacherInfo,
       ReviewsSection,
       ModalEdit,
-      ProfileSwitcher, // Добавляем компонент в список компонентов
     },
     data() {
       return {
@@ -115,6 +120,14 @@
   </script>
   
   <style scoped>
-  /* Дополнительные стили, если нужно */
+  h2 {
+  font-size: 2rem;
+  font-family: 'BezierSans-Regular';
+  text-shadow: #FF007A 1px 1px 1px;
+}
+
+.card {
+  background-color:#0D0F1A;
+}
   </style>
   

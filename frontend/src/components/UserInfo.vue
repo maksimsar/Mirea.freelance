@@ -1,6 +1,7 @@
 <template>
     <div class="card p-3">
-      <h5>Общая информация</h5>
+      <div class="card-div">      
+        <h5>Общая информация</h5>
       <p><strong>Фамилия:</strong> {{ user.surname }}</p>
       <p><strong>Имя:</strong> {{ user.name }}</p>
       <p><strong>Отчество:</strong> {{ user.patronymic }}</p>
@@ -13,6 +14,7 @@
         <button class="btn btn-edit" @click="editField('telegram')">Изменить</button>
       </p>
       <p><strong>Средний балл:</strong> {{ user.grade }}</p>
+    </div>
     </div>
   </template>
   
@@ -30,15 +32,20 @@
   </script>
   
   <style>
-  .card {
-  background-color:  #0D0F1A;
-  color:#E0E0E0;
+.card-div {
+  background-color: #2D3445;
+  border-radius: 5px;
+  color: #E0E0E0;
+  padding: 10px;
+  border: 1px #E0E0E0 solid;
 }
-.btn {
+
+
+.card-div .btn {
   background-color: #00b5c5;
   color: white;
 }
-.btn:hover {
+.card-div .btn:hover {
   background-color: #037485;
   color: white;
 }
