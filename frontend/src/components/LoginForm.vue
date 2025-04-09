@@ -110,11 +110,16 @@
     }
   }
   
-  /* Кнопка при наведении */
-  .btn-primary:hover {
-    background-color: #1d4ed8;
-    transition: background-color 0.3s ease-in-out;
-  }
+  .btn {
+  background-color: #00b5c5;
+  color: white;
+
+}
+.btn:hover {
+  background-color:  #037485;
+  color: white;
+}
+
   </style>
   
   

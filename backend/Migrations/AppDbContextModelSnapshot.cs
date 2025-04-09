@@ -139,9 +139,6 @@ namespace backend.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("Rating")
-                        .HasColumnType("numeric");
-
                     b.HasKey("UserId");
 
                     b.ToTable("Profiles", (string)null);
@@ -322,6 +319,9 @@ namespace backend.Migrations
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<decimal>("Rating")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("SphereOfDevelopment")
                         .IsRequired()

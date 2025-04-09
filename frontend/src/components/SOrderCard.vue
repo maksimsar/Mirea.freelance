@@ -7,7 +7,9 @@
         <i class="fa fa-ellipsis-v"></i>
       </div>
     </div>
-    <div class="card-body">
+
+    <div class="card-body" :style="cardStyle">
+
       <p><strong>Описание:</strong> {{ order.Description }}</p>
       <p>
         <strong>Компания:</strong>
@@ -15,8 +17,8 @@
       </p>
       <p><strong>Бюджет:</strong> {{ order.Budget }} руб.</p>
       <p><strong>Дедлайн:</strong> {{ formattedDeadline }}</p>
-      <p><strong>Статус:</strong> {{ order.Status }}</p>
-    </div>
+      <p><strong>Статус:</strong> {{ order.Status }}</p>     
+    </div> 
     <div class="card-footer">
       <!-- Кнопка "Начать обработку" для заказов со статусом "Open" или "unprocessed" -->
       <div v-if="order.Status === 'Open' || order.Status === 'unprocessed'">
@@ -51,13 +53,13 @@ export default {
       // Определяем стиль карточки в зависимости от статуса заказа
       switch (this.order.Status) {
         case "processing":
-          return { backgroundColor: "#fff9c4" }; // светло-жёлтый
+          return { backgroundColor: "#E0E0E0"};
         case "processed_positive":
-          return { backgroundColor: "#d4edda" }; // светло-зелёный
+          return { backgroundColor: "#00a36a" , color: "#e0e0e0"};
         case "processed_negative":
-          return { backgroundColor: "#f8d7da" }; // светло-красный
+          return { backgroundColor: "#a1014f", color: "#e0e0e0"}; 
         default:
-          return { backgroundColor: "#f8f9fa" };
+          return { backgroundColor: "#E0E0E0" };
       }
     },
     formattedDeadline() {
@@ -93,8 +95,7 @@ export default {
   margin-bottom: 1em;
   padding: 1em;
   border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  background-color: #f8f9fa;
+  color:#0D0F1A;
 }
 .card-header {
   display: flex;
@@ -102,16 +103,13 @@ export default {
   align-items: center;
   font-weight: bold;
 }
-.card-header h3 {
-  margin: 0;
-  color: #007bff;
-}
+
 .edit-icon {
   cursor: pointer;
-  color: #007bff;
+  color: #00b5c5;
 }
 .edit-icon:hover {
-  color: #0056b3;
+  color: #037485;
 }
 .card-body {
   margin-top: 0.5em;
@@ -119,13 +117,12 @@ export default {
 .card-body p {
   margin: 5px 0;
   font-size: 0.9rem;
-  color: #555;
 }
 .card-footer {
   margin-top: 0.5em;
 }
 .btn-action {
-  background-color: #007bff;
+  background-color:  #00b5c5 ;
   border: none;
   color: #fff;
   margin-right: 0.5em;
@@ -135,18 +132,18 @@ export default {
   transition: background-color 0.3s ease;
 }
 .btn-action:hover {
-  background-color: #0056b3;
+  background-color: 	#037485;
 }
 .approve {
-  background-color: #28a745;
+  background-color:  #00da87;
 }
 .approve:hover {
-  background-color: #218838;
+  background-color: #00a36a;
 }
 .reject {
-  background-color: #dc3545;
+  background-color: #FF007A;
 }
 .reject:hover {
-  background-color: #c82333;
+  background-color: #a1014f;
 }
 </style>

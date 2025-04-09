@@ -1,4 +1,7 @@
 <template>
+   <div class="mt-5">
+ <h2 class="text-center md-5">Управление заявками</h2>
+</div>
   <div class="processing-order">
     <!-- Первая колонка: Не обработан -->
     <div class="column unprocessed animate__animated animate__fadeInLeft">
@@ -119,25 +122,28 @@ export default {
 <style scoped>
 @import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css";
 
+h2 {
+    font-size: 2rem;
+    font-family: 'BezierSans-Regular';
+    text-shadow: #FF007A 1px 1px 1px;
+  }
 .processing-order {
   display: flex;
   justify-content: space-between;
-  background-color: #007bff;
+  background-color: #0D0F1A;
   padding: 1em;
   gap: 1em;
   min-height: calc(100vh - 60px);
 }
 .column {
   flex: 1;
-  background-color: #fff;
+  background-color: #2D3445;
   border-radius: 5px;
   padding: 1em;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .column h3 {
   margin-bottom: 1em;
   text-align: center;
-  color: #007bff;
 }
 .list-enter-active,
 .list-leave-active {

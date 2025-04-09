@@ -4,7 +4,7 @@
       <ul>
         <li v-for="(entry, index) in order.history" :key="index">
           <span class="date">{{ entry.date }}</span>
-          <span class="status" :style="{ color: entry.color }">{{ entry.status }}</span>
+          <span class="status">{{ entry.status }}</span>
         </li>
       </ul>
     </div>
@@ -26,7 +26,6 @@
   .detailed-timeline h3 {
     font-size: 1rem;
     margin-bottom: 5px;
-    color: #007bff;
   }
   .detailed-timeline ul {
     list-style: none;
@@ -37,14 +36,10 @@
     display: flex;
     justify-content: space-between;
     padding: 5px 0;
-    border-bottom: 1px solid #eee;
     font-size: 0.85rem;
   }
-  .date {
-    color: #555;
-  }
   .status {
-    font-weight: bold;
+    color: #00FF9F;
   }
   </style>
   

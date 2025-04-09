@@ -10,7 +10,7 @@
           <form @submit.prevent="submitForm">
             <!-- ФИО -->
             <div class="form-group">
-              <label for="fullName">ФИО</label>
+              <label class="form" for="fullName">ФИО</label>
               <input
                 type="text"
                 id="fullName"
@@ -22,7 +22,7 @@
             
             <!-- Группа -->
             <div class="form-group">
-              <label for="group">Группа</label>
+              <label class="form" for="group">Группа</label>
               <input
                 type="text"
                 id="group"
@@ -34,7 +34,7 @@
             
             <!-- Уровень -->
             <div class="form-group">
-              <label for="level">Уровень</label>
+              <label class="form" for="level">Уровень</label>
               <input
                 type="text"
                 id="level"
@@ -46,7 +46,7 @@
             
             <!-- Роль (выбирается через радиокнопки) -->
             <div class="form-group">
-              <label>Выберите предпочитаемую роль</label>
+              <label class="form">Выберите предпочитаемую роль</label>
               <div>
                 <div class="form-check">
                   <input
@@ -100,9 +100,10 @@
                 </div>
               </div>
             </div>
-            
             <!-- Кнопка отправки -->
-            <button type="submit" class="btn btn-primary" style="background-color: #007bff;">Отправить заявку</button>
+            <div class="form-submit-container">
+  <button type="submit" class="btn">Отправить заявку</button>
+</div>
           </form>
         </div>
       </div>
@@ -148,22 +149,42 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .modal-dialog {
-  background: white;
-  padding: 1.5rem;
+  background:#2D3445;
+  padding: 2rem;
   border-radius: 8px;
   max-width: 500px;
   width: 100%;
 }
 
 .form-check-input:checked {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #037485;
+  border-color: #037485;
 }
+.btn {
+  background-color: #00b5c5;
+  color: white;
+}
+.btn:hover {
+  background-color:  #037485;
+  color: white;
+}
+
+.form {
+  margin: 3%;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+.form-submit-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 </style>
