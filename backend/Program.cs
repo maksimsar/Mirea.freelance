@@ -24,6 +24,16 @@ builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<ProfileService>();
 builder.Services.AddScoped<RoleService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin() // Разрешаем запросы с любого источника
+               .AllowAnyMethod() // GET, POST, PUT, DELETE и т.д.
+               .AllowAnyHeader(); // Любые заголовки
+    });
+});
+
 // Добавляем Swagger для документации API
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -31,7 +41,11 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new() { Title = "Mirea Freelance API", Version = "v1" });
 });
 
+
+
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 // Настраиваем pipeline
 if (app.Environment.IsDevelopment())

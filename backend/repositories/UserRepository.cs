@@ -55,4 +55,9 @@ public class UserRepository : IUserRepository
         return await _context.Users
             .AnyAsync(u => u.Login == login);
     }
+
+    public async Task<User> GetByLoginAsync(string login)
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => u.Login == login);
+    }
 }
