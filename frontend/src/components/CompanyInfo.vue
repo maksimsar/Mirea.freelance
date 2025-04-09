@@ -1,5 +1,6 @@
 <template>
     <div class="card p-3">
+      <div class="card-div">   
       <h5>Общая информация о компании</h5>
       <p><strong>Название компании:</strong> {{ user.companyName }}</p>
       
@@ -14,6 +15,7 @@
           <strong>Telegram:</strong> {{ contact.telegram }}
           <button class="btn btn-edit" @click="editField(`contacts[${index}].telegram`)">Изменить</button>
         </p>
+      </div>
       </div>
     </div>
   </template>
@@ -31,20 +33,23 @@
   };
   </script>
   
-  <style scoped>
-  .btn-edit {
-    color: #fff; /* Белый текст */
-    background-color: #007bff; /* Синий фон */
-    border: none; /* Убираем рамку */
-    padding: 5px 10px; /* Пространство внутри кнопки */
-    font-size: 14px; /* Размер текста */
-    border-radius: 5px; /* Скруглённые углы */
-    cursor: pointer; /* Указатель при наведении */
-    transition: background-color 0.2s ease; /* Плавный переход цвета */
-  }
-  
-  .btn-edit:hover {
-    background-color: #0056b3; /* Более тёмный синий при наведении */
-  }
+  <style>
+.card-div {
+  background-color: #2D3445;
+  border-radius: 5px;
+  color: #E0E0E0;
+  padding: 10px;
+  border: 1px #E0E0E0 solid;
+}
+
+
+.card-div .btn {
+  background-color: #00b5c5;
+  color: white;
+}
+.card-div .btn:hover {
+  background-color: #037485;
+  color: white;
+}
   </style>
   

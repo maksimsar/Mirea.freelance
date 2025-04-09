@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-5">
-    <h2 class="text-center mb-3">Профиль</h2>
+    <h2 class="text-center mb-3">Профиль студента</h2>
     <div class="row g-4 align-items-start">
       <!-- Левая колонка -->
       <div class="col-md-4">
@@ -15,7 +15,7 @@
       <!-- Правая колонка -->
       <div class="col-md-8">
         <div class="card p-4">
-          <TeacherInfo :user="user" @edit="openEditModal" />
+          <UserInfo :user="user" @edit="openEditModal" />
         </div>
       </div>
     </div>
@@ -33,7 +33,7 @@
 <script>
 import { Modal } from 'bootstrap';
 import ProfileAvatar from '../components/ProfileAvatar.vue';
-import TeacherInfo from '../components/TeacherInfo.vue';
+import UserInfo from '../components/UserInfo.vue';
 import ReviewsSection from '../components/ReviewsSection.vue';
 import ModalEdit from '../components/ModalEdit.vue';
 
@@ -41,7 +41,7 @@ export default {
   name: 'ProfilePage',
   components: {
     ProfileAvatar,
-    TeacherInfo,
+    UserInfo,
     ReviewsSection,
     ModalEdit,
   },
@@ -54,8 +54,7 @@ export default {
         patronymic: 'Иванович',
         phone: '+7-999-123-45-67',
         telegram: '@ivan_ivanov',
-        rating: 4.8,
-        developmentArea: 'Web-разработка',
+        grade: 4.8,
         reviews: [
           {
             customerFeedback: 'Прекрасная работа! Все выполнено в срок.',
