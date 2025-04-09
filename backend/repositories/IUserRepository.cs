@@ -21,4 +21,7 @@ public interface IUserRepository
 
     // Проверить, занят ли логин (возвращает true, если пользователь с таким логином уже существует)
     Task<bool> IsLoginTakenAsync(string login);
+
+    //Логин пользователя
+    Task<User> GetByLoginAsync(string login);
 }

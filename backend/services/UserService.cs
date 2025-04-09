@@ -113,4 +113,28 @@ public class UserService
         await _userRepository.DeleteAsync(id);
         return (true, "Пользователь удален успешно.");
     }
+
+    public async Task<(bool success, string message, UserResponseDto? user)> AuthenticateAsync(string login, string password)
+{
+    var user = await _userRepository.GetByLoginAsync(login);
+    if (user == null)
+    {
+        return (false, "Пользователь не найден", null);
+    }
+
+    // Простая проверка пароля (в реале используй хеширование, например, BCrypt)
+    if (user.PasswordHash != password) // Замени на реальную проверку хеша
+    {
+        return (false, "Неверный пароль", null);
+    }
+
+    var response = new UserResponseDto
+    {
+        Id = user.Id,
+        Login = user.Login,
+        RegistrationDate = user.RegistrationDate
+    };
+
+    return (true, "Авторизация успешна", response);
+}
 }
