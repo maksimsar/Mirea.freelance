@@ -1,18 +1,24 @@
-<template>
-    <div class="container mt-4">
-      <!-- Кнопка "Создать заказ" -->
+
+  <template>
+    <div class="container mt-5">
+      <h2 class="text-center mb-3">Профиль компании</h2>
       <button class="create-order-btn" @click="navigateToCreateOrder">Создать заказ</button>
-  
-      <!-- Компонент переключения профилей -->
-      <ProfileSwitcher />
-  
-      <div class="row mt-4">
+      <div class="row g-4 align-items-start">
+        <!-- Левая колонка -->
         <div class="col-md-4">
-          <ProfileAvatar :avatar="user.avatar" />
-          <ReviewsSection :reviews="user.reviews" />
+          <div class="card p-3 shadow-sm">
+            <ProfileAvatar :avatar="user.avatar" />
+          </div>
+          <div class="card p-3 mt-4">
+            <ReviewsSection :reviews="user.reviews" />
+          </div>
         </div>
+  
+        <!-- Правая колонка -->
         <div class="col-md-8">
-          <CompanyInfo :user="user" @edit="openEditModal" />
+          <div class="card p-4">
+            <CompanyInfo :user="user" @edit="openEditModal" />
+          </div>
         </div>
       </div>
   
@@ -30,7 +36,6 @@
   import ProfileAvatar from '../components/ProfileAvatar.vue';
   import ReviewsSection from '../components/ReviewsSection.vue';
   import ModalEdit from '../components/ModalEdit.vue';
-  import ProfileSwitcher from '../components/ProfileSwitcher.vue';
   import CompanyInfo from '../components/CompanyInfo.vue';
   
   export default {
@@ -39,7 +44,6 @@
       ProfileAvatar,
       ReviewsSection,
       ModalEdit,
-      ProfileSwitcher,
       CompanyInfo,
     },
     data() {
@@ -116,25 +120,30 @@
   <style scoped>
   .create-order-btn {
     position: absolute;
-    top: 80px; /* Смещено ниже */
-    right: 20px;
-    background-color: #007bff;
+    top: 100px; /* Смещено ниже */
+    right: 130px;
+    background-color: #00b5c5;
     color: #fff;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
-    transition: transform 0.3s, background-color 0.3s;
+    
   }
   
   .create-order-btn:hover {
-    background-color: #0056b3;
-    transform: scale(1.1);
+    background-color: #037485;
   }
   
-  .create-order-btn:active {
-    transform: scale(0.95);
-  }
+  h2 {
+  font-size: 2rem;
+  font-family: 'BezierSans-Regular';
+  text-shadow: #FF007A 1px 1px 1px;
+}
+
+.card {
+  background-color:#0D0F1A;
+}
   </style>
   

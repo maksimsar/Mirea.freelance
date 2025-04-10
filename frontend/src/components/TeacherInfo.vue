@@ -1,5 +1,6 @@
 <template>
     <div class="card">
+      <div class="card-div"> 
       <h5>Общая информация</h5>
       <p><strong>Фамилия:</strong> {{ user.surname }}</p>
       <p><strong>Имя:</strong> {{ user.name }}</p>
@@ -14,6 +15,7 @@
       </p>
       <p><strong>Рейтинг:</strong> {{ user.rating }}</p>
       <p><strong>Сфера разработки:</strong> {{ user.developmentArea }}</p>
+      </div>
     </div>
   </template>
   
@@ -30,16 +32,21 @@
   };
   </script>
   
-  <style scoped>
-.card {
-  background-color:  #0D0F1A;
-  color:#E0E0E0;
+  <style>
+.card-div {
+  background-color: #2D3445;
+  border-radius: 5px;
+  color: #E0E0E0;
+  padding: 10px;
+  border: 1px #E0E0E0 solid;
 }
-.btn {
+
+
+.card-div .btn {
   background-color: #00b5c5;
   color: white;
 }
-.btn:hover {
+.card-div .btn:hover {
   background-color: #037485;
   color: white;
 }

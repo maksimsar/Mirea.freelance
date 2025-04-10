@@ -2,7 +2,7 @@
 <template>
   <div class="modal-overlay">
     <div class="modal-window animate__animated animate__zoomIn">
-      <h4>Редактирование заказа</h4>
+      <h4 class="text-center">Редактирование заказа</h4>
       <transition name="fade-slide">
         <div class="form-group">
           <label>Название заказа:</label>
@@ -96,14 +96,14 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
 }
 .modal-window {
-  background: #fff;
+  background: #2D3445;
   padding: 1.5em;
   border-radius: 8px;
   min-width: 500px;
@@ -125,18 +125,18 @@ font-weight: bold; /* Жирный шрифт для выделения */
   font-weight: bold;
   display: block;
   margin-bottom: 5px;
-  color: #0D0F1A;
+  color:  #E0E0E0;
 }
 .form-group input,
 .form-group textarea,
 .form-group select {
   width: 100%;
   padding: 8px;
-  border: 1px solid #ccc;
+  background-color:  #e0e0e0;
   border-radius: 5px;
   font-size: 1rem;
   box-sizing: border-box;
-  color: black;
+  color:#2D3445;
 }
 .buttons {
   display: flex;
@@ -174,5 +174,23 @@ font-weight: bold; /* Жирный шрифт для выделения */
   opacity: 0;
   transform: translateY(20px);
 }
+
+.modal-window::-webkit-scrollbar {
+  width: 10px;
+}
+
+.modal-window::-webkit-scrollbar-track {
+  background: #1c1e2a;
+  border-radius: 5px;
+}
+
+.modal-window::-webkit-scrollbar-thumb {
+  background-color: #037485;
+  border-radius: 5px;
+  border: 2px solid #1c1e2a;
+}
+
+
+
 </style>
   
