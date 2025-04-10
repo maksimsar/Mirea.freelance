@@ -174,5 +174,23 @@ font-weight: bold; /* Жирный шрифт для выделения */
   opacity: 0;
   transform: translateY(20px);
 }
+
+.modal-window::-webkit-scrollbar {
+  width: 10px;
+}
+
+.modal-window::-webkit-scrollbar-track {
+  background: #1c1e2a;
+  border-radius: 5px;
+}
+
+.modal-window::-webkit-scrollbar-thumb {
+  background-color: #037485;
+  border-radius: 5px;
+  border: 2px solid #1c1e2a;
+}
+
+
+
 </style>
   
