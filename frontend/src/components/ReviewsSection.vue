@@ -79,6 +79,20 @@
   .star {
     margin-right: 5px;
   }
+  .reviews-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.reviews-container::-webkit-scrollbar-track {
+  background: #1c1e2a; 
+  border-radius: 5px;
+}
+
+.reviews-container::-webkit-scrollbar-thumb {
+  background-color: #2D3445; 
+  border-radius: 5px;
+  border: 2px solid #1c1e2a; /* Отступ вокруг ползунка */
+}
 
   </style>
   
