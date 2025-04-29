@@ -5,57 +5,59 @@ using Mirea.freelance.backend.services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Добавляем поддержку контроллеров
+// GitLab integration
+builder.Services.Configure<GitLabSettings>(
+    builder.Configuration.GetSection("GitLab"));
+builder.Services.AddHttpClient<GitLabClient>();
+builder.Services.AddScoped<IGitDocumentService, GitDocumentService>();
+
+// MVC controllers
 builder.Services.AddControllers();
 
-// Подключаем DbContext с PostgreSQL
+// PostgreSQL DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Регистрируем репозитории
+// Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
-// Регистрируем сервисы
+// Existing services
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<ProfileService>();
 builder.Services.AddScoped<RoleService>();
 
+// CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", builder =>
-    {
-        builder.AllowAnyOrigin() // Разрешаем запросы с любого источника
-               .AllowAnyMethod() // GET, POST, PUT, DELETE и т.д.
-               .AllowAnyHeader(); // Любые заголовки
-    });
+    options.AddPolicy("AllowAll", b =>
+        b.AllowAnyOrigin()
+         .AllowAnyMethod()
+         .AllowAnyHeader());
 });
 
-// Добавляем Swagger для документации API
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "Mirea Freelance API", Version = "v1" });
 });
 
-
-
 var app = builder.Build();
 
 app.UseCors("AllowAll");
 
-// Настраиваем pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mirea Freelance API v1"));
+    app.UseSwaggerUI(c =>
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mirea Freelance API v1"));
 }
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-
 app.Run();
