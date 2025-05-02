@@ -33,6 +33,23 @@ namespace Mirea.freelance.backend.controllers
             return Ok();
         }
 
+        [HttpGet("stats")]
+        public async Task<IActionResult> Stats()
+        {
+            // Получаем все файлы в корне и в подпапках (для MVP – только корень)
+            var all = await _svc.ListAsync(null);
+            var totalFiles    = all.Count();
+            var totalVersions = all.Sum(d => d.VersionCount);
+
+            // Заглушка, пока не считаем настоящий объём и коммиты за 7 дней
+            return Ok(new {
+            totalFiles,
+            totalVersions,
+            totalBytes     = 0,
+            recentCommits  = 0
+            });
+        }
+
         [HttpGet("history/{*path}")]
         public async Task<IActionResult> History(string path)
             => Ok(await _svc.HistoryAsync(path));
