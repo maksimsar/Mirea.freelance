@@ -10,7 +10,8 @@ import AuthPage from '../views/AuthPage.vue';
 import OrderTrackingStudent from '../views/OrderTrackingStudent.vue';
 import OrderTrackingTeacher from '../views/OrderTrackingTeacher.vue'; // Можно оставить, если в дальнейшем понадобится
 import OrderTrackingCompany from '../views/OrderTrackingCompany.vue';
-import AdminOrders from '../views/AdminsOrders.vue'; // Новый компонент для админов
+import AdminOrders from '../views/AdminsOrders.vue';    // Уже есть
+import AdminDocs from '../views/AdminDocs.vue';        // Новый компонент для документации
 
 const routes = [
   {
@@ -45,12 +46,12 @@ const routes = [
       } else if (userRole === 'company') {
         return ProfileCompany;
       } else {
-        return ProfilePage; 
+        return ProfilePage;
       }
     },
     meta: { requiresAuth: true, roles: ['student', 'admin', 'company'] },
   },
-  // Страница обработки заказов для админа (с учетом, что преподаватель = админ)
+  // Страница обработки заказов для админа (преподаватель = админ)
   {
     path: '/order_processing',
     name: 'OrderProcessing',
@@ -75,7 +76,6 @@ const routes = [
     path: '/tracking/teacher',
     name: 'TeacherTracking',
     component: OrderTrackingTeacher,
-    // Если преподаватель равен администратору, можно добавить роль "admin"
     meta: { requiresAuth: true, roles: ['admin'] },
   },
   {
@@ -84,13 +84,20 @@ const routes = [
     component: OrderTrackingCompany,
     meta: { requiresAuth: true, roles: ['company'] },
   },
-  // Новый маршрут для страницы администраторов, где они просматривают заказы и берут их в менторство
+  // Новый маршрут для страницы администраторов заказов
   {
     path: '/admin/orders',
     name: 'AdminsOrders',
     component: AdminOrders,
     meta: { requiresAuth: true, roles: ['admin'] },
   },
+  // Новый маршрут для модуля документации (только для админа)
+  {
+    path: '/admin/docs',
+    name: 'AdminDocs',
+    component: AdminDocs,
+    meta: { requiresAuth: true, roles: ['admin'] },
+  }
 ];
 
 const router = createRouter({
@@ -102,12 +109,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const userRole = localStorage.getItem('userRole');
   if (to.meta.requiresAuth && !userRole) {
-    next({ name: 'AuthPage' });
-  } else if (to.meta.roles && userRole && !to.meta.roles.includes(userRole)) {
-    next({ name: 'Home' });
-  } else {
-    next();
+    return next({ name: 'AuthPage' });
   }
+  if (to.meta.roles && userRole && !to.meta.roles.includes(userRole)) {
+    return next({ name: 'Home' });
+  }
+  next();
 });
 
 export default router;

@@ -2,9 +2,7 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-custom shadow-sm">
       <div class="container">
-        <router-link class="navbar-brand logo-font" to="/"
-          >MIREA FREELANCE</router-link
-        >
+        <router-link class="navbar-brand logo-font" to="/">MIREA FREELANCE</router-link>
         <button
           class="navbar-toggler"
           type="button"
@@ -25,9 +23,7 @@
             <!-- Если пользователь не авторизован -->
             <template v-if="!userRole">
               <li class="nav-item">
-                <router-link class="nav-link" to="/login"
-                  >Вход/Регистрация</router-link
-                >
+                <router-link class="nav-link" to="/login">Вход/Регистрация</router-link>
               </li>
             </template>
             <!-- Для авторизованных пользователей -->
@@ -35,61 +31,44 @@
               <!-- Меню для студентов -->
               <template v-if="userRole === 'student'">
                 <li class="nav-item">
-                  <router-link class="nav-link" to="/orders"
-                    >Найти проект</router-link
-                  >
+                  <router-link class="nav-link" to="/orders">Найти проект</router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link class="nav-link" to="/tracking/student"
-                    >Мои проекты</router-link
-                  >
+                  <router-link class="nav-link" to="/tracking/student">Мои проекты</router-link>
                 </li>
               </template>
               <!-- Меню для админа (преподаватель = админ) -->
               <template v-if="userRole === 'admin'">
                 <li class="nav-item">
-                  <router-link class="nav-link" to="/order_processing"
-                    >Обработка заказов</router-link
-                  >
+                  <router-link class="nav-link" to="/order_processing">Обработка заказов</router-link>
                 </li>
-                <!-- Ссылка на отслеживание заказов (ранее для преподавателя) -->
                 <li class="nav-item">
-                  <router-link class="nav-link" to="/tracking/teacher"
-                    >Мои проекты</router-link
-                  >
+                  <router-link class="nav-link" to="/tracking/teacher">Мои проекты</router-link>
                 </li>
-                <!-- Новая ссылка для перехода на страницу заказов для менторства -->
                 <li class="nav-item">
-                  <router-link class="nav-link" to="/admin/orders"
-                    >Доступные проекты</router-link
-                  >
+                  <router-link class="nav-link" to="/admin/orders">Доступные проекты</router-link>
+                </li>
+                <!-- Новая ссылка на модуль документации -->
+                <li class="nav-item">
+                  <router-link class="nav-link" to="/admin/docs">Документация</router-link>
                 </li>
               </template>
-
               <!-- Меню для компании -->
               <template v-if="userRole === 'company'">
                 <li class="nav-item">
-                  <router-link class="nav-link" to="/create_order"
-                    >Создать заявку</router-link
-                  >
+                  <router-link class="nav-link" to="/create_order">Создать заявку</router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link class="nav-link" to="/tracking/company"
-                    >Мои проекты</router-link
-                  >
+                  <router-link class="nav-link" to="/tracking/company">Мои проекты</router-link>
                 </li>
               </template>
               <!-- Общая страница профиля -->
               <li class="nav-item">
-                <router-link class="nav-link" to="/profile"
-                  >Профиль</router-link
-                >
+                <router-link class="nav-link" to="/profile">Профиль</router-link>
               </li>
               <!-- Кнопка Logout -->
               <li class="nav-item">
-                <button class="nav-link btn-logout" @click="logout">
-                  Выйти
-                </button>
+                <button class="nav-link btn-logout" @click="logout">Выйти</button>
               </li>
             </template>
           </ul>
@@ -152,7 +131,6 @@ export default {
   font-weight: 500;
   padding: 0.5rem 1rem;
 }
-
 .logo-font {
   font-family: 'BezierSans-Regular';
 }
