@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace Mirea.freelance.backend.models;
@@ -13,7 +14,7 @@ public class UserRole
     
     public int RoleId { get; set; }
     
-    public Role Role { get; set; } = null!;
+    public IdentityRole<int> Role { get; set; } = null!;
     
     public DateTime AssignedDate { get; set; } = DateTime.Now;
 }
