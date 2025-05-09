@@ -1,30 +1,24 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Mirea.freelance.backend.models;
 
 
 namespace Mirea.freelance.backend.data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
         }
 
-        public DbSet<User> Users { get; set; } = null!;
-
         public DbSet<Profile> Profiles { get; set; } = null!;
-
-        public DbSet<Role> Roles { get; set; } = null!;
-
-        public DbSet<UserRole> UserRoles { get; set; } = null!;
-
         public DbSet<Order> Orders { get; set; } = null!;
-
         public DbSet<Feedback> Feedbacks { get; set; } = null!;
-
         public DbSet<CompanyContact> CompanyContacts { get; set; } = null!;
-
+        public DbSet<UserRole> UserRoles { get; set; } = null!; 
+        
         // OnConfiguring оставлен как запасной вариант, если DI не настроит опции (например, при выполнении миграций)
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -46,16 +40,51 @@ namespace Mirea.freelance.backend.data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //Настройка сущщности User
+            base.OnModelCreating(modelBuilder);
+            //Настройка сущности User
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("Users");
-
-                entity.HasKey(u => u.Id);
-                entity.Property(u => u.Login).IsRequired();
+                entity.Property(u => u.UserName).HasColumnName("Login").IsRequired();
+                entity.Property(u => u.NormalizedUserName).HasColumnName("NormalizedUserName");
                 entity.Property(u => u.PasswordHash).IsRequired();
                 entity.Property(u => u.RegistrationDate).IsRequired();
+                entity.Ignore(u => u.Login);
             });
+
+            //Настройка таблицы Roles
+            modelBuilder.Entity<IdentityRole<int>>(entity =>
+            {
+                entity.ToTable("Roles");
+                entity.Property(r => r.Name).IsRequired();
+                entity.Property(r => r.NormalizedName).IsRequired();
+            });
+
+            //Настройка кастомной таблицы UserRoles
+            modelBuilder.Entity<UserRole>(entity =>
+            {
+                entity.ToTable("UserRoles");
+                entity.HasKey(ur => ur.Id); // Используем Id как первичный ключ
+                entity.Property(ur => ur.UserId).IsRequired();
+                entity.Property(ur => ur.RoleId).IsRequired();
+                entity.Property(ur => ur.AssignedDate).IsRequired();
+                entity.HasOne(ur => ur.User)
+                    .WithMany()
+                    .HasForeignKey(ur => ur.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(ur => ur.Role)
+                    .WithMany()
+                    .HasForeignKey(ur => ur.RoleId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+            });
+
+
+            // Дополнительные таблицы Identity
+            modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("UserClaims");
+            modelBuilder.Entity<IdentityUserLogin<int>>().ToTable("UserLogins");
+            modelBuilder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
+            modelBuilder.Entity<IdentityRoleClaim<int>>().ToTable("RoleClaims");
 
             //Настройка базовой сущности Profile
             modelBuilder.Entity<Profile>(entity =>
@@ -137,35 +166,6 @@ namespace Mirea.freelance.backend.data
                     .HasForeignKey(cc => cc.CompanyProfileId)
                     .IsRequired()
                     .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            //Настройка сущности UserRole
-            modelBuilder.Entity<UserRole>(entity =>
-            {
-                entity.ToTable("UserRoles");
-
-                entity.HasKey(ur => ur.Id);
-
-                entity.Property(ur => ur.AssignedDate).IsRequired();
-
-                entity.HasOne(ur => ur.User)
-                    .WithMany()
-                    .HasForeignKey(ur => ur.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasOne(ur => ur.Role)
-                    .WithMany()
-                    .HasForeignKey(ur => ur.RoleId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-            
-            //Настройка сущности Role
-            modelBuilder.Entity<Role>(entity =>
-            {
-                entity.ToTable("Roles");
-
-                entity.HasKey(r => r.Id);
-                entity.Property(r => r.Name).IsRequired();
             });
             
             //Настройка сущности Order
