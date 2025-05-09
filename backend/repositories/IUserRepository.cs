@@ -11,7 +11,7 @@ public interface IUserRepository
     Task<IEnumerable<User>> GetAllAsync();
 
     // Добавить нового пользователя
-    Task AddAsync(User user);
+    Task AddAsync(User user, string password);
 
     // Обновить данные пользователя
     Task UpdateAsync(User user);
@@ -23,5 +23,5 @@ public interface IUserRepository
     Task<bool> IsLoginTakenAsync(string login);
 
     //Логин пользователя
-    Task<User> GetByLoginAsync(string login);
+    Task<User?> GetByLoginAsync(string login);
 }

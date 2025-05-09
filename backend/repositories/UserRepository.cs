@@ -1,43 +1,53 @@
 using Mirea.freelance.backend.models;
 using Microsoft.EntityFrameworkCore;
 using Mirea.freelance.backend.data;
+using Microsoft.AspNetCore.Identity;
 
 namespace Mirea.freelance.backend.repositories;
 
 public class UserRepository : IUserRepository
 {
     private readonly AppDbContext _context;
+    private readonly UserManager<User> _userManager;
 
-    public UserRepository(AppDbContext context)
+    public UserRepository(AppDbContext context, UserManager<User> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     public async Task<User?> GetByIdAsync(int id)
     {
         // Находит пользователя по первичному ключу (Id)
-        return await _context.Users
-            .FirstOrDefaultAsync(u => u.Id == id);
+        return await _userManager.FindByIdAsync(id.ToString());
     }
 
+    public async Task<User?> GetByLoginAsync(string login){
+        return await _userManager.FindByNameAsync(login); //мапится на юзернейм
+    }
+    
     public async Task<IEnumerable<User>> GetAllAsync()
     {
         return await _context.Users
             .ToListAsync();
     }
 
-    public async Task AddAsync(User user)
+    public async Task AddAsync(User user, string password)
     {
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
+        var result = await _userManager.CreateAsync(user, password);
+        if (!result.Succeeded){
+            throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
+        }
     }
 
     public async Task UpdateAsync(User user)
     {
         // Предполагается, что user уже прикреплён к контексту
         // или вы делаете Attach, FindAsync, и т.п.
-        _context.Users.Update(user);
-        await _context.SaveChangesAsync();
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded){
+            throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
+        }
     }
 
     public async Task DeleteAsync(int id)
@@ -45,19 +55,17 @@ public class UserRepository : IUserRepository
         var user = await GetByIdAsync(id);
         if (user != null)
         {
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded){
+                throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
+            }
         }
     }
 
     public async Task<bool> IsLoginTakenAsync(string login)
     {
-        return await _context.Users
-            .AnyAsync(u => u.Login == login);
+        var user = await _userManager.FindByNameAsync(login);
+        return user != null;
     }
 
-    public async Task<User> GetByLoginAsync(string login)
-    {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Login == login);
-    }
 }
