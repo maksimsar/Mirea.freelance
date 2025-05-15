@@ -17,9 +17,13 @@ namespace Mirea.freelance.backend.data
         public DbSet<Order> Orders { get; set; } = null!;
         public DbSet<Feedback> Feedbacks { get; set; } = null!;
         public DbSet<CompanyContact> CompanyContacts { get; set; } = null!;
-        public DbSet<UserRole> UserRoles { get; set; } = null!; 
-        
+        public DbSet<StudentProfile> StudentProfiles { get; set; } = null!;
+        public DbSet<MentorProfile> MentorProfiles { get; set; } = null!;
+        public DbSet<CompanyProfile> CompanyProfiles { get; set; } = null!;
+        public DbSet<UserRole> UserRoles { get; set; } = null!;
+
         // OnConfiguring оставлен как запасной вариант, если DI не настроит опции (например, при выполнении миграций)
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -60,11 +64,26 @@ namespace Mirea.freelance.backend.data
                 entity.Property(r => r.NormalizedName).IsRequired();
             });
 
-            //Настройка кастомной таблицы UserRoles
+            // Настройка таблицы UserRoles для ASP.NET Identity
+            modelBuilder.Entity<IdentityUserRole<int>>(entity =>
+            {
+                entity.ToTable("IdentityUserRoles"); // Изменено: Переименовал таблицу, чтобы не конфликтовала с твоей UserRole
+                entity.HasKey(ur => new { ur.UserId, ur.RoleId });
+                entity.HasOne<User>()
+                    .WithMany()
+                    .HasForeignKey(ur => ur.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne<IdentityRole<int>>()
+                    .WithMany()
+                    .HasForeignKey(ur => ur.RoleId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Настройка твоей кастомной таблицы UserRole
             modelBuilder.Entity<UserRole>(entity =>
             {
-                entity.ToTable("UserRoles");
-                entity.HasKey(ur => ur.Id); // Используем Id как первичный ключ
+                entity.ToTable("UserRoles"); // Без изменений: Твоя таблица UserRole
+                entity.HasKey(ur => ur.Id);
                 entity.Property(ur => ur.UserId).IsRequired();
                 entity.Property(ur => ur.RoleId).IsRequired();
                 entity.Property(ur => ur.AssignedDate).IsRequired();
@@ -76,9 +95,7 @@ namespace Mirea.freelance.backend.data
                     .WithMany()
                     .HasForeignKey(ur => ur.RoleId)
                     .OnDelete(DeleteBehavior.Cascade);
-
             });
-
 
             // Дополнительные таблицы Identity
             modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("UserClaims");
