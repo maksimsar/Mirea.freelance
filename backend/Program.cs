@@ -6,6 +6,7 @@ using Mirea.freelance.backend.data;
 using Mirea.freelance.backend.models;
 using Mirea.freelance.backend.repositories;
 using Mirea.freelance.backend.services;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 internal class Program
@@ -64,10 +65,12 @@ internal class Program
 
         // Existing services
         builder.Services.AddScoped<UserService>();
+        builder.Services.AddDbContext<AppDbContext>();
         builder.Services.AddScoped<OrderService>();
         builder.Services.AddScoped<ProfileService>();
         builder.Services.AddScoped<RoleService>();
-        builder.Services.AddSingleton<JwtService>();
+        builder.Services.AddScoped<JwtService>();
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
         // CORS
         builder.Services.AddCors(options =>
