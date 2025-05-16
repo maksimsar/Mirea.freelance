@@ -26,12 +26,14 @@ namespace Mirea.freelance.backend.controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload([FromForm] IFormFile file, [FromQuery] string path)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Upload([FromForm] UploadFileDto dto)
         {
-            using var s = file.OpenReadStream();
-            await _svc.UploadAsync(path ?? file.FileName, s, $"Upload {file.FileName}");
+            using var stream = dto.File.OpenReadStream();
+            await _svc.UploadAsync(dto.Path ?? dto.File.FileName, stream, $"Upload {dto.File.FileName}");
             return Ok();
         }
+
 
         [HttpGet("history/{*path}")]
         public async Task<IActionResult> History(string path)

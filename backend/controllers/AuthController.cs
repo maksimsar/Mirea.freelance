@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Mirea.freelance.backend.dto;
 using Mirea.freelance.backend.services;
 
 [Route("api/[controller]")]
@@ -15,12 +16,24 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
     {
-        var (success, message, user) = await _userService.AuthenticateAsync(loginDto.Login, loginDto.Password);
+        var (success, message, user, token) = await _userService.AuthenticateAsync(loginDto.Login, loginDto.Password);
         if (!success)
         {
-            return BadRequest(new { message });
+            return Unauthorized(new { Message = message });
         }
-        return Ok(new { user.Id, user.Login });
+        return Ok(new { Token = token, user!.Id, user.Login});
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] CreateUserDto createUserDto)
+    {
+        var (success, message, user) = await _userService.CreateUserAsync(createUserDto);
+        if (!success)
+        {
+            return BadRequest(new {Message = message});
+        }
+
+        return Ok(new {Message = message, user!.Id, user.Login});
     }
 }
 
