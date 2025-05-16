@@ -43,5 +43,39 @@ namespace Mirea.freelance.backend.controllers
             await _svc.DeleteAsync(path, $"Delete {path}");
             return NoContent();
         }
+
+        [HttpGet("stats")]
+        public async Task<IActionResult> Stats([FromQuery] string folder = null)
+        {
+            var s = await _svc.StatsAsync(folder);
+            return Ok(s);
+        }
+
+        // Создать папку
+        [HttpPost("folder")]
+        public async Task<IActionResult> CreateFolder([FromQuery] string path)
+        {
+            await _svc.CreateFolderAsync(path);
+            return Ok();
+        }
+
+        // Переименовать (путь к пути)
+        [HttpPost("rename")]
+        public async Task<IActionResult> Rename([FromQuery] string oldPath, [FromQuery] string newPath)
+        {
+            await _svc.RenameAsync(oldPath, newPath);
+            return Ok();
+        }
+
+        // Переместить (аналогично rename)
+        [HttpPost("move")]
+        public async Task<IActionResult> Move([FromQuery] string oldPath, [FromQuery] string newPath)
+        {
+            await _svc.MoveAsync(oldPath, newPath);
+            return Ok();
+        }
     }
+
+
 }
+

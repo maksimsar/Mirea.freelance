@@ -12,5 +12,11 @@ namespace Mirea.freelance.backend.services
         Task                               UploadAsync(string path, Stream fileStream, string commitMessage);
         Task<IEnumerable<CommitDto>>      HistoryAsync(string path);
         Task                               DeleteAsync(string path, string commitMessage);
+        // в backend/services/IGitDocumentService.cs
+        Task CreateFolderAsync(string path);
+        Task RenameAsync(string oldPath, string newPath);
+        Task MoveAsync(string oldPath, string newPath);
+        Task<StatsDto> StatsAsync(string folder = null);
+
     }
 }
