@@ -1,16 +1,19 @@
 using Mirea.freelance.backend.models;
 using Mirea.freelance.backend.repositories;
 using Mirea.freelance.backend.dto;
+using Microsoft.AspNetCore.Identity;
 
 namespace Mirea.freelance.backend.services;
 
 public class RoleService
 {
     private readonly IRoleRepository _roleRepository;
+    private readonly UserManager<User> _userManager;
 
-    public RoleService(IRoleRepository roleRepository)
+    public RoleService(IRoleRepository roleRepository, UserManager<User> userManager)   
     {
         _roleRepository = roleRepository;
+        _userManager = userManager;
     }
 
     // Получить роль по Id
@@ -43,20 +46,17 @@ public class RoleService
         if (string.IsNullOrWhiteSpace(dto.Name))
             return (false, "Название роли не может быть пустым.", null);
 
-        var role = new Role
+        var role = new IdentityRole<int> { Name = dto.Name };
+
+        try
         {
-            Name = dto.Name
-        };
-
-        await _roleRepository.AddAsync(role);
-
-        var response = new RoleResponseDto
+            await _roleRepository.AddAsync(role);
+            return (true, "Роль успешно создана.", new RoleResponseDto { Id = role.Id, Name = role.Name });
+        }
+        catch (Exception ex)
         {
-            Id = role.Id,
-            Name = role.Name
-        };
-
-        return (true, "Роль успешно создана.", response);
+            return (false, $"Ошибка при создании роли: {ex.Message}", null);
+        }
     }
 
     // Обновить роль
@@ -124,8 +124,12 @@ public class RoleService
     // Назначить роль пользователю
     public async Task<(bool success, string message, UserRoleResponseDto? userRole)> CreateUserRoleAsync(CreateUserRoleDto dto)
     {
-        var existingRole = await _roleRepository.GetByIdAsync(dto.RoleId);
-        if (existingRole == null)
+        var user = await _userManager.FindByIdAsync(dto.UserId.ToString());
+        if (user == null)
+            return (false, "Пользователь не найден.", null);
+
+        var role = await _roleRepository.GetByIdAsync(dto.RoleId);
+        if (role == null)
             return (false, "Указанная роль не найдена.", null);
 
         var userRole = new UserRole
@@ -135,17 +139,21 @@ public class RoleService
             AssignedDate = DateTime.UtcNow
         };
 
-        await _roleRepository.AddUserRoleAsync(userRole);
-
-        var response = new UserRoleResponseDto
+        try
         {
-            Id = userRole.Id,
-            UserId = userRole.UserId,
-            RoleId = userRole.RoleId,
-            AssignedDate = userRole.AssignedDate
-        };
-
-        return (true, "Роль успешно назначена пользователю.", response);
+            await _roleRepository.AddUserRoleAsync(userRole);
+            return (true, "Роль успешно назначена пользователю.", new UserRoleResponseDto
+            {
+                Id = userRole.Id,
+                UserId = userRole.UserId,
+                RoleId = userRole.RoleId,
+                AssignedDate = userRole.AssignedDate
+            });
+        }
+        catch (Exception ex)
+        {
+            return (false, $"Ошибка при назначении роли: {ex.Message}", null);
+        }
     }
 
     // Обновить назначение роли

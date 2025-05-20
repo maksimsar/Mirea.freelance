@@ -24,6 +24,12 @@ public class Order
     public DateTime? Deadline { get; set; }
     
     public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+
+    public ICollection<ProjectStudent> ProjectStudents { get; set; } = new List<ProjectStudent>();
+
+    public ICollection<ProjectTask> ProjectTasks { get; set; } = new List<ProjectTask>();
+
+
 }
 
 

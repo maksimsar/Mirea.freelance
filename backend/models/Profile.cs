@@ -29,6 +29,9 @@ public class StudentProfile : Profile
     public string SphereOfDevelopment { get; set; } = string.Empty;
     
     public ICollection<Order> Orders { get; set; } = new List<Order>();
+
+    public ICollection<ProjectStudent> ProjectStudents { get; set; } = new List<ProjectStudent>();
+
 }
 
 // Профиль для преподавателя
