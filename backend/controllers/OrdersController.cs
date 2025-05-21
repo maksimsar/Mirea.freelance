@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mirea.freelance.backend.dto;
 using Mirea.freelance.backend.services;
@@ -5,6 +6,7 @@ using Mirea.freelance.backend.services;
 namespace Mirea.freelance.backend.controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class OrdersController : ControllerBase
 {
@@ -16,6 +18,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Mentor,Admin")]
     public async Task<IActionResult> GetAllOrders()
     {
         var orders = await _orderService.GetAllOrdersAsync();
@@ -23,6 +26,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = "Student,Company,Mentor,Admin")]
     public async Task<IActionResult> GetOrder(int id)
     {
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -32,6 +36,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Company,Admin")]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto dto)
     {
         var (success, message, order) = await _orderService.CreateOrderAsync(dto);
@@ -41,6 +46,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Student,Company,Admin")]
     public async Task<IActionResult> UpdateOrder(int id, [FromBody] UpdateOrderDto dto)
     {
         var (success, message, order) = await _orderService.UpdateOrderAsync(id, dto);
@@ -50,6 +56,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteOrder(int id)
     {
         var (success, message) = await _orderService.DeleteOrderAsync(id);
@@ -59,6 +66,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet("company/{companyProfileId}")]
+    [Authorize(Roles = "Company,Mentor,Admin")]
     public async Task<IActionResult> GetOrdersByCompanyId(int companyProfileId)
     {
         var orders = await _orderService.GetOrdersByCompanyIdAsync(companyProfileId);
@@ -66,6 +74,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet("freelancer/{freelancerProfileId}")]
+    [Authorize(Roles = "Student,Mentor,Admin")]
     public async Task<IActionResult> GetOrdersByFreelancerId(int freelancerProfileId)
     {
         var orders = await _orderService.GetOrdersByFreelancerIdAsync(freelancerProfileId);
@@ -73,6 +82,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet("open")]
+    [Authorize(Roles = "Student,Company,Mentor,Admin")]
     public async Task<IActionResult> GetOpenOrders()
     {
         var orders = await _orderService.GetOpenOrdersAsync();
