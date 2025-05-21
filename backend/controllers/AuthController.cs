@@ -36,9 +36,3 @@ public class AuthController : ControllerBase
         return Ok(new {Message = message, user!.Id, user.Login});
     }
 }
-
-public class LoginDto
-{
-    public string Login { get; set; } = null!;
-    public string Password { get; set; } = null!;
-}
