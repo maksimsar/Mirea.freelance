@@ -11,6 +11,7 @@ using DomainTaskStatus = Mirea.freelance.backend.models.TaskStatus;
 namespace Mirea.freelance.backend.controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/tasks")]
 public class TasksController : ControllerBase
 {
@@ -20,7 +21,7 @@ public class TasksController : ControllerBase
 
     /// <summary>Куратор создаёт задачу</summary>
     [HttpPost]
-    [Authorize(Roles = "Mentor")]
+    [Authorize(Roles = "Mentor, Admin")]
     public async Task<IActionResult> Create([FromBody] CreateTaskDto dto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -31,7 +32,7 @@ public class TasksController : ControllerBase
 
     /// <summary>Получить задачу по Id (для CreatedAtAction)</summary>
     [HttpGet("{id:int}")]
-    [Authorize]                     // любой аутентифицированный
+    [Authorize(Roles = "Student,Company,Mentor,Admin")]                     // любой аутентифицированный
     public async Task<IActionResult> GetById(int id)      // ← имя метода
     {
         var task = await _svc.GetTaskQueryable()
@@ -42,7 +43,7 @@ public class TasksController : ControllerBase
 
     /// <summary>Сменить статус задачи</summary>
     [HttpPatch("{id:int}/status")]
-    [Authorize] // студент меняет себе на AwaitingReview, куратор — на Done/Rejected
+    [Authorize(Roles = "Student,Mentor,Admin")] // студент меняет себе на AwaitingReview, куратор — на Done/Rejected
     public async Task<IActionResult> ChangeStatus(int id, [FromBody] ChangeStatusDto dto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mirea.freelance.backend.dto;
 using Mirea.freelance.backend.services;
@@ -5,6 +6,7 @@ using Mirea.freelance.backend.services;
 namespace Mirea.freelance.backend.controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class ProfilesController : ControllerBase
 {
@@ -16,6 +18,7 @@ public class ProfilesController : ControllerBase
     }
 
     [HttpGet("student/{userId}")]
+    [Authorize(Roles = "Student,Company,Mentor,Admin")]
     public async Task<IActionResult> GetStudentProfile(int userId)
     {
         var profile = await _profileService.GetStudentProfileByUserIdAsync(userId);
@@ -25,6 +28,7 @@ public class ProfilesController : ControllerBase
     }
 
     [HttpGet("mentor/{userId}")]
+    [Authorize(Roles = "Student,Company,Mentor,Admin")]
     public async Task<IActionResult> GetMentorProfile(int userId)
     {
         var profile = await _profileService.GetMentorProfileByUserIdAsync(userId);
@@ -34,6 +38,7 @@ public class ProfilesController : ControllerBase
     }
 
     [HttpGet("company/{userId}")]
+    [Authorize(Roles = "Student,Company,Mentor,Admin")]
     public async Task<IActionResult> GetCompanyProfile(int userId)
     {
         var profile = await _profileService.GetCompanyProfileByUserIdAsync(userId);
@@ -43,6 +48,7 @@ public class ProfilesController : ControllerBase
     }
 
     [HttpPost("student")]
+    [Authorize(Roles = "Student,Admin")]
     public async Task<IActionResult> CreateStudentProfile([FromBody] CreateStudentProfileDto dto)
     {
         var (success, message, profile) = await _profileService.CreateStudentProfileAsync(dto);
@@ -52,6 +58,7 @@ public class ProfilesController : ControllerBase
     }
 
     [HttpPost("mentor")]
+    [Authorize(Roles = "Mentor,Admin")]
     public async Task<IActionResult> CreateMentorProfile([FromBody] CreateMentorProfileDto dto)
     {
         var (success, message, profile) = await _profileService.CreateMentorProfileAsync(dto);
@@ -61,6 +68,7 @@ public class ProfilesController : ControllerBase
     }
 
     [HttpPost("company")]
+    [Authorize(Roles = "Company,Admin")]
     public async Task<IActionResult> CreateCompanyProfile([FromBody] CreateCompanyProfileDto dto)
     {
         var (success, message, profile) = await _profileService.CreateCompanyProfileAsync(dto);
@@ -70,6 +78,7 @@ public class ProfilesController : ControllerBase
     }
 
     [HttpPut("student/{userId}")]
+    [Authorize(Roles = "Student,Admin")]
     public async Task<IActionResult> UpdateStudentProfile(int userId, [FromBody] UpdateStudentProfileDto dto)
     {
         var (success, message, profile) = await _profileService.UpdateStudentProfileAsync(userId, dto);
@@ -79,6 +88,7 @@ public class ProfilesController : ControllerBase
     }
 
     [HttpPut("mentor/{userId}")]
+    [Authorize(Roles = "Mentor,Admin")]
     public async Task<IActionResult> UpdateMentorProfile(int userId, [FromBody] UpdateMentorProfileDto dto)
     {
         var (success, message, profile) = await _profileService.UpdateMentorProfileAsync(userId, dto);
@@ -88,6 +98,7 @@ public class ProfilesController : ControllerBase
     }
 
     [HttpPut("company/{userId}")]
+    [Authorize(Roles = "Company,Admin")]
     public async Task<IActionResult> UpdateCompanyProfile(int userId, [FromBody] UpdateCompanyProfileDto dto)
     {
         var (success, message, profile) = await _profileService.UpdateCompanyProfileAsync(userId, dto);
@@ -97,6 +108,7 @@ public class ProfilesController : ControllerBase
     }
 
     [HttpDelete("{userId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteProfile(int userId)
     {
         var (success, message) = await _profileService.DeleteProfileAsync(userId);
