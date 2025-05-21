@@ -22,6 +22,7 @@ public class Order
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     
     public DateTime? Deadline { get; set; }
+    public string RequiredRoles { get; set; } = string.Empty;
     
     public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
@@ -29,6 +30,7 @@ public class Order
 
     public ICollection<ProjectTask> ProjectTasks { get; set; } = new List<ProjectTask>();
 
+     public string PreferredContactMethods { get; set; } = string.Empty;
 
 }
 
