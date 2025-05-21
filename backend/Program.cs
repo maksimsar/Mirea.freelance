@@ -5,6 +5,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Microsoft.Extensions.Options;
+using Prometheus;
 
 using Mirea.freelance.backend.data;
 using Mirea.freelance.backend.models;
@@ -35,25 +37,33 @@ internal class Program
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders()
             .AddRoleManager<RoleManager<IdentityRole<int>>>();
+        
+        // ---------- JwtOptions ----------
+        builder.Services.Configure<JwtOptions>(
+            builder.Configuration.GetSection(JwtOptions.SectionName));
 
         // ---------- JWT-аутентификация ----------
         builder.Services.AddAuthentication(opts =>
         {
             opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            opts.DefaultChallengeScheme    = JwtBearerDefaults.AuthenticationScheme;
+            opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-        .AddJwtBearer(opts =>
+        .AddJwtBearer(options => // Изменено: убрано serviceProvider, используется Action<JwtBearerOptions>
         {
-            opts.TokenValidationParameters = new TokenValidationParameters
+            var serviceProvider = builder.Services.BuildServiceProvider();
+            var jwtOptions = serviceProvider.GetRequiredService<IOptions<JwtOptions>>().Value
+                ?? throw new InvalidOperationException("JWT configuration is missing.");
+
+            options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer           = true,
-                ValidateAudience         = true,
-                ValidateLifetime         = true,
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer              = builder.Configuration["Jwt:Issuer"],
-                ValidAudience            = builder.Configuration["Jwt:Audience"],
-                IssuerSigningKey         = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+                ValidIssuer = jwtOptions.Issuer,
+                ValidAudience = jwtOptions.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(jwtOptions.Key))
             };
         });
 
@@ -129,6 +139,10 @@ internal class Program
         app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();
+
+        //Prometheus
+        app.UseMetricServer(); // Экспорт метрик по /metrics
+        app.UseHttpMetrics();  // Сбор HTTP-метрик (запросы, длительность, статусы)
 
         app.MapControllers();
         app.Run();
