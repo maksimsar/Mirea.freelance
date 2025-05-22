@@ -5,7 +5,13 @@ using Mirea.freelance.backend.models;        // ← добавь, если не�
 
 namespace Mirea.freelance.backend.models
 {
-    public enum TaskStatus { Open, AwaitingReview, Done, Rejected }
+    public enum TaskStatus {
+    Open           = 0,
+    AwaitingReview = 1,
+    Done           = 2,
+    Rejected       = 3
+    }
+
 
     public class ProjectTask
     {
