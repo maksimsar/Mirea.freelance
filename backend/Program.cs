@@ -81,6 +81,7 @@ internal class Program
         builder.Services.AddScoped<RoleService>();
         builder.Services.AddScoped<JwtService>();
 
+        builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<ITaskService, TaskService>();
 
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();

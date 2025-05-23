@@ -29,6 +29,9 @@ public class Order
 
     public ICollection<ProjectTask> ProjectTasks { get; set; } = new List<ProjectTask>();
 
+    public int? MentorProfileId { get; set; }
+    public MentorProfile? MentorProfile { get; set; }
+
 
 }
 

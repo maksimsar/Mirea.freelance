@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mirea.freelance.backend.data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250523092018_TaskStatusHistoryUser")]
+    partial class TaskStatusHistoryUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,9 +256,6 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("MentorProfileId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
@@ -267,8 +267,6 @@ namespace backend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyProfileId");
-
-                    b.HasIndex("MentorProfileId");
 
                     b.ToTable("Orders", (string)null);
                 });
@@ -687,14 +685,7 @@ namespace backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mirea.freelance.backend.models.MentorProfile", "MentorProfile")
-                        .WithMany()
-                        .HasForeignKey("MentorProfileId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.Navigation("CompanyProfile");
-
-                    b.Navigation("MentorProfile");
                 });
 
             modelBuilder.Entity("Mirea.freelance.backend.models.Profile", b =>

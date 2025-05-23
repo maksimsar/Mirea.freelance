@@ -158,6 +158,11 @@ namespace Mirea.freelance.backend.data
                     .WithMany(cp => cp.Orders)
                     .HasForeignKey(o => o.CompanyProfileId)
                     .OnDelete(DeleteBehavior.Cascade);
+                
+                entity.HasOne(o => o.MentorProfile)
+                    .WithMany()                       // нет ICollection<Order> в MentorProfile
+                    .HasForeignKey(o => o.MentorProfileId)
+                    .OnDelete(DeleteBehavior.SetNull);
 
                 // старая связь many-to-many (FreelancerProfiles) остаётся как была
             });
@@ -201,6 +206,14 @@ namespace Mirea.freelance.backend.data
                     .WithMany(t => t.StatusHistory)
                     .HasForeignKey(h => h.ProjectTaskId)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<TaskStatusHistory>(e =>
+            {
+                e.HasOne(h => h.ChangedByUser)
+                .WithMany()
+                .HasForeignKey(h => h.ChangedByUserId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             // ---------- Feedback ----------
