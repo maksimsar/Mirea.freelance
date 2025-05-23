@@ -4,22 +4,31 @@ using System.Security.Claims;
 
 using Mirea.freelance.backend.data;
 using Mirea.freelance.backend.models;
+using Mirea.freelance.backend.dto;
 using Mirea.freelance.backend.dto.TaskDTO;
-using Mirea.freelance.backend.dto; 
 
-// ─── алиас, чтобы не конфликтовать с System.Threading.Tasks.TaskStatus ───
+// ── алиас, чтобы не конфликтовать с System.Threading.Tasks.TaskStatus ──
 using DomainTaskStatus = Mirea.freelance.backend.models.TaskStatus;
 
 namespace Mirea.freelance.backend.services;
 
-/// <summary>Сервис работы с задачами проекта</summary>
 public interface ITaskService
 {
     Task<ProjectTask>  CreateAsync(CreateTaskDto dto);
     Task<bool>         ChangeStatusAsync(int taskId, DomainTaskStatus newStatus);
+
+    /// список задач без трекинга – удобно контроллеру
     IQueryable<ProjectTask> GetTaskQueryable();
+
+    /// история по-конкретной задаче
     Task<IReadOnlyList<TaskStatusHistory>> GetHistoryAsync(int taskId);
-    Task<PagedResult<ProjectTask>> GetListAsync(string role, ClaimsPrincipal user, int page = 1, int pageSize = 20);
+
+    /// задачи одного проекта (для ProjectPage)
+    Task<IEnumerable<TaskListItemDto>> GetProjectTasksAsync(int projectId);
+
+    /// пагинация «мои задачи» / «задачи моих проектов»
+    Task<PagedResult<ProjectTask>> GetListAsync(
+        string role, ClaimsPrincipal user, int page = 1, int pageSize = 20);
 }
 
 public class TaskService : ITaskService
@@ -33,7 +42,8 @@ public class TaskService : ITaskService
         _http = http;
     }
 
-    /// <summary>Куратор создаёт новую задачу</summary>
+    /* ---------- С О З Д А Т Ь  ---------- */
+
     public async Task<ProjectTask> CreateAsync(CreateTaskDto dto)
     {
         var task = new ProjectTask
@@ -50,7 +60,8 @@ public class TaskService : ITaskService
         return task;
     }
 
-    /// <summary>Сменить статус задачи с учётом роли пользователя</summary>
+    /* ---------- С М Е Н А   С Т А Т У С А ---------- */
+
     public async Task<bool> ChangeStatusAsync(int taskId, DomainTaskStatus newStatus)
     {
         var task = await _db.ProjectTasks
@@ -60,17 +71,21 @@ public class TaskService : ITaskService
 
         var user = _http.HttpContext?.User
                    ?? throw new InvalidOperationException("HttpContext unavailable");
-        var isMentor  = user.IsInRole("Mentor");
-        var isStudent = user.IsInRole("Student");
+        bool isMentor  = user.IsInRole("Mentor");
+        bool isStudent = user.IsInRole("Student");
 
         bool allowed = task.Status switch
         {
-            DomainTaskStatus.Open when
-                isStudent && newStatus == DomainTaskStatus.AwaitingReview => true,
+            DomainTaskStatus.Open
+                 when isStudent  && newStatus == DomainTaskStatus.AwaitingReview => true,
 
-            DomainTaskStatus.AwaitingReview when isMentor &&
-                (newStatus == DomainTaskStatus.Done ||
-                 newStatus == DomainTaskStatus.Rejected) => true,
+            DomainTaskStatus.AwaitingReview
+                 when isMentor   &&
+                      (newStatus == DomainTaskStatus.Done ||
+                       newStatus == DomainTaskStatus.Rejected)                  => true,
+
+            DomainTaskStatus.Rejected
+                 when isStudent  && newStatus == DomainTaskStatus.AwaitingReview => true,
 
             _ => false
         };
@@ -83,18 +98,18 @@ public class TaskService : ITaskService
             Status          = newStatus,
             ChangedAt       = DateTime.UtcNow,
             ChangedByUserId = int.Parse(
-                user.FindFirst(ClaimTypes.NameIdentifier)!.Value) // "sub" если так настроено
+                user.FindFirst(ClaimTypes.NameIdentifier)!.Value)
         });
 
         await _db.SaveChangesAsync();
         return true;
     }
 
-    /// <summary>Отдаём IQueryable без трекинга — удобно для контроллера/репозитория</summary>
+    /* ---------- Q U E R I E S ---------- */
+
     public IQueryable<ProjectTask> GetTaskQueryable() =>
         _db.ProjectTasks.AsNoTracking();
 
-    /// <summary>История смены статусов конкретной задачи</summary>
     public async Task<IReadOnlyList<TaskStatusHistory>> GetHistoryAsync(int taskId) =>
         await _db.TaskStatusHistories
                  .Where(h => h.ProjectTaskId == taskId)
@@ -102,18 +117,38 @@ public class TaskService : ITaskService
                  .AsNoTracking()
                  .ToListAsync();
 
-    public async Task<PagedResult<ProjectTask>> GetListAsync(string role,
-        ClaimsPrincipal user, int page = 1, int pageSize = 20)
+
+    public async Task<IEnumerable<TaskListItemDto>> GetProjectTasksAsync(int projectId)
+    {
+        return await _db.ProjectTasks
+            .Where(t => t.OrderId == projectId)
+            .Select(t => new TaskListItemDto(
+                t.Id,
+                t.Title,
+                t.Description,
+                t.Status,
+                t.AssigneeStudentId,
+                // ----------- было: $"{t.Assignee.LastName} {t.Assignee.FirstName[..1]}."
+                t.Assignee.LastName + " " +               // Фамилия
+                t.Assignee.FirstName.Substring(0, 1) + "."// Инициал
+            ))
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+
+
+    public async Task<PagedResult<ProjectTask>> GetListAsync(
+        string role, ClaimsPrincipal user, int page = 1, int pageSize = 20)
     {
         var query = _db.ProjectTasks.AsNoTracking();
 
         if (role.Equals("mentor", StringComparison.OrdinalIgnoreCase))
         {
-            // куратор → задачи заказов, где он куратор
             int mentorId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             query = query.Where(t => t.Order.MentorProfile.UserId == mentorId);
         }
-        else // student (по умолчанию)
+        else               // student
         {
             int studentId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             query = query.Where(t => t.AssigneeStudentId == studentId);
@@ -122,7 +157,7 @@ public class TaskService : ITaskService
         int total = await query.CountAsync();
 
         var items = await query
-            .OrderBy(t => t.Status)                 // сортировка любая
+            .OrderBy(t => t.Status)
             .ThenBy(t => t.Id)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
@@ -130,6 +165,4 @@ public class TaskService : ITaskService
 
         return new PagedResult<ProjectTask>(items, page, pageSize, total);
     }
-
 }
-

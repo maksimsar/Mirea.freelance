@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Mirea.freelance.backend.dto;
 using Mirea.freelance.backend.services;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace Mirea.freelance.backend.controllers;
 
@@ -103,5 +105,16 @@ public class ProfilesController : ControllerBase
         if (!success)
             return NotFound(message);
         return Ok(message);
+    }
+
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> ListByRole([FromQuery] string role)
+    {
+        if (string.IsNullOrWhiteSpace(role))
+            return BadRequest("Query parameter 'role' is required.");
+
+        var list = await _profileService.GetListByRoleAsync(role);
+        return Ok(list);
     }
 }

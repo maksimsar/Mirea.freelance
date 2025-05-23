@@ -1,5 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using Mirea.freelance.backend.models;
 using Mirea.freelance.backend.repositories;
+using Mirea.freelance.backend.data;   
 using Mirea.freelance.backend.dto;
 
 namespace Mirea.freelance.backend.services;
@@ -7,10 +10,12 @@ namespace Mirea.freelance.backend.services;
 public class ProfileService
 {
     private readonly IProfileRepository _profileRepository;
+    private readonly AppDbContext _dbContext;
 
-    public ProfileService(IProfileRepository profileRepository)
+    public ProfileService(IProfileRepository profileRepository, AppDbContext dbContext)
     {
         _profileRepository = profileRepository;
+        _dbContext = dbContext;
     }
 
     // Получить профиль студента по UserId
@@ -323,4 +328,67 @@ public class ProfileService
         await _profileRepository.DeleteProfileAsync(userId);
         return (true, "Профиль успешно удален.");
     }
+
+   // List profiles by role: "student", "mentor", "company"
+    public async Task<IEnumerable<object>> GetListByRoleAsync(string role)
+    {
+        role = role?.Trim().ToLower();
+        switch (role)
+        {
+            case "student":
+                return await _dbContext.StudentProfiles
+                    .Select(p => new StudentProfileResponseDto {
+                        UserId               = p.UserId,
+                        FirstName            = p.FirstName,
+                        LastName             = p.LastName,
+                        Patronymic           = p.Patronymic,
+                        Age                  = p.Age,
+                        Gender               = p.Gender,
+                        Phone                = p.Phone,
+                        Telegram             = p.Telegram,
+                        Rating               = p.Rating,
+                        SphereOfDevelopment  = p.SphereOfDevelopment
+                    })
+                    .ToListAsync<object>();
+
+            case "mentor":
+                return await _dbContext.MentorProfiles
+                    .Select(p => new MentorProfileResponseDto {
+                        UserId              = p.UserId,
+                        FirstName           = p.FirstName,
+                        LastName            = p.LastName,
+                        Patronymic          = p.Patronymic,
+                        Age                 = p.Age,
+                        Gender              = p.Gender,
+                        Phone               = p.Phone,
+                        Telegram            = p.Telegram,
+                        SphereOfDevelopment = p.SphereOfDevelopment,
+                        OfficeAddress       = p.OfficeAddress
+                    })
+                    .ToListAsync<object>();
+
+            case "company":
+                return await _dbContext.CompanyProfiles
+                    .Include(c => c.Contacts)
+                    .Select(p => new CompanyProfileResponseDto {
+                        UserId         = p.UserId,
+                        CompanyName    = p.CompanyName,
+                        CompanyAddress = p.CompanyAddress,
+                        TaxId          = p.TaxId,
+                        Website        = p.Website,
+                        Contacts       = p.Contacts
+                            .Select(c => new CompanyContactResponseDto {
+                                Name  = c.Name,   
+                                Email = c.Email,
+                                Phone = c.Phone
+                            })
+                            .ToList()
+                    })
+                    .ToListAsync<object>();
+
+            default:
+                return Enumerable.Empty<object>();
+        }
+    }
+
 }

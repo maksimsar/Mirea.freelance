@@ -27,4 +27,7 @@ public interface IOrderRepository
     
     //
     Task<IEnumerable<Order>> GetOrdersAsync();
+
+    Task<IEnumerable<Order>> GetOrdersByMentorIdAsync(int mentorProfileId);
+
 }

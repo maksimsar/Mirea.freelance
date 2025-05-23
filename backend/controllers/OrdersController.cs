@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Mirea.freelance.backend.dto;
 using Mirea.freelance.backend.services;
 
@@ -78,4 +79,32 @@ public class OrdersController : ControllerBase
         var orders = await _orderService.GetOpenOrdersAsync();
         return Ok(orders);
     }
+
+       
+    [HttpGet("mentor/{mentorProfileId}")]
+    [Authorize(Roles = "Mentor")]
+    public async Task<IActionResult> GetByMentor(int mentorProfileId)
+    {
+        var list = await _orderService.GetOrdersByMentorIdAsync(mentorProfileId);
+        return Ok(list);
+    }
+
+
+    [HttpPatch("{orderId:int}/assign-mentor")]
+    [Authorize(Roles = "Mentor,Admin")]
+    public async Task<IActionResult> AssignMentor(int orderId, [FromBody] AssignMentorDto dto)
+    {
+        var (success, message) = await _orderService.AssignMentorAsync(orderId, dto.MentorProfileId);
+        return success ? NoContent() : BadRequest(message);
+    }
+
+
+    [HttpPost("{orderId:int}/students")]
+    [Authorize(Roles = "Mentor,Admin")]
+    public async Task<IActionResult> AttachStudent(int orderId, [FromBody] AttachStudentDto dto)
+    {
+        var (success, message) = await _orderService.AttachStudentAsync(orderId, dto.StudentProfileId);
+        return success ? NoContent() : BadRequest(message);
+    }
+
 }

@@ -191,4 +191,53 @@ public class OrderService
                 Deadline = o.Deadline
             });
         }
+
+        // Assign mentor to existing order
+        public async Task<(bool success, string message)> AssignMentorAsync(int orderId, int mentorProfileId)
+        {
+            var order = await _orderRepository.GetByIdAsync(orderId);
+            if (order == null)
+                return (false, "Order not found.");
+            if (order.MentorProfileId != null)
+                return (false, "Order already has a mentor.");
+
+            order.MentorProfileId = mentorProfileId;
+            await _orderRepository.UpdateAsync(order);
+            return (true, "Mentor assigned successfully.");
+        }
+
+        // Attach student to existing order
+        public async Task<(bool success, string message)> AttachStudentAsync(int orderId, int studentProfileId)
+        {
+            var order = await _orderRepository.GetByIdAsync(orderId);
+            if (order == null)
+                return (false, "Order not found.");
+
+            if (order.ProjectStudents.Any(ps => ps.StudentId == studentProfileId))
+                return (false, "Student already attached.");
+
+            order.ProjectStudents.Add(new ProjectStudent {
+                OrderId   = orderId,
+                StudentId = studentProfileId
+            });
+            await _orderRepository.UpdateAsync(order);
+            return (true, "Student attached successfully.");
+        }
+
+        // Get orders by mentor
+        public async Task<IEnumerable<OrderResponseDto>> GetOrdersByMentorIdAsync(int mentorProfileId)
+        {
+            var orders = await _orderRepository.GetOrdersByMentorIdAsync(mentorProfileId);
+            return orders.Select(o => new OrderResponseDto {
+                Id               = o.Id,
+                Title            = o.Title,
+                Description      = o.Description,
+                Status           = o.Status,
+                Budget           = o.Budget,
+                CompanyProfileId = o.CompanyProfileId,
+                CreatedDate      = o.CreatedDate,
+                Deadline         = o.Deadline
+            });
+        }
+
 }   
