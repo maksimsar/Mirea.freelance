@@ -135,7 +135,6 @@ export default {
         switch (method.trim()) {
           case 'Calls': return 'Звонки';
           case 'Telegram': return 'Telegram';
-          case 'InternalChat': return 'Внутренний чат';
           case 'Any': return 'Не важно';
           default: return method;
         }
