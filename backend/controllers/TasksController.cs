@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 using Mirea.freelance.backend.dto.TaskDTO;
 using Mirea.freelance.backend.services;
-using DomainTaskStatus = Mirea.freelance.backend.models.TaskStatus;
+using Mirea.freelance.backend.models;
 
-namespace Mirea.freelance.backend.controllers;
+namespace Mirea.freelance.backend.dto.TaskDTO;
 
 [ApiController]
 [Route("api/tasks")]

@@ -24,7 +24,6 @@ namespace Mirea.freelance.backend.data
         public DbSet<MentorProfile>       MentorProfiles      { get; set; } = null!;
         public DbSet<CompanyProfile>      CompanyProfiles     { get; set; } = null!;
         public DbSet<UserRole>            UserRoles           { get; set; } = null!;
-
         public DbSet<ProjectStudent>      ProjectStudents     => Set<ProjectStudent>();
         public DbSet<ProjectTask>         ProjectTasks        => Set<ProjectTask>();
         public DbSet<TaskStatusHistory>   TaskStatusHistories => Set<TaskStatusHistory>();
@@ -149,11 +148,12 @@ namespace Mirea.freelance.backend.data
                 entity.HasKey(o => o.Id);
                 entity.Property(o => o.Title).IsRequired();
                 entity.Property(o => o.Description).IsRequired();
-                entity.Property(o => o.Status).IsRequired();
+                entity.Property(o => o.Status).IsRequired().HasConversion<string>();
                 entity.Property(o => o.Budget).IsRequired();
                 entity.Property(o => o.CreatedDate).IsRequired();
                 entity.Property(o => o.Deadline).IsRequired();
-
+                entity.Property(o => o.RequiredRoles).HasDefaultValue("");
+                entity.Property(o => o.PreferredContactMethods).HasDefaultValue("");
                 entity.HasOne(o => o.CompanyProfile)
                     .WithMany(cp => cp.Orders)
                     .HasForeignKey(o => o.CompanyProfileId)
@@ -163,6 +163,8 @@ namespace Mirea.freelance.backend.data
                     .WithMany()                       // нет ICollection<Order> в MentorProfile
                     .HasForeignKey(o => o.MentorProfileId)
                     .OnDelete(DeleteBehavior.SetNull);
+
+               
 
                 // старая связь many-to-many (FreelancerProfiles) остаётся как была
             });

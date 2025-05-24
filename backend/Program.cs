@@ -77,6 +77,7 @@ internal class Program
 
         builder.Services.AddScoped<UserService>();
         builder.Services.AddScoped<OrderService>();
+       builder.Services.AddScoped<IOrderStatusStrategy, DefaultOrderStatusStrategy>(); 
         builder.Services.AddScoped<ProfileService>();
         builder.Services.AddScoped<RoleService>();
         builder.Services.AddScoped<JwtService>();
@@ -100,7 +101,7 @@ internal class Program
         builder.Services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new() { Title = "Mirea Freelance API", Version = "v1" });
-
+              c.CustomSchemaIds(type => type.FullName);
             // 🛡 bearerAuth schema
             var jwtScheme = new OpenApiSecurityScheme
             {

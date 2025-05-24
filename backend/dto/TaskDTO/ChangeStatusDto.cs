@@ -1,7 +1,7 @@
 namespace Mirea.freelance.backend.dto.TaskDTO;
-using DomainTaskStatus = Mirea.freelance.backend.models.TaskStatus;
+using Mirea.freelance.backend.models;
 
 public class ChangeStatusDto
 {
-    public DomainTaskStatus NewStatus { get; set; }
+    public TaskStatus NewStatus { get; set; }
 }

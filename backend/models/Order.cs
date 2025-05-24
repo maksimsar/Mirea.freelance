@@ -12,7 +12,7 @@ namespace Mirea.freelance.backend.models;
 public class Order
 {
     public int Id { get; set; }
-    
+
     public string Title { get; set; } = string.Empty;
     
     public string Description { get; set; } = string.Empty;
@@ -39,6 +39,7 @@ public class Order
     public ICollection<ProjectTask> ProjectTasks { get; set; } = new List<ProjectTask>();
     public int? MentorProfileId { get; set; }
     public MentorProfile? MentorProfile { get; set; }
+    public string PreferredContactMethods { get; set; } = string.Empty;
 
 }
 
