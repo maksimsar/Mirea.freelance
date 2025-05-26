@@ -9,16 +9,24 @@
     </div>
 
     <div class="card-body" :style="cardStyle">
-
+      <p><strong>Название:</strong> {{ order.Title }}</p>
       <p><strong>Описание:</strong> {{ order.Description }}</p>
-      <p>
-        <strong>Компания:</strong>
-        {{ companyName }} – {{ companyAddress }}
-      </p>
       <p><strong>Бюджет:</strong> {{ order.Budget }} руб.</p>
       <p><strong>Дедлайн:</strong> {{ formattedDeadline }}</p>
-      <p><strong>Статус:</strong> {{ order.Status }}</p>     
-    </div> 
+      <p><strong>Требуемые роли:</strong> {{ order.RequiredRoles || 'Не указаны' }}</p>
+      <p><strong>Предпочтительный способ связи:</strong> {{ formattedContactMethods }}</p>
+      <p><strong>Компания:</strong> {{ companyName }}</p>
+      <p><strong>Адрес:</strong> {{ companyAddress }}</p>
+      <div v-if="order.CompanyProfile && order.CompanyProfile.contacts">
+        <p><strong>Контакты:</strong></p>
+        <div v-for="(contact, index) in order.CompanyProfile.contacts" :key="index">
+          <p>Представитель {{ index + 1 }}: {{ contact.name }}</p>
+          <p>Телефон: {{ contact.phone || 'Не указан' }}</p>
+          <p>Telegram: {{ contact.telegram || 'Не указан' }}</p>
+        </div>
+      </div>
+      <p><strong>Статус:</strong> {{ statusDisplay }}</p>
+    </div>
     <div class="card-footer">
       <!-- Кнопка "Начать обработку" для заказов со статусом "Open" или "unprocessed" -->
       <div v-if="order.Status === 'Open' || order.Status === 'unprocessed'">
@@ -50,14 +58,13 @@ export default {
   },
   computed: {
     cardStyle() {
-      // Определяем стиль карточки в зависимости от статуса заказа
       switch (this.order.Status) {
         case "processing":
-          return { backgroundColor: "#E0E0E0"};
+          return { backgroundColor: "#E0E0E0" };
         case "processed_positive":
-          return { backgroundColor: "#00a36a" , color: "#e0e0e0"};
+          return { backgroundColor: "#00a36a", color: "#e0e0e0" };
         case "processed_negative":
-          return { backgroundColor: "#a1014f", color: "#e0e0e0"}; 
+          return { backgroundColor: "#a1014f", color: "#e0e0e0" };
         default:
           return { backgroundColor: "#E0E0E0" };
       }
@@ -68,19 +75,41 @@ export default {
       return d.toLocaleDateString();
     },
     companyName() {
-      return this.order.CompanyProfile && this.order.CompanyProfile.name
-        ? this.order.CompanyProfile.name
-        : "Не указано";
+      return this.order.CompanyProfile?.name || "Не указано";
     },
     companyAddress() {
-      return this.order.CompanyProfile && this.order.CompanyProfile.address
-        ? this.order.CompanyProfile.address
-        : "Не указан";
+      return this.order.CompanyProfile?.address || "Не указан";
     },
+    statusDisplay() {
+      switch (this.order.Status) {
+        case "unprocessed":
+          return "Не обработан";
+        case "processing":
+          return "В обработке";
+        case "processed_positive":
+          return "Обработан (Одобрен)";
+        case "processed_negative":
+          return "Обработан (Отклонен)";
+        default:
+          return this.order.Status;
+      }
+    },
+    formattedContactMethods() {
+      if (!this.order.PreferredContactMethods) return "Не указаны";
+      const methods = this.order.PreferredContactMethods.split(',').map(method => {
+        switch (method.trim()) {
+          case 'Calls': return 'Звонки';
+          case 'Telegram': return 'Telegram';
+          case 'InternalChat': return 'Внутренний чат';
+          case 'Any': return 'Не важно';
+          default: return method;
+        }
+      });
+      return methods.filter(m => m).join(', ');
+    }
   },
   methods: {
     editOrder() {
-      // Эмитируем событие для открытия модального окна редактирования
       this.$emit("editOrder", this.order);
     },
   },
@@ -95,8 +124,9 @@ export default {
   margin-bottom: 1em;
   padding: 1em;
   border-radius: 5px;
-  color:#0D0F1A;
+  color: #0D0F1A;
 }
+
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -108,21 +138,26 @@ export default {
   cursor: pointer;
   color: #00b5c5;
 }
+
 .edit-icon:hover {
   color: #037485;
 }
+
 .card-body {
   margin-top: 0.5em;
 }
+
 .card-body p {
   margin: 5px 0;
   font-size: 0.9rem;
 }
+
 .card-footer {
   margin-top: 0.5em;
 }
+
 .btn-action {
-  background-color:  #00b5c5 ;
+  background-color: #00b5c5;
   border: none;
   color: #fff;
   margin-right: 0.5em;
@@ -131,18 +166,23 @@ export default {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
 .btn-action:hover {
-  background-color: 	#037485;
+  background-color: #037485;
 }
+
 .approve {
-  background-color:  #00da87;
+  background-color: #00da87;
 }
+
 .approve:hover {
   background-color: #00a36a;
 }
+
 .reject {
   background-color: #FF007A;
 }
+
 .reject:hover {
   background-color: #a1014f;
 }

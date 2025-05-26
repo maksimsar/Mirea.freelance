@@ -16,7 +16,7 @@
           <button class="btn btn-edit" @click="editField(`contacts[${index}].telegram`)">Изменить</button>
         </p>
       </div>
-      </div>
+    </div>
     </div>
   </template>
   
