@@ -74,12 +74,4 @@ public class TasksController : ControllerBase
         var history = await _svc.GetHistoryAsync(id);
         return history.Count == 0 ? NotFound() : Ok(history);
     }
-
-    [HttpGet("/api/projects/{id:int}/tasks")]
-    [Authorize]                               // студент или ментор
-    public async Task<IActionResult> GetTasksByProject(int id)
-    {
-        var tasks = await _svc.GetProjectTasksAsync(id);
-        return Ok(tasks);
-    }
 }

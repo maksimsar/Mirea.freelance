@@ -1,7 +1,6 @@
 using Mirea.freelance.backend.models;
 using Microsoft.EntityFrameworkCore;
 using Mirea.freelance.backend.data;
-using System.Linq;
 
 namespace Mirea.freelance.backend.repositories;
 
@@ -70,12 +69,11 @@ public class OrderRepository : IOrderRepository
     //
     public async Task<IEnumerable<Order>> GetOrdersByFreelancerIdAsync(int freelancerProfileId)
     {
+        // Находим все заказы, у которых среди FreelancerProfiles есть профиль с UserId = freelancerProfileId
         return await _context.Orders
-            .Include(o => o.ProjectStudents)
-                .ThenInclude(ps => ps.Student)    // навигация к Student, а не StudentProfile
-            .Where(o => o.ProjectStudents
-                .Any(ps => ps.StudentId == freelancerProfileId))
+            .Where(o => o.FreelancerProfiles.Any(fp => fp.UserId == freelancerProfileId))
             .ToListAsync();
+        
     }
     
     //
@@ -87,15 +85,5 @@ public class OrderRepository : IOrderRepository
             .ToListAsync();
         
     }
-
-    public async Task<IEnumerable<Order>> GetOrdersByMentorIdAsync(int mentorProfileId)
-    {
-        return await _context.Orders
-            .Include(o => o.ProjectStudents)
-                .ThenInclude(ps => ps.Student)
-            .Where(o => o.MentorProfileId == mentorProfileId)
-            .ToListAsync();
-    }
-
 
 }
