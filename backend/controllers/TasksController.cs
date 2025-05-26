@@ -16,10 +16,7 @@ public class TasksController : ControllerBase
 
     public TasksController(ITaskService svc) => _svc = svc;
 
-    // ───────────────────────────────────────────────────────────────
-    /// <summary>Куратор создаёт задачу</summary>
     [HttpPost]
-    [Authorize(Roles = "Mentor")]
     public async Task<IActionResult> Create([FromBody] CreateTaskDto dto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -27,11 +24,7 @@ public class TasksController : ControllerBase
         var task = await _svc.CreateAsync(dto);
         return CreatedAtAction(nameof(GetById), new { id = task.Id }, task);
     }
-
-    // ───────────────────────────────────────────────────────────────
-    /// <summary>Получить задачу по Id</summary>
     [HttpGet("{id:int}")]
-    [Authorize]                              // любой вошедший
     public async Task<IActionResult> GetById(int id)
     {
         var task = await _svc.GetTaskQueryable()
@@ -39,10 +32,7 @@ public class TasksController : ControllerBase
         return task is null ? NotFound() : Ok(task);
     }
 
-    // ───────────────────────────────────────────────────────────────
-    /// <summary>Сменить статус задачи</summary>
     [HttpPatch("{id:int}/status")]
-    [Authorize]                              // студент или куратор
     public async Task<IActionResult> ChangeStatus(int id,
         [FromBody] ChangeStatusDto dto)
     {
@@ -53,7 +43,6 @@ public class TasksController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
     public async Task<IActionResult> List([FromQuery] string role = "student",
                                         [FromQuery] int page = 1,
                                         [FromQuery] int pageSize = 20)
@@ -65,10 +54,7 @@ public class TasksController : ControllerBase
         return Ok(result);
     }
 
-    // ───────────────────────────────────────────────────────────────
-    /// <summary>История смены статусов задачи</summary>
     [HttpGet("{id:int}/history")]
-    [Authorize]
     public async Task<IActionResult> GetHistory(int id)
     {
         var history = await _svc.GetHistoryAsync(id);
@@ -76,7 +62,6 @@ public class TasksController : ControllerBase
     }
 
     [HttpGet("/api/projects/{id:int}/tasks")]
-    [Authorize]                               // студент или ментор
     public async Task<IActionResult> GetTasksByProject(int id)
     {
         var tasks = await _svc.GetProjectTasksAsync(id);

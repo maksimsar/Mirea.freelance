@@ -82,7 +82,6 @@ public class OrdersController : ControllerBase
 
        
     [HttpGet("mentor/{mentorProfileId}")]
-    [Authorize(Roles = "Mentor")]
     public async Task<IActionResult> GetByMentor(int mentorProfileId)
     {
         var list = await _orderService.GetOrdersByMentorIdAsync(mentorProfileId);
@@ -91,7 +90,6 @@ public class OrdersController : ControllerBase
 
 
     [HttpPatch("{orderId:int}/assign-mentor")]
-    [Authorize(Roles = "Mentor,Admin")]
     public async Task<IActionResult> AssignMentor(int orderId, [FromBody] AssignMentorDto dto)
     {
         var (success, message) = await _orderService.AssignMentorAsync(orderId, dto.MentorProfileId);
@@ -100,7 +98,6 @@ public class OrdersController : ControllerBase
 
 
     [HttpPost("{orderId:int}/students")]
-    [Authorize(Roles = "Mentor,Admin")]
     public async Task<IActionResult> AttachStudent(int orderId, [FromBody] AttachStudentDto dto)
     {
         var (success, message) = await _orderService.AttachStudentAsync(orderId, dto.StudentProfileId);
