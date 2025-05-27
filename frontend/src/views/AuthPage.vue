@@ -1,3 +1,4 @@
+```vue
 <template>
   <div class="auth-page">
     <div class="card auth-card shadow-lg">
@@ -7,13 +8,13 @@
       <div class="card-body">
         <form @submit.prevent="handleSubmit">
           <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
+            <label for="login" class="form-label">Логин</label>
             <input
-              type="email"
-              id="email"
+              type="text"
+              id="login"
               class="form-control"
-              v-model="form.email"
-              placeholder="Введите ваш email"
+              v-model="form.login"
+              placeholder="Введите ваш логин"
               required
             />
           </div>
@@ -39,20 +40,20 @@
               required
             />
           </div>
-          <!-- Поле выбора роли -->
-          <div class="mb-3">
+          <div v-if="!isLoginMode" class="mb-3">
             <label for="role" class="form-label">Выберите роль</label>
             <select id="role" class="form-select" v-model="selectedRole" required>
               <option disabled value="">Выберите роль</option>
-              <option value="student">Студент</option>
-              <option value="admin">Админ</option>
-              <option value="company">Компания</option>
+              <option value="Student">Студент</option>
+              <option value="Mentor">Преподаватель</option>
+              <option value="Company">Компания</option>
             </select>
           </div>
           <button type="submit" class="btn btn-primary w-100" :disabled="loading">
             <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
             {{ isLoginMode ? "Войти" : "Зарегистрироваться" }}
           </button>
+          <p v-if="error" class="error">{{ error }}</p>
         </form>
       </div>
       <div class="card-footer text-center">
@@ -68,52 +69,105 @@
 </template>
 
 <script>
+import { loginUser, createUser } from '../api/api';
+
 export default {
-  name: "AuthPage",
+  name: 'AuthPage',
   data() {
     return {
-      isLoginMode: true, // true = Вход, false = Регистрация
+      isLoginMode: true,
       form: {
-        email: "",
-        password: "",
-        confirmPassword: "",
+        login: '',
+        password: '',
+        confirmPassword: '',
       },
-      selectedRole: "",
+      selectedRole: '',
       loading: false,
+      error: '',
     };
   },
   methods: {
     toggleMode() {
       this.isLoginMode = !this.isLoginMode;
-      this.form.password = "";
-      this.form.confirmPassword = "";
+      this.form.login = '';
+      this.form.password = '';
+      this.form.confirmPassword = '';
+      this.selectedRole = '';
+      this.error = '';
     },
     async handleSubmit() {
-      if (!this.selectedRole) {
-        alert("Пожалуйста, выберите роль");
+      this.error = '';
+      if (!this.isLoginMode && !this.selectedRole) {
+        this.error = 'Пожалуйста, выберите роль';
         return;
       }
       if (!this.isLoginMode && this.form.password !== this.form.confirmPassword) {
-        alert("Пароли не совпадают!");
+        this.error = 'Пароли не совпадают!';
         return;
       }
       this.loading = true;
       try {
-        console.log(
-          this.isLoginMode ? "Вход успешен" : "Регистрация успешна",
-          this.form,
-          "Роль:",
-          this.selectedRole
-        );
-        // Сохраняем выбранную роль и имитируем успешный вход
-        localStorage.setItem("userRole", this.selectedRole);
-        alert(this.isLoginMode ? "Вы вошли в систему!" : "Вы зарегистрировались!");
-        // Переход на главную с последующим обновлением страницы
-        this.$router.push({ name: "Home" }).then(() => {
-          window.location.reload();
-        });
+        if (this.isLoginMode) {
+          // Логин
+          console.log('Отправка на /auth/login:', {
+            login: this.form.login,
+            password: this.form.password,
+          });
+          const response = await loginUser({
+            login: this.form.login,
+            password: this.form.password,
+          });
+          console.log('Полный ответ /auth/login:', JSON.stringify(response, null, 2));
+          const token = response.data.token;
+          if (!token) {
+            throw new Error('Токен не получен в ответе');
+          }
+          localStorage.setItem('token', token);
+
+          // Извлекаем роль из JWT
+          let userRole;
+          try {
+            const { jwtDecode } = await import('jwt-decode');
+            const decoded = jwtDecode(token);
+            console.log('Декодированный токен:', JSON.stringify(decoded, null, 2));
+            userRole = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+            if (!userRole) {
+              throw new Error('Роль не найдена в токене');
+            }
+            console.log('Роль до нормализации:', userRole);
+            userRole = userRole.toLowerCase();
+            const validRoles = ['student', 'mentor', 'company', 'admin'];
+            if (!validRoles.includes(userRole)) {
+              throw new Error(`Недопустимая роль: ${userRole}`);
+            }
+            console.log('Роль из токена:', userRole);
+            localStorage.setItem('userRole', userRole);
+            this.$router.push('/');
+          } catch (err) {
+            this.error = 'Ошибка получения роли: ' + err.message;
+            console.error('Ошибка декодирования токена:', err);
+            return;
+          }
+        } else {
+          // Регистрация
+          console.log('Отправка на /Users:', {
+            login: this.form.login,
+            password: this.form.password,
+            role: this.selectedRole,
+          });
+          await createUser({
+            login: this.form.login,
+            password: this.form.password,
+            role: this.selectedRole,
+          });
+          this.error = 'Регистрация успешна! Пожалуйста, войдите.';
+          this.toggleMode();
+        }
       } catch (error) {
-        alert("Произошла ошибка, попробуйте ещё раз.");
+        console.error('Ошибка запроса:', error.response || error);
+        this.error = `Ошибка ${this.isLoginMode ? 'входа' : 'регистрации'}: ${
+          error.response?.data?.message || error.message || 'Попробуйте снова'
+        }`;
       } finally {
         this.loading = false;
       }
@@ -123,7 +177,6 @@ export default {
 </script>
 
 <style scoped>
-
 .auth-page {
   display: flex;
   justify-content: center;
@@ -131,10 +184,11 @@ export default {
   height: 100vh;
   background-color: #0D0F1A;
   animation: fadeIn 1s ease-out;
-  
 }
-h3, label {
-  font-family: "BezierSans-Regular";
+
+h3,
+label {
+  font-family: 'BezierSans-Regular';
 }
 
 .auth-card {
@@ -143,11 +197,10 @@ h3, label {
   animation: slideIn 0.8s ease-out;
   border-radius: 15px;
   overflow: hidden;
-  color:#E0E0E0;
+  color: #E0E0E0;
   background-color: #181B29;
 }
 
-/* Анимации */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -167,8 +220,6 @@ h3, label {
     opacity: 1;
   }
 }
-
-/* Визуальная эстетика */
 
 .card-header {
   background-color: #FF007A;
@@ -192,7 +243,7 @@ h3, label {
   color: white;
 }
 
-.btn:hover{
+.btn:hover {
   background-color: #037485;
   color: white;
 }
@@ -207,4 +258,11 @@ h3, label {
   text-decoration: underline;
   background-color: #FF007A;
 }
+
+.error {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+}
 </style>
+```

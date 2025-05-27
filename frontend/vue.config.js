@@ -6,5 +6,12 @@ module.exports = {
         changeOrigin: true
       }
     }
+  },
+  configureWebpack: {
+    resolve: {
+      alias: {
+        'jwt-decode': require.resolve('jwt-decode')
+      }
+    }
   }
 }

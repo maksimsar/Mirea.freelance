@@ -120,6 +120,6 @@
   color: white;
 }
 
-  </style>
+</style>
   
   
