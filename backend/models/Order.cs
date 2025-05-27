@@ -17,7 +17,7 @@ public class Order
     
     public string Description { get; set; } = string.Empty;
     
-    public OrderStatus Status { get; set; } = OrderStatus.Open;
+    public String Status { get; set; } = "Open";
     
     public decimal Budget { get; set; }
     
