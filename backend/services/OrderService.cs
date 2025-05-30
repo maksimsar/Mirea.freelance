@@ -166,39 +166,40 @@ namespace Mirea.freelance.backend.services
         }
 
         private OrderResponseDto MapToResponseDto(Order order)
+{
+    return new OrderResponseDto
+    {
+        Id = order.Id,
+        Title = order.Title,
+        Description = order.Description,
+        Status = order.Status,
+        Budget = order.Budget,
+        CompanyProfileId = order.CompanyProfileId,
+        CompanyProfile = order.CompanyProfile == null ? null : new CompanyProfileResponseDto
         {
-            return new OrderResponseDto
+            UserId = order.CompanyProfile.UserId,
+            CompanyName = order.CompanyProfile.CompanyName,
+            CompanyAddress = order.CompanyProfile.CompanyAddress,
+            TaxId = order.CompanyProfile.TaxId,
+            Website = order.CompanyProfile.Website,
+            Contacts = order.CompanyProfile.Contacts?.Select(c => new CompanyContactResponseDto
             {
-                Id = order.Id,
-                Title = order.Title,
-                Description = order.Description,
-                Status = order.Status,
-                Budget = order.Budget,
-                CompanyProfileId = order.CompanyProfileId,
-                CompanyProfile = new CompanyProfileResponseDto
-                {
-                    UserId = order.CompanyProfile.UserId,
-                    CompanyName = order.CompanyProfile.CompanyName,
-                    CompanyAddress = order.CompanyProfile.CompanyAddress,
-                    TaxId = order.CompanyProfile.TaxId,
-                    Website = order.CompanyProfile.Website,
-                    Contacts = order.CompanyProfile.Contacts.Select(c => new CompanyContactResponseDto
-                    {
-                        Id = c.Id,
-                        CompanyProfileId = c.CompanyProfileId,
-                        Name = c.Name,
-                        Phone = c.Phone,
-                        Telegram = c.Telegram,
-                        Email = c.Email
-                    }).ToList()
-                },
-                CreatedDate = order.CreatedDate,
-                Deadline = order.Deadline,
-                RequiredRoles = order.RequiredRoles,
-                PreferredContactMethods = order.PreferredContactMethods,
-                MentorProfileId = order.MentorProfileId
-            };
-        }
+                Id = c.Id,
+                CompanyProfileId = c.CompanyProfileId,
+                Name = c.Name,
+                Phone = c.Phone,
+                Telegram = c.Telegram,
+                Email = c.Email
+            }).ToList() ?? new List<CompanyContactResponseDto>()
+        },
+        CreatedDate = order.CreatedDate,
+        Deadline = order.Deadline,
+        RequiredRoles = order.RequiredRoles,
+        PreferredContactMethods = order.PreferredContactMethods,
+        MentorProfileId = order.MentorProfileId
+    };
+}
+
     }
 
     // Factory Method
@@ -228,7 +229,11 @@ namespace Mirea.freelance.backend.services
         public OrderBuilder SetDescription(string description) { _order.Description = description; return this; }
         public OrderBuilder SetBudget(decimal budget) { _order.Budget = budget; return this; }
         public OrderBuilder SetCompanyProfileId(int companyProfileId) { _order.CompanyProfileId = companyProfileId; return this; }
-        public OrderBuilder SetDeadline(DateTime? deadline) { _order.Deadline = deadline; return this; }
+        public OrderBuilder SetDeadline(DateTime? deadline)
+{
+        _order.Deadline = deadline?.ToUniversalTime();
+    return this;
+}
         public OrderBuilder SetRequiredRoles(string roles) { _order.RequiredRoles = roles; return this; }
         public OrderBuilder SetPreferredContactMethods(string methods) { _order.PreferredContactMethods = methods; return this; }
         public Order Build() => _order;
