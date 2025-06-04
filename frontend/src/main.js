@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'; // Подключение сти�
 import 'bootstrap'; // Подключение JS
 import DocTreeNode from '@/components/DocTreeNode.vue';
 
+
 const app = createApp(App);
 
 app.component('DocTreeNode', DocTreeNode);
